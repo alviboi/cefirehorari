@@ -1,0 +1,12 @@
+{
+    "Password" : "Contrasenya",
+    "E-Mail Address" : "Adreça electrònica",
+    "Remember Me" : "Recorda'm",
+    "Forgot Your Password?" : "Has oblida't la contrasenya?",
+    "Log In" : "Entra",
+    "Reset Password" : "Reinicia el password",
+    "Send Password Reset Link" : "Envia'm el link per a reiniciar el password",
+    "Name" : "Nom",
+    "Confirm Password" : "Confirma el password",
+    "Register" : "Registra't"
+}
