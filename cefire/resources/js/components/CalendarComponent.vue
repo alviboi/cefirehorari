@@ -48,7 +48,7 @@
                     :class="`theme-` + theme"
                     :current-period-label="themeOptions.currentPeriodLabel"
                     :startingDayOfWeek=1
-                    class="holiday-us-traditional holiday-us-official"
+                    class="holiday-es-traditional holiday-es-official"
 
                     @click-item="borrar"
                     @drag-start="drag_comencant"
