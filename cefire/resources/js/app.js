@@ -10,6 +10,8 @@ require('./home.js');
 import Toast from "vue-toastification";
 import "vue-toastification/dist/index.css";
 
+
+
 // import Echo from "laravel-echo"
 
 // window.Echo = new Echo({
@@ -45,8 +47,8 @@ window.channel = pusher.subscribe('cefire');
 //     });
 //   });
 
-
-window.Vue = require('vue');
+//import Vue from 'vue';
+window.Vue = require('vue').default;
 
 /**
  * The following block of code may be used to automatically register your

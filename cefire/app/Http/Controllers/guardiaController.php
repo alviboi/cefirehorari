@@ -171,4 +171,29 @@ class guardiaController extends Controller
         $guardia->delete();
 
     }
+
+    /**
+     * Mostra un llistat de totes les guardies d'un mes i un any concret
+     *
+     * @return array $ret
+     */
+    public function get_numero_de_guardies()
+    {
+        $year = date("Y");
+        $mes = date("m");
+        if ($mes > 8) {
+            $any = $year;
+        } else {
+            $any = $year-1;
+        }
+        $str = $any."-9-1";
+        $inici = date_create($str);
+        $final = date_create(($any+1)."-08-31");
+        $ret = array();
+        $guardies = guardia::selectRaw('user_id, count(*) total')->where('data', '>', $inici)->where('data', '<', $final)->groupby("user_id")->orderBy('total','desc')->get();
+        foreach ($guardies as $guardia) {
+            array_push($ret, [$guardia->user_id,$guardia->user['name'],$guardia->total]);
+        }
+        return $ret;
+    }
 }

@@ -754,7 +754,7 @@ $fondo:  #f1faee
 
     // Icones dels diferents elements a utilitzar
     .cerrar
-        font-family: "Font Awesome 5 Free"
+        font-family: "Font Awesome 6 Free"
         text-align: right
         float: right
         margin-right: 3px
@@ -765,7 +765,7 @@ $fondo:  #f1faee
             content: "\f2ed"
 
     .falta_fitxar
-        font-family: "Font Awesome 5 Free"
+        font-family: "Font Awesome 6 Free"
         text-align: right
         float: right
         margin-right: 3px
@@ -775,7 +775,7 @@ $fondo:  #f1faee
             content: "\f4fd"
 
     .falta_validar
-        font-family: "Font Awesome 5 Free"
+        font-family: "Font Awesome 6 Free"
         text-align: right
         float: right
         margin-right: 1px
@@ -785,7 +785,7 @@ $fondo:  #f1faee
             content: "\f556"
 
     .arxiu
-        font-family: "Font Awesome 5 Free"
+        font-family: "Font Awesome 6 Free"
         text-align: right
         float: right
         margin-right: 3px

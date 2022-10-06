@@ -12,7 +12,7 @@
         @if ($dat['estat']=='Eliminada')
             <h2>A no ser que hages eliminat tu la compensació, qualsevol aclariment que vullgues fer has de dirigir-te a la direcció del CEFIRE.</h2>
         @else
-            <h2>Una vegada Aprovada la guardia, si finalment l'elimines cal que avises a la direcció del CEFIRE.</h2>
+            <h2>Una vegada Aprovada la compensació, si finalment l'elimines cal que avises a la direcció del CEFIRE.</h2>
         @endif
         <br><br>
     <h2><a href="{{ $dat ['link'] }}">Afegir a Google Calendar</a></h2>

@@ -70,6 +70,7 @@ class cefireController extends Controller
     {
         //
         $data_hui = date('Y-m-d');
+        $en4dies = date('Y-m-d', strtotime($data_hui. ' + 4 days'));
         if ($this->aparell == 1){
             if ($request->data != $data_hui){
                 return response("Està habilitat el fitxatge per dies. Has de fitxar cada dia", 403);
@@ -104,7 +105,9 @@ class cefireController extends Controller
             if ($hi_ha) {
                 //abort(403, "Ja has fitxat el dia de hui");
                 return response("Ja has fitxat", 403);
-            } else {
+            } elseif ($request->data > $en4dies) {
+                return response("Has de planificar la teua estància al CEFIRE cada setmana", 403);
+            }else {
                 $dat = new cefire();
                 $dat->data = $request->data;
                 $dat->inici = $request->inici;
