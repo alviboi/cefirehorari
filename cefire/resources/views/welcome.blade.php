@@ -21,7 +21,7 @@
     <div>
         <div class="buttons2">
                 <div class="container2">
-                    <a href="/consultacentres" class="btn2 effect04" data-sm-link-text="Antiga pàgina de gestió de centres" target="_blank"><span class="uk-flex uk-flex-middle"><i class="fa fa-graduation-cap fa-3x" aria-hidden="true"></i> Control de centres</span></a>
+                    <a href="/consultacentres" class="btn2 effect04" data-sm-link-text="Pàgina consulta de centres" target="_blank"><span class="uk-flex uk-flex-middle"><i class="fa fa-graduation-cap fa-3x" aria-hidden="true"></i> Control de centres</span></a>
                 </div>
             </div>
     </div>
@@ -35,14 +35,14 @@
     <div>
         <div class="buttons2">
                 <div class="container2">
-                    <a href="http://128.0.0.231/nextcloud/" class="btn2 effect04" data-sm-link-text="Espai per a enmagatzenar arxius" target="_blank"><span class="uk-flex uk-flex-middle"><i class="fa fa-cloud fa-3x" aria-hidden="true"></i> Nextcloud</span></a>
+                    <a href="https://aules.edu.gva.es/formaciodelprofessorat/login/index.php" class="btn2 effect04" data-sm-link-text="Aules de formació del professorat" target="_blank"><span class="uk-flex uk-flex-middle"><i class="fa fa-school fa-3x" aria-hidden="true"></i>  Aules</span></a>
                 </div>
             </div>
     </div>
     <div>
         <div class="buttons2">
                 <div class="container2">
-                    <a href="https://128.0.0.231:82/" class="btn2 effect04" data-sm-link-text="Realitzar videoconfènrecies online" target="_blank"><span class="uk-flex uk-flex-middle"><i class="fa fa fa-video fa-3x" aria-hidden="true"></i> Jitsi Meet</span></a>
+                    <a href="https://teams.microsoft.com" class="btn2 effect04" data-sm-link-text="Microsoft Teams" target="_blank"><span class="uk-flex uk-flex-middle"><i class="fa fa-brands fa-teamspeak fa-3x" aria-hidden="true"></i> MS Teams</span></a>
                 </div>
             </div>
     </div>

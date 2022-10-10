@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\compensa;
+use App\Models\control;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 
@@ -59,7 +60,20 @@ class compensaController extends Controller
      */
     public function store(Request $request)
     {
-        //
+               
+        $aux2 = compensa::where('user_id','=',auth()->id())->where('data','=',$request->data)->where('inici','=',$request->inici)->get();
+        if (!$aux2->isEmpty()) {
+            abort(403,"Ja tens una compensació este dia");
+        } 
+        $max_compensacions = control::first();
+
+        $aux = compensa::where('data','=',$request->data)->where('inici','=',$request->inici)->count();
+        if ($aux>=$max_compensacions->max_compensacions) {
+            abort(403,"El màxim de persones que poden compensar per dia són ".$max_compensacions->max_compensacions." i ja s'ha superat");
+        } 
+        
+        
+
         $dat = new compensa();
         $dat->data = $request->data;
         $dat->inici = $request->inici;

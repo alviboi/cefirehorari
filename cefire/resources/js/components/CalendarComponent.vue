@@ -20,10 +20,10 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr v-for="item in users_total" :key="item.user_id">
-                                    <td>{{ item[1] }}</td>
-                                    <td>{{ item[2] }}</td>
-                                </tr>
+                                    <tr v-for="item in users_total" :key="item.user_id">
+                                        <td>{{ item[1] }}</td>
+                                        <td>{{ item[2] }}</td>
+                                    </tr>
                             </tbody>
 
                         </table>
@@ -48,7 +48,7 @@
                     :class="`theme-` + theme"
                     :current-period-label="themeOptions.currentPeriodLabel"
                     :startingDayOfWeek=1
-                    class="holiday-us-traditional holiday-us-official"
+                    class="holiday-cef-traditional holiday-cef-official"
 
                     @click-item="borrar"
                     @drag-start="drag_comencant"
@@ -238,6 +238,7 @@ export default {
             })
             .catch(err => {
                 console.error(err);
+                this.$toast.error(err.response.data.message);
             })
             
 

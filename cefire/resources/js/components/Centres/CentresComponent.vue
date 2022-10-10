@@ -116,7 +116,7 @@
             </textarea>
           </div>
           <div class="uk-text-center uk-margin">
-              <a :href="url" class="uk-margin uk-h4">Informació del centre</a>
+              <a :href="url" target="_blank" class="uk-margin uk-h4">Informació del centre</a>
           </div>
 
         <p class="uk-text-right">

@@ -33,7 +33,7 @@
                 :current-period-label="themeOptions.currentPeriodLabel"
                 :startingDayOfWeek=1
                 @click-item="envia_missatge"
-                class="holiday-us-traditional holiday-us-official"
+                class="holiday-cef-traditional holiday-cef-official"
             >
                 <calendar-view-header
                     slot="header"

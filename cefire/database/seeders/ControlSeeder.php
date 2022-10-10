@@ -21,7 +21,8 @@ class ControlSeeder extends Seeder
             'id' => 1,
             'aparell' => 0,
             'temps' => 0,
-            'registra' => 1
+            'registra' => 1,
+            'max_compensacions' => 3
         ]);
     }
 }

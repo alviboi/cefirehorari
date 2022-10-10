@@ -2,7 +2,7 @@
 	<div>
         <div class="uk-grid-small uk-child-width-expand uk-margin" uk-grid>
             <div class="uk-width-1-3">
-                <h3>Busca l'horari de l'assessor</h3>
+                <h3>Busca l'horari de l'assessor/a</h3>
             </div>
             <div class="uk-width-1-3">
                 <form class="uk-width-expand uk-search uk-search-default" autocomplete="on">
@@ -12,6 +12,9 @@
                             <option v-for="(user,key) in users" :key="key" :value="user.name">{{user.name}}</option>
                       </datalist>
                 </form>
+            </div>
+            <div class="uk-width-1-3 uk-text-center">
+                <button @click="generate()" class="uk-button uk-button-primary">Descarrega PDF</button>
             </div>
         </div>
     <div  class="calendari-general">
@@ -29,7 +32,7 @@
                 :current-period-label="themeOptions.currentPeriodLabel"
                 :startingDayOfWeek=1
                 @click-item="envia_missatge"
-                class="holiday-us-traditional holiday-us-official"
+                class="holiday-cef-traditional holiday-cef-official"
             >
                 <calendar-view-header
                     slot="header"
@@ -53,6 +56,9 @@ import { CalendarView, CalendarViewHeader } from "vue-simple-calendar"
 require("vue-simple-calendar/static/css/default.css")
 require("vue-simple-calendar/static/css/holidays-us.css")
 require("vue-simple-calendar/static/css/gcal.css")
+var pdfMake = require('pdfmake/build/pdfmake.js')
+var pdfFonts = require('pdfmake/build/vfs_fonts.js')
+pdfMake.vfs = pdfFonts.pdfMake.vfs
 export default {
 	components: {
 		CalendarView,
@@ -66,7 +72,10 @@ export default {
             users: [],
 			dia: new Date(),
 			theme: "gcal",
-			items: Array()
+			items: Array(),
+            pdf_body: Array(),
+            pdf_body_table: Array(),
+            row: Array()
 		}
 	},
 	computed: {
@@ -88,6 +97,101 @@ export default {
 		},
 	},
 	methods: {
+        generate() {
+            this.pdf_body.sort(function(a, b){return a.dia - b.dia});
+            var content = "";
+            var dia_pdf = new Date (this.dia.getFullYear(),this.dia.getMonth(),1);
+            var dia_pdf2 = new Date (this.dia.getFullYear(),this.dia.getMonth(),0);
+            var dia_setmana = dia_pdf.getDay();
+            var numero_dies_mes = dia_pdf2.getDate();
+           
+            //var body = [];
+            this.row = [];
+            this.pdf_body_table = [];
+            var dies = ['Dilluns', 'Dimarts','Dimecres','Dijous','Divendres','Dissabte','Diumenge'];
+            this.pdf_body_table.push(dies);
+            
+            var cell; 
+            for (let index = 0; index < (numero_dies_mes+dia_setmana); index++) {
+                var dia = index-dia_setmana+2;
+                if ((dia < 1)){
+                    this.row.push(" ");
+                } else {
+                    cell = dia + "\n";
+                    this.pdf_body.forEach(element => {
+                        if (element.dia == index-dia_setmana+2) {
+                            cell += element.inici + "-" + element.fi + ": " + element.title + "\n";
+                        }
+                    });
+                    
+                    this.row.push(cell);
+                } 
+                if (index == 6 || index == 13 || index == 20 || index == 27 || index == 34 || index == 41) {
+                    this.pdf_body_table.push(this.row);
+                    this.row = [];
+                } else if (index == (numero_dies_mes+dia_setmana-1)) {
+                    var falten = 7-this.row.length;
+                    for (let index = 0; index < falten; index++) {
+                        if (dia+this.row.length <= numero_dies_mes){
+                            this.row.push(dia+this.row.length);
+                        } else {
+                            this.row.push(" ");
+                        }              
+                    }
+                    this.pdf_body_table.push(this.row);
+                }
+                            
+            }
+            console.log(this.pdf_body_table);
+
+
+            var docDefinition = {
+                pageOrientation: 'landscape',
+                fontSize: 22,
+                pageMargins: [ 40, 60, 40, 60 ],
+                content: [
+                    {
+                    //layout: 'lightHorizontalLines', // optional
+                    text: "Horari de l\'assessor "+ this.results[0].name +"\n\n",
+                    style: 'cap'
+                    },
+                    {
+                        text: 'Horari del mes: '+ (dia_pdf.getMonth() + 1) + '\n\n',
+                        style: 'texts'
+		            },
+                    {
+                    table: {
+                        // headers are automatically repeated if the table spans over multiple pages
+                        // you can declare how many rows should be treated as headers
+                        headerRows: 1,
+                        widths: [ '*', '*', '*', '*', '*', '*', '*' ],
+                        body: this.pdf_body_table,
+                        style: 'taula',
+                        //body: this.pdf_body
+                    }
+                    }
+                    
+                ],
+                styles: {
+                    taula: {
+                        fontSize: 8
+                    },
+                    cap: {
+                        fontSize: 18,
+                        bold: true
+                    },
+                    texts: {
+                        fontSize: 12,
+                        bold: true
+                    },
+                }
+                // content: [
+                // { text: 'Dynamic parts', style: 'header' },
+                // table(pdf_body, ['Dilluns', 'Dimarts','Dimecres','Dijous','Divendres','Dissabte','Diumenge'])
+                // ]
+            };
+            pdfMake.createPdf(docDefinition).download("horari.pdf");
+            },
         // Quan s'establix un mes es demana tota la informació del dia de tots els elements
         setdia(d) {
             this.dia = d;
@@ -106,6 +210,7 @@ export default {
         // Es demanen tots el elements
         tots_els_elements_get() {
             this.items= [];
+            this.pdf_body= [];
             this.get_element('cefire');
             this.get_element('compensa');
             this.get_element('curs');
@@ -133,7 +238,8 @@ export default {
             axios.get(url)
             .then(res => {
                 console.log(res);
-                this.emplena_calendari(element,res.data)
+                this.emplena_calendari(element,res.data);
+                //this.pdf_body.push(res.data);
             })
             .catch(err => {
                 console.error(err);
@@ -210,6 +316,13 @@ export default {
                     classes: clase+" uk-animation-scale-up",
                 };
                 this.items.push(i);
+                let f = {
+                    title: element.toUpperCase(),
+                    inici: ele.inici,
+                    fi: ele.fi,
+                    dia: parseInt(fechas[2])
+                }
+                this.pdf_body.push(f);
             }
             this.index=result.length;
         },

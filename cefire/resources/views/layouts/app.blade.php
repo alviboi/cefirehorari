@@ -75,11 +75,11 @@
         @yield('content')
     </main>
 
-    <footer class="uk-section uk-section-xsmall uk-section-secondary">
+    <footer class="uk-section uk-section-xsmall uk-section-secondary" style="position:fixed;bottom:0px;width:100%;">
         <div class="uk-container">
             <div class="uk-grid uk-text-center uk-text-left@s uk-flex-middle" data-uk-grid>
                 <div class="uk-text-small uk-text-muted uk-width-1-2@s">
-                    Aplicació creada per <a href="mailto:vicente_alf@gva.es">Alfredo Rafael Vicente Boix</a>
+                    Aplicació creada per <a href="mailto:ar.vicenteboix@edu.gva.es">Alfredo Rafael Vicente Boix</a>
                 </div>
 
                 <div class="uk-text-small uk-text-muted uk-text-right uk-text-right@s uk-width-1-2@s">

@@ -42,6 +42,23 @@
                 </div>
             </div>
         </div>
+        <div>
+            <div class="uk-card uk-card-secondary uk-card-hover uk-card-body">
+                <h3 class="uk-card-title">Configuració compensacions</h3>
+                Limita el número de compensacions per dia que es poden agafar
+                <div class="uk-margin">
+                    <div class="uk-form-controls uk-form-controls-text">
+                        <!-- <label><input v-model="habilita_registre" @click="canvia_dades('registra')" class="uk-checkbox" type="checkbox" > Habilita registre</label> -->
+                        <div class="uk-margin">
+                            <input v-model="max_compensacions" class="uk-input" type="number" step="1" placeholder="Número de compensacions" min="0" max="9">
+                        </div>
+                        <div class="uk-margin">
+                            <button @click="canvia_dades('max_compensacions')" class="uk-button uk-button-primary">Actualitza</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <div id="usuaris_ldap" uk-modal>
@@ -80,6 +97,7 @@ export default {
             netadmin: "",
             servidor: "",
             fitxar_aparell: null,
+            max_compensacions: 0,
             importa: []
         }
     },
@@ -125,6 +143,7 @@ export default {
             .then(res => {
                 this.fitxar_aparell=res.data.aparell;
                 this.habilita_registre=res.data.registra;
+                this.max_compensacions=res.data.max_compensacions;
                 console.log(res)
             })
             .catch(err => {
@@ -137,6 +156,8 @@ export default {
             var envia = false;
             if (nom == 'aparell') {
                 envia = this.fitxar_aparell? 0 : 1;
+            } else if (nom == 'max_compensacions') {
+                envia = this.max_compensacions;
             } else {
                 envia = this.habilita_registre? 0 : 1;
             }

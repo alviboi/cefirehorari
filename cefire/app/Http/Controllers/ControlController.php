@@ -44,6 +44,9 @@ class ControlController extends Controller
         if (isset($request->registra)){
             $con->registra = $request->registra;
         }
+        if (isset($request->max_compensacions)){
+            $con->max_compensacions = $request->max_compensacions;
+        }
         $con->save();
         return "S'han actualitzat les dades";
     }

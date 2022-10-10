@@ -10,6 +10,9 @@ use App\Events\GuardiaAfegidaGeneral;
 use App\Mail\EnviarGuardia;
 
 use App\Models\guardia;
+use App\Models\compensa;
+use App\Models\permis;
+use App\Models\visita;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use App\Jobs\SendGuardiaMail;
@@ -69,6 +72,21 @@ class guardiaController extends Controller
      */
     public function put_guardia_id(Request $request)
     {
+        if ($request->mati=="m"){
+            $h="09:00:00";
+        } else {
+            $h="16:00:00";
+        }
+
+        $a = compensa::get()->where('user_id',"=",$request->id)->where('inici',"=",$h)->where('data',"=",$request->data);
+        $b = permis::get()->where('user_id',"=",$request->id)->where('inici',"=",$h)->where('data',"=",$request->data);
+        $c = visita::get()->where('user_id',"=",$request->id)->where('inici',"=",$h)->where('data',"=",$request->data);
+        if (!$a->isEmpty() || !$b->isEmpty() || !$c->isEmpty()) {
+            abort(403,"Aquest usuari no pot fer una guàrdia este dia");
+        }
+        
+
+
         $guardia = new guardia();
         $guardia->user_id=$request->id;
         $guardia->data=$request->data;
@@ -105,7 +123,7 @@ class guardiaController extends Controller
    		dispatch($emailJob);
         return $guardia;
 
-
+        //abort(403,"No tens permís per a borrar aquest avís");
 
     }
 

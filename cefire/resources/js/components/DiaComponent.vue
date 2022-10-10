@@ -12,7 +12,7 @@
           @click="afegix_cefire()"
           class="btn btn-primary btn-sm"
         >
-          <i class="fas fa-check"></i>
+          <i class="fa-solid fa-user-check"></i>
         </button>
         <button
           data-toggle="tooltip"
@@ -57,7 +57,7 @@
           class="btn btn-primary btn-sm"
           @click="obre_permis()"
         >
-          <i class="fas fa-virus"></i>
+          <i class="fa-solid fa-bed-pulse"></i>
         </button>
       </div>
       <!-- COLUMNA LATERAL DESPLEGABLE -->
@@ -341,7 +341,7 @@ export default {
             link.click();
         })
         .catch(err => {
-            this.$toast.error("Error: Pareix que no ha pujat el permís");
+            this.$toast.error("Error: Pareix que no s'ha pujat el permís");
             console.error(err);
         })
     },
@@ -503,7 +503,8 @@ export default {
           }
         })
         .catch((err) => {
-          this.$toast.error(err.response.data);
+          console.error(err);
+          this.$toast.error("err.response.data.message");
         });
     },
     // Afegix element que requerixca el nom d'un motiu
@@ -545,6 +546,7 @@ export default {
         })
         .catch((err) => {
           console.error(err);
+          this.$toast.error(err.response.data.message);
         });
       this[varNom] = "";
       this.arxiu_pujat="";
