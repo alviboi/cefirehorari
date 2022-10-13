@@ -428,6 +428,32 @@ export default {
           console.error(err);
         });
     },
+    get_de_bd_tot() {
+      axios
+        .get("dia_tot/"+data_db(this.data)+"/"+this.mati) ///dia_cefire/{dia}/{mati}
+        .then((res) => {
+          console.log(res.data);
+          this["cefire"] = res.data["cefire"];
+          this["compensa"] = res.data["compensa"];
+          this["curs"] = res.data["curs"];
+          this["visita"] = res.data["visita"];
+          this["guardia"] = res.data["guardia"];
+          this["incidencies"] = res.data["incidencies"];
+          this["permis"] = res.data["permis"];
+           // this.get_de_bd("cefire");
+    // this.get_de_bd();
+    // this.get_de_bd();
+    // this.get_de_bd();
+    // this.get_de_bd();
+    // this.get_de_bd();
+    // this.get_de_bd();
+          
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    },
+
     // Afegix element cefire al dia
     afegix_cefire(){
         //alert(this.data);
@@ -598,13 +624,14 @@ export default {
   },
   mounted() {
 
-    this.get_de_bd("cefire");
-    this.get_de_bd("compensa");
-    this.get_de_bd("curs");
-    this.get_de_bd("visita");
-    this.get_de_bd("guardia");
-    this.get_de_bd("incidencies");
-    this.get_de_bd("permis");
+    // this.get_de_bd("cefire");
+    // this.get_de_bd("compensa");
+    // this.get_de_bd("curs");
+    // this.get_de_bd("visita");
+    // this.get_de_bd("guardia");
+    // this.get_de_bd("incidencies");
+    // this.get_de_bd("permis");
+    this.get_de_bd_tot();
     this.get_nom_dia();
     this.get_dia_mes();
     this.channel_create();

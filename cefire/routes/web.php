@@ -76,6 +76,7 @@ Route::get('/dia_visita/{dia}/{mati}', 'UserController@dia_visita')->name('dia_v
 Route::get('/dia_guardia/{dia}/{mati}', 'UserController@dia_guardia')->name('dia_guardia')->middleware('auth');
 Route::get('/dia_permis/{dia}/{mati}', 'UserController@dia_permis')->name('dia_permis')->middleware('auth');
 Route::get('/dia_incidencies/{dia}/{mati}', 'UserController@dia_incidencies')->name('dia_incidencies')->middleware('auth');
+Route::get('/dia_tot/{dia}/{mati}', 'UserController@dia_tot')->name('dia_tot');//->middleware('auth');
 Route::get('/guardia/totes/{mes}/{any}', 'guardiaController@get_data_index2')->name('guardia_totes')->middleware('auth');
 Route::get('/guardia/totes_les_guardies', 'guardiaController@get_numero_de_guardies')->name('guardia_totals')->middleware('auth');
 

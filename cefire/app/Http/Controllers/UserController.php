@@ -253,7 +253,7 @@ class UserController extends Controller
         if ($mati == 'm') $control='<'; else $control='>';
         $cefire = User::find(auth()->id())->cefire()->where('data','=',$dia)->where('fi',$control,'15:00:00')->get();
         $ret2=array();
-        foreach ($cefire as  $value) {
+        foreach ($cefire as $value) {
             $ret1 = array("id" => $value->id, "user_id" => $value->user_id,"inici" => $value->inici->format('H:i:s'),"fi" => $value->fi->format('H:i:s'));
             array_push($ret2,$ret1);
 
@@ -357,6 +357,28 @@ class UserController extends Controller
         if ($mati == 'm') $control='<'; else $control='>';
         $cefire = User::find(auth()->id())->permis()->where('data','=',$dia)->where('fi',$control,'15:00:00')->get();
         return $cefire;
+    }
+
+    public function dia_tot($dia,$mati)
+    {
+        //
+        $cefire = array();
+        $ret2=array();
+        $ret3=array();
+        if ($mati == 'm') $control='<'; else $control='>';
+        $cefire['permis'] = User::find(auth()->id())->permis()->where('data','=',$dia)->where('fi',$control,'15:00:00')->get();
+        $cefire['visita'] = User::find(auth()->id())->visita()->where('data','=',$dia)->where('fi',$control,'15:00:00')->get();
+        $cefire['compensa'] = User::find(auth()->id())->compensa()->where('data','=',$dia)->where('fi',$control,'15:00:00')->get();
+        $cefire ['curs'] = User::find(auth()->id())->curs()->where('data','=',$dia)->where('fi',$control,'15:00:00')->get();
+        $cefire ['guardia'] = User::find(auth()->id())->guardia()->where('data','=',$dia)->where('fi',$control,'15:00:00')->get();
+        $ret2 = User::find(auth()->id())->cefire()->where('data','=',$dia)->where('fi',$control,'15:00:00')->get();
+        
+        foreach ($ret2 as $value) {
+            $ret1 = array("id" => $value->id, "user_id" => $value->user_id,"inici" => $value->inici->format('H:i:s'),"fi" => $value->fi->format('H:i:s'));
+            array_push($ret3,$ret1);
+        }
+        $cefire['cefire'] = $ret3;
+        return $cefire; 
     }
 
 
