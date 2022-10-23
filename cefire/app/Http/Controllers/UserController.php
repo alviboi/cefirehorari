@@ -226,6 +226,7 @@ class UserController extends Controller
             $user->email=$request->mail;
             $user->Perfil=$request->perfil;
             $user->rfid=$request->rfid;
+            $user->moscosos=$request->moscosos;
             if($user->contrasenya != ""){
                 $user->password=$request->contrasenya;
             }
@@ -293,6 +294,21 @@ class UserController extends Controller
         if ($mati == 'm') $control='<'; else $control='>';
         $incidencies = User::find(auth()->id())->incidencies()->where('data','=',$dia)->where('fi',$control,'15:00:00')->get();
         return $incidencies;
+    }
+    /**
+     * dia_moscoso
+     *
+     * Torna la informació sol·licitada d'un moment concret del dia del recurs
+     *
+     * @param  mixed $dia
+     * @param  mixed $mati
+     * @return array $ret2 amb tota la informació
+     */
+    public function dia_moscoso($dia,$mati)
+    {
+        //
+        $moscoso = User::find(auth()->id())->moscoso()->where('data','=',$dia)->get();
+        return $moscoso;
     }
     /**
      * dia_curs
@@ -378,6 +394,9 @@ class UserController extends Controller
             array_push($ret3,$ret1);
         }
         $cefire['cefire'] = $ret3;
+        $cefire['moscosos'] = User::find(auth()->id())->moscoso()->where('data','=',$dia)->get();
+        
+        
         return $cefire; 
     }
 

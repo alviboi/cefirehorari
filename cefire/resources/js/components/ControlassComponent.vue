@@ -20,6 +20,10 @@
                   <span data-uk-icon="icon: world"></span>
                   {{ item.Perfil }}
               </div>
+              <div class="moscosos">
+                  <span data-uk-icon="icon: tripadvisor"></span>
+                  {{ item.moscosos }}
+              </div>
               <div class="rfid">
                   <span data-uk-icon="icon: credit-card"></span>
                   {{ item.rfid }}
@@ -66,7 +70,12 @@
                             <input v-model="edita_u.perfil" class="uk-input" type="number" min="0" max="3" step="1" placeholder="Perfil">
                         </div>
                     </div>
-
+                    <div class="uk-margin">
+                        <div class="uk-inline">
+                            <span class="uk-form-icon" uk-icon="icon: tripadvisor"></span>
+                            <input v-model="edita_u.moscosos" class="uk-input" type="number" step="1" placeholder="moscosos">
+                        </div>
+                    </div>
                     <div class="uk-margin">
                         <div class="uk-inline">
                             <span class="uk-form-icon" uk-icon="icon: credit-card"></span>
@@ -99,6 +108,7 @@ export default {
                 nom: "",
                 mail: "",
                 perfil: 0,
+                moscosos: 0,
                 rfid: ""
             }
         }
@@ -136,6 +146,7 @@ export default {
             this.edita_u.mail=results[0].email;
             this.edita_u.perfil=results[0].Perfil;
             this.edita_u.rfid=results[0].rfid;
+            this.edita_u.moscosos=results[0].moscosos;
             UIkit.modal("#edita").show();
         },
         // Agafa usuaris
@@ -165,10 +176,10 @@ $fondo: #f1faee
     width: 100%
 .llistat
     display: grid
-    grid-template-columns: 0.3fr 1.7fr 1fr 1fr 1fr 0.3fr
+    grid-template-columns: 0.3fr 1.4fr 1fr 0.3fr 0.7fr 0.7fr 0.3fr
     grid-template-rows: 1fr
     gap: 0px 0px
-    grid-template-areas: "id nom mail perfil rfid botons"
+    grid-template-areas: "id nom mail perfil moscosos rfid botons"
     border: 2px solid black
     border-radius: 10px
     margin: 10px
@@ -190,6 +201,9 @@ $fondo: #f1faee
         grid-area: mail
     .perfil
         grid-area: perfil
+    .moscosos
+        @extend comu
+        grid-area: moscosos
     .rfid
         @extend comu
         grid-area: rfid

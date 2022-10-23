@@ -41,6 +41,8 @@
                                         @endif
                                         <li><a href="#" @click="showModal = true"><span data-uk-icon="icon: warning"></span> Escriu Avís</a></li>
 										<li><a href="#" @click="showModalInc = true"><span data-uk-icon="icon: lifesaver"></span> Escriu Incidència</a></li>
+										<li><a href="#" @click="showModalMosc = true"><span data-uk-icon="icon: tripadvisor"></span> Escriu Moscoso</a></li>
+
 										<li class="uk-nav-divider"></li>
 										<li><a href="#" @click="view = 'personals'"><span data-uk-icon="icon: image"></span> Dades Personals</a></li>
 										<li class="uk-nav-divider"></li>

@@ -107,7 +107,9 @@ Vue.component('centres-component', require('./components/Centres/CentresComponen
 Vue.component('buscahorari-component', require('./components/BuscahorariComponent.vue').default);
 Vue.component('line-component', require('./components/Reports/LinegrafComponent.vue').default);
 Vue.component('pie-component', require('./components/Reports/PiegrafComponent.vue').default);
-//Vue.component('llistatcompensacions-component', require('./components/LlistatCompensacions.vue').default);
+//Vue.component('pie-component', require('./components/Reports/PiegrafComponent.vue').default);
+
+Vue.component('escriumoscoso-component', require('./components/Moscosos/EscriuMoscosoComponent.vue').default);
 
 
 
@@ -144,6 +146,7 @@ const app = new Vue({
         showMissatge: false,
         showModal: false,
         showModalInc: false,
+        showModalMosc: false,
         // calendar: false,
         // horari: false,
         showEdita: false,
@@ -226,6 +229,10 @@ const app = new Vue({
             // alert('hola');
             this.showModalInc=false;
         },
+        tanca_moscoso() {
+            // alert('hola');
+            this.showModalMosc=false;
+        },
         log() {
             axios.get("logat_id")
             .then(res => {
@@ -245,6 +252,7 @@ const app = new Vue({
         // Creem els elements que es van a escoltar pel bus
         this.$eventBus.$on('tanca-avis', this.tanca_avis);
         this.$eventBus.$on('tanca-incidencia', this.tanca_incidencia);
+        this.$eventBus.$on('tanca-moscoso', this.tanca_moscoso);
         this.$eventBus.$on('tanca-missatge', this.tanca_missatge);
         this.$eventBus.$on('tanca-edita', this.tanca_edita);
         this.log();
@@ -255,6 +263,7 @@ const app = new Vue({
         this.$eventBus.$off('tanca-missatge');
         this.$eventBus.$off('tanca-edita');
         this.$eventBus.$off('tanca-incidencia');
+        this.$eventBus.$off('tanca-moscoso');
 
     }
 

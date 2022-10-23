@@ -122,6 +122,13 @@
             <span @click="borra_par('incidencies', inc.id)" class="cerrar" />
           </div>
           <div
+            v-for="mosc in moscosos"
+            class="s-moscosos list-complete-item"
+            :key="'mosc' + mosc.id"
+          >
+            <span @click="borra_par('moscosos', mosc.id)" class="cerrar" />
+          </div>
+          <div
             v-for="perm in permis"
             class="s-permis list-complete-item"
             :key="'perm' + perm.id"
@@ -292,6 +299,7 @@ export default {
       visita: {},
       guardia: {},
       incidencies: {},
+      moscosos: {},
       permis: {},
       curs_i: "",
       compensa_i: "",
@@ -406,13 +414,18 @@ export default {
         .delete(url)
         .then((res) => {
           console.log(res);
-          for (let index = 0; index < this[bd].length; index++) {
-            if (this[bd][index].id == id) {
-              this[bd].splice(index, 1);
+          if(bd == "moscosos") {
+            this.$eventBus.$emit('moscoso-enviat');
+          } else {
+            for (let index = 0; index < this[bd].length; index++) {
+              if (this[bd][index].id == id) {
+                this[bd].splice(index, 1);
+              }
             }
-          }
+          }          
         })
         .catch((err) => {
+          this.$toast.error(err.response.data.message);
           console.error(err);
         });
     },
@@ -440,6 +453,7 @@ export default {
           this["guardia"] = res.data["guardia"];
           this["incidencies"] = res.data["incidencies"];
           this["permis"] = res.data["permis"];
+          this["moscosos"] = res.data["moscosos"];
            // this.get_de_bd("cefire");
     // this.get_de_bd();
     // this.get_de_bd();
@@ -498,7 +512,7 @@ export default {
             }
         })
         .catch((err) => {
-          this.$toast.error(err.response.data);
+          this.$toast.error(err.response.data.message);
         });
     },
     // Afegix qualsevol altre element que necessite hora a la base de dades
@@ -582,6 +596,9 @@ export default {
     get_incidencia(){
         this.get_de_bd("incidencies")
     },
+    get_moscosos(){
+        this.get_de_bd("moscosos")
+    },
     // Afegix guardia al array de guàrdies
     afg_guardia(dat){
         this.guardia.push(dat);
@@ -637,6 +654,7 @@ export default {
     this.channel_create();
     this.channel_borra();
     this.$eventBus.$on('incidencia-enviada', this.get_incidencia);
+    this.$eventBus.$on('moscoso-enviat', this.get_moscosos);
   },
   beforeDestroy() {
       this.$eventBus.$off('incidencia-enviada');
@@ -771,6 +789,14 @@ $fondo:  #f1faee
                         content: "PERMÍS"
                     @media (max-width: 1280px)
                         content: "PER..."
+            &moscosos
+                @extend .s-
+                background-color: violet
+                &:before
+                    @media (min-width: 1280px)
+                        content: "MOSCOSO"
+                    @media (max-width: 1280px)
+                        content: "MOS..."
             &incidencia
                 @extend .s-
                 background-color: MediumVioletRed

@@ -8,9 +8,11 @@
  --}}
 <escriuincidencia-component :show-incidencia="this.showModalInc"></escriuincidencia-component>
 
- <escriuavis-component :show-modal="this.showModal"></escriuavis-component>
+<escriumoscoso-component :show-moscoso="this.showModalMosc"></escriumoscoso-component>
 
- <editaperfil-component :show-edita="this.showEdita"></editaperfil-component>
+<escriuavis-component :show-modal="this.showModal"></escriuavis-component>
 
- <escriumsg-component :show-missatge="this.showMissatge"/></escriumsg-conponent>
+<editaperfil-component :show-edita="this.showEdita"></editaperfil-component>
+
+<escriumsg-component :show-missatge="this.showMissatge"/></escriumsg-conponent>
 
