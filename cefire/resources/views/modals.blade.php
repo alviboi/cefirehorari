@@ -10,6 +10,8 @@
 
 <escriumoscoso-component :show-moscoso="this.showModalMosc"></escriumoscoso-component>
 
+<escriuvacances-component :show-vacances="this.showModalVac"></escriuvacances-component>
+
 <escriuavis-component :show-modal="this.showModal"></escriuavis-component>
 
 <editaperfil-component :show-edita="this.showEdita"></editaperfil-component>

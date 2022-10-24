@@ -1,14 +1,14 @@
 <template>
   <div>
 
-    <div class="titulet" data-uk-tooltip="animation: true; offset: 2;" :title="data">{{ nom_dia }} {{ dia_mes }}  <span v-html="mati_icon"></span></div>
+    <div class="titulet" data-uk-tooltip="animation: true; offset: 2;" :title="data">{{ nom_dia }} {{ dia_mes }}  </div> <!--<span v-html="mati_icon"></span>-->
     <div class="dia">
       <!-- COLUMNA LATERAL DESPLEGABLE -->
       <div class="lateral_esquerre flex-container">
         <button
           data-toggle="tooltip"
           data-placement="bottom"
-          title="CEFIRE"
+          title="FITXATGE"
           @click="afegix_cefire()"
           class="btn btn-primary btn-sm"
         >
@@ -44,11 +44,29 @@
         <button
           data-toggle-second="tooltip"
           data-placement="bottom"
-          title="VISITA"
+          title="COM. SERV."
           class="btn btn-primary btn-sm"
           :uk-toggle="'target: #visita-modal'+this._uid"
         >
           <i class="fas fa-school"></i>
+        </button>
+        <button
+          data-toggle-second="tooltip"
+          data-placement="bottom"
+          title="MOSCOSO"
+          class="btn btn-primary btn-sm"
+          @click="emitix('obre-moscoso')"
+        >
+          <i class="fa-solid fa-champagne-glasses"></i>
+        </button>
+        <button
+          data-toggle-second="tooltip"
+          data-placement="bottom"
+          title="VACANCES"
+          class="btn btn-primary btn-sm"
+          @click="emitix('obre-vacances')"
+        >
+          <i class="fa-solid fa-plane-departure"></i>
         </button>
         <button
           data-toggle-second="tooltip"
@@ -127,6 +145,15 @@
             :key="'mosc' + mosc.id"
           >
             <span @click="borra_par('moscosos', mosc.id)" class="cerrar" />
+            <span :class="(mosc.aprobada!=1) ? 'falta_validar' : ''"></span>
+          </div>
+          <div
+            v-for="vac in vacances"
+            class="s-vacances list-complete-item"
+            :key="'vac' + vac.id"
+          >
+            <span @click="borra_par('vacances', vac.id)" class="cerrar" />
+            <span :class="(vac.aprobada!=1) ? 'falta_validar' : ''"></span>
           </div>
           <div
             v-for="perm in permis"
@@ -154,9 +181,16 @@
               class="uk-form-large data-uk-input uk-width-1-1"
               type="text"
               placeholder="Curs a realitzar"
+              required
             />
           </div>
-        </fieldset>
+          <div class="uk-margin">                        
+              <label>Hora: </label>
+                  <vue-timepicker :minute-interval="5" v-model="inici"></vue-timepicker>
+              <span> a </span>
+                  <vue-timepicker :minute-interval="5" v-model="fi"></vue-timepicker> 
+              </div>
+          </fieldset>
         <p class="uk-text-right">
           <button
             class="uk-button uk-button-default uk-modal-close"
@@ -186,6 +220,12 @@
               type="text"
               placeholder="Motiu pel que compenses"
             />
+          </div>
+          <div class="uk-margin">                        
+              <label>Hora: </label>
+                  <vue-timepicker :minute-interval="5" v-model="inici"></vue-timepicker>
+              <span> a </span>
+                  <vue-timepicker :minute-interval="5" v-model="fi"></vue-timepicker> 
           </div>
         </fieldset>
         <p class="uk-text-right">
@@ -218,7 +258,13 @@
               placeholder="Visita a realitzar"
             />
           </div>
-        </fieldset>
+          <div class="uk-margin">                        
+              <label>Hora: </label>
+                  <vue-timepicker :minute-interval="5" v-model="inici"></vue-timepicker>
+              <span> a </span>
+                  <vue-timepicker :minute-interval="5" v-model="fi"></vue-timepicker> 
+          </div>
+          </fieldset>
         <p class="uk-text-right">
           <button
             class="uk-button uk-button-default uk-modal-close"
@@ -247,6 +293,12 @@
               type="text"
               placeholder="Motiu del permís"
             />
+            <div class="uk-margin">                        
+              <label>Hora: </label>
+                  <vue-timepicker :minute-interval="5" v-model="inici"></vue-timepicker>
+              <span> a </span>
+                  <vue-timepicker :minute-interval="5" v-model="fi"></vue-timepicker> 
+              </div>
             <div :id="'upload'+this._uid" class="js-upload uk-placeholder uk-text-center">
                 <div>
                         {{avis_pujada}}
@@ -287,7 +339,8 @@
 /**
  * Component d'un únic dia que controla totes les accions que es realitzen sobre el mateix dia
  */
-
+import VueTimepicker from 'vue2-timepicker'
+import 'vue2-timepicker/dist/VueTimepicker.css'
 export default {
   data() {
     return {
@@ -300,11 +353,14 @@ export default {
       guardia: {},
       incidencies: {},
       moscosos: {},
+      vacances: {},
       permis: {},
       curs_i: "",
       compensa_i: "",
       visita_i: "",
       permis_i: "",
+      inici: "",
+      fi: "",
       dies: [
             'Diumenge',
             'Dilluns',
@@ -322,8 +378,14 @@ export default {
     act: 1
     };
   },
-  props: ['mati','data'],
+  props: ['data'],
+  components: {
+        VueTimepicker        
+  },
   methods: {
+    emitix(emitix_bus) {
+      this.$eventBus.$emit(emitix_bus);
+    },
     // Mètode per a descarregar el arxiu, es reb com un objecte binari de grans dimensions (blob) per a reconstrueix i permet descarregar-se. D'aquesta
     // manera l'arxiu no té cap enllaç per a poder-se descarregar.
     mira_arxiu(d){
@@ -414,15 +476,13 @@ export default {
         .delete(url)
         .then((res) => {
           console.log(res);
-          if(bd == "moscosos") {
-            this.$eventBus.$emit('moscoso-enviat');
-          } else {
+
             for (let index = 0; index < this[bd].length; index++) {
               if (this[bd][index].id == id) {
                 this[bd].splice(index, 1);
               }
             }
-          }          
+                 
         })
         .catch((err) => {
           this.$toast.error(err.response.data.message);
@@ -432,7 +492,7 @@ export default {
     // Agafa elements de la base de dades
     get_de_bd(bd) {
       axios
-        .get("dia_"+bd+"/"+data_db(this.data)+"/"+this.mati) ///dia_cefire/{dia}/{mati}
+        .get("dia_"+bd+"/"+data_db(this.data)) ///dia_cefire/{dia}/{mati}
         .then((res) => {
           console.log(res.data);
           this[bd] = res.data;
@@ -443,7 +503,7 @@ export default {
     },
     get_de_bd_tot() {
       axios
-        .get("dia_tot/"+data_db(this.data)+"/"+this.mati) ///dia_cefire/{dia}/{mati}
+        .get("dia_tot/"+data_db(this.data)) ///dia_cefire/{dia}/{mati}
         .then((res) => {
           console.log(res.data);
           this["cefire"] = res.data["cefire"];
@@ -454,6 +514,7 @@ export default {
           this["incidencies"] = res.data["incidencies"];
           this["permis"] = res.data["permis"];
           this["moscosos"] = res.data["moscosos"];
+          this["vacances"] = res.data["vacances"];
            // this.get_de_bd("cefire");
     // this.get_de_bd();
     // this.get_de_bd();
@@ -512,7 +573,7 @@ export default {
             }
         })
         .catch((err) => {
-          this.$toast.error(err.response.data.message);
+          this.$toast.error(err.response.data);
         });
     },
     // Afegix qualsevol altre element que necessite hora a la base de dades
@@ -551,26 +612,19 @@ export default {
     salva(desti) {
       let varNom = desti + "_i";
       let inici,fi;
-      if (this.mati=='m'){
-        inici="9:00:00";
-        fi="14:00:00";
-      } else {
-        inici="16:00:00";
-        fi="20:00:00";
-      }
       if (desti=="permis"){
         var params = {
             data: data_db(this.data),
-            inici: inici,
-            fi: fi,
+            inici: this.inici,
+            fi: this.fi,
             motiu: this[varNom],
             arxiu: this.arxiu_pujat
         };
       } else {
         var params = {
             data: data_db(this.data),
-            inici: inici,
-            fi: fi,
+            inici: this.inici,
+            fi: this.fi,
             motiu: this[varNom]
         };
       }
@@ -598,6 +652,9 @@ export default {
     },
     get_moscosos(){
         this.get_de_bd("moscosos")
+    },
+    get_vacances(){
+        this.get_de_bd("vacances")
     },
     // Afegix guardia al array de guàrdies
     afg_guardia(dat){
@@ -655,6 +712,7 @@ export default {
     this.channel_borra();
     this.$eventBus.$on('incidencia-enviada', this.get_incidencia);
     this.$eventBus.$on('moscoso-enviat', this.get_moscosos);
+    this.$eventBus.$on('vacances-enviat', this.get_vacances);
   },
   beforeDestroy() {
       this.$eventBus.$off('incidencia-enviada');
@@ -745,9 +803,9 @@ $fondo:  #f1faee
                 background-color: $blue
                 &:before
                     @media (min-width: 1280px)
-                        content: "CEFIRE"
+                        content: "FITXATGE"
                     @media (max-width: 1280px)
-                        content: "CEF..."
+                        content: "FITX..."
             &compensa
                 @extend .s-
                 background-color: gray
@@ -797,6 +855,14 @@ $fondo:  #f1faee
                         content: "MOSCOSO"
                     @media (max-width: 1280px)
                         content: "MOS..."
+            &vacances
+                @extend .s-
+                background-color: white
+                &:before
+                    @media (min-width: 1280px)
+                        content: "VACANCES"
+                    @media (max-width: 1280px)
+                        content: "VAC..."
             &incidencia
                 @extend .s-
                 background-color: MediumVioletRed

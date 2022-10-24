@@ -18,11 +18,17 @@
               </div>
               <div class="perfil">
                   <span data-uk-icon="icon: world"></span>
-                  {{ item.Perfil }}
+                  <span v-if=" item.Perfil == 1">Admin</span>
+                  <span v-else-if=" item.Perfil == 0">Assessor</span>
+                  <span v-else>Altres</span>
               </div>
               <div class="moscosos">
-                  <span data-uk-icon="icon: tripadvisor"></span>
+                  <span><i class="fa-solid fa-champagne-glasses"></i></span>
                   {{ item.moscosos }}
+              </div>
+              <div class="vacances">
+                  <span><i class="fa-solid fa-plane-departure"></i></span>
+                  {{ item.vacances }}
               </div>
               <div class="rfid">
                   <span data-uk-icon="icon: credit-card"></span>
@@ -72,8 +78,14 @@
                     </div>
                     <div class="uk-margin">
                         <div class="uk-inline">
-                            <span class="uk-form-icon" uk-icon="icon: tripadvisor"></span>
+                            <span class="uk-form-icon"><i class="fa-solid fa-champagne-glasses"></i></span>
                             <input v-model="edita_u.moscosos" class="uk-input" type="number" step="1" placeholder="moscosos">
+                        </div>
+                    </div>
+                    <div class="uk-margin">
+                        <div class="uk-inline">
+                            <span class="uk-form-icon"><i class="fa-solid fa-plane-departure"></i></span>
+                            <input v-model="edita_u.vacances" class="uk-input" type="number" step="1" placeholder="vacances">
                         </div>
                     </div>
                     <div class="uk-margin">
@@ -147,6 +159,7 @@ export default {
             this.edita_u.perfil=results[0].Perfil;
             this.edita_u.rfid=results[0].rfid;
             this.edita_u.moscosos=results[0].moscosos;
+            this.edita_u.vacances=results[0].vacances;
             UIkit.modal("#edita").show();
         },
         // Agafa usuaris
@@ -176,10 +189,10 @@ $fondo: #f1faee
     width: 100%
 .llistat
     display: grid
-    grid-template-columns: 0.3fr 1.4fr 1fr 0.3fr 0.7fr 0.7fr 0.3fr
+    grid-template-columns: 0.3fr 1.2fr 1fr 0.5fr 0.3fr 0.3fr 0.7fr 0.3fr
     grid-template-rows: 1fr
     gap: 0px 0px
-    grid-template-areas: "id nom mail perfil moscosos rfid botons"
+    grid-template-areas: "id nom mail perfil moscosos vacances rfid botons"
     border: 2px solid black
     border-radius: 10px
     margin: 10px
@@ -204,6 +217,9 @@ $fondo: #f1faee
     .moscosos
         @extend comu
         grid-area: moscosos
+    .vacances
+        @extend comu
+        grid-area: vacances
     .rfid
         @extend comu
         grid-area: rfid

@@ -45,6 +45,86 @@
             </div>
           </div>
         </div>
+        <!-- VACANCES -->
+        <div v-for="item in vacances" :key="item.id">
+          <div class="llistatcomp">
+            <div class="data">
+              <span data-uk-icon="icon: calendar"></span>
+              {{ item.data }}
+            </div>
+            <div class="nom">
+              <span data-uk-icon="icon: user"></span>
+              <b>{{ item.name }}</b>
+            </div>
+            <div class="mati">
+              <span data-uk-icon="icon: clock"></span>
+              <span v-if="item.inici == '09:00:00'"
+                ><i class="fas fa-sun"></i>{{ item.inici }} -
+                {{ item.fi }}</span
+              >
+              <span v-else
+                ><i class="fas fa-moon"></i>{{ item.inici }} -
+                {{ item.fi }}</span
+              >
+            </div>
+            <div class="motiu">
+              <span data-uk-icon="icon: comments"></span>
+              {{ item.motiu }}
+            </div>
+            <div class="botons">
+              <div
+                @click.prevent="valida(item.id)"
+                class="uk-icon-button uk-text-success"
+                uk-icon="check"
+              ></div>
+              <div
+                @click.prevent="borra(item.id)"
+                class="uk-icon-button uk-text-danger"
+                uk-icon="close"
+              ></div>
+            </div>
+          </div>
+        </div>
+        <!-- MOSCOSOS -->
+        <div v-for="item in moscosos" :key="item.id">
+          <div class="llistatcomp">
+            <div class="data">
+              <span data-uk-icon="icon: calendar"></span>
+              {{ item.data }}
+            </div>
+            <div class="nom">
+              <span data-uk-icon="icon: user"></span>
+              <b>{{ item.name }}</b>
+            </div>
+            <div class="mati">
+              <span data-uk-icon="icon: clock"></span>
+              <span v-if="item.inici == '09:00:00'"
+                ><i class="fas fa-sun"></i>{{ item.inici }} -
+                {{ item.fi }}</span
+              >
+              <span v-else
+                ><i class="fas fa-moon"></i>{{ item.inici }} -
+                {{ item.fi }}</span
+              >
+            </div>
+            <div class="motiu">
+              <span data-uk-icon="icon: comments"></span>
+              {{ item.motiu }}
+            </div>
+            <div class="botons">
+              <div
+                @click.prevent="valida(item.id)"
+                class="uk-icon-button uk-text-success"
+                uk-icon="check"
+              ></div>
+              <div
+                @click.prevent="borra(item.id)"
+                class="uk-icon-button uk-text-danger"
+                uk-icon="close"
+              ></div>
+            </div>
+          </div>
+        </div>
       </transition-group>
     </div>
   </div>
@@ -60,6 +140,8 @@ export default {
     return {
       hui: new Date(),
       compensacions: {},
+      moscosos: {},
+      vacances: {},
     };
   },
   methods: {
@@ -69,6 +151,30 @@ export default {
         .post(url)
         .then((res) => {
           this.compensacions = res.data;
+          console.log(res);
+        })
+        .catch((err) => {
+          this.$toast.error(err.response.data.message);
+        });
+    },
+    agafa_moscosos() {
+      let url = "moscosos_no_validades";
+      axios
+        .post(url)
+        .then((res) => {
+          this.moscosos = res.data;
+          console.log(res);
+        })
+        .catch((err) => {
+          this.$toast.error(err.response.data.message);
+        });
+    },
+    agafa_vacances() {
+      let url = "vacances_no_validades";
+      axios
+        .post(url)
+        .then((res) => {
+          this.vacances = res.data;
           console.log(res);
         })
         .catch((err) => {
@@ -93,8 +199,84 @@ export default {
           this.$toast.error(err.response.data.message);
         });
     },
+    borra_moscosos(id) {
+      let url = "compensa/" + id;
+      for (let index = 0; index < this.compensacions.length; index++) {
+        if (this.compensacions[index].id == id) {
+          this.compensacions.splice(index, 1);
+        }
+      }
+      axios
+        .delete(url)
+        .then((res) => {
+          console.log(res);
+          this.$toast.success("Borrat correctament");
+        })
+        .catch((err) => {
+          console.error(err);
+          this.$toast.error(err.response.data.message);
+        });
+    },
+    borra_vacances(id) {
+      let url = "compensa/" + id;
+      for (let index = 0; index < this.compensacions.length; index++) {
+        if (this.compensacions[index].id == id) {
+          this.compensacions.splice(index, 1);
+        }
+      }
+      axios
+        .delete(url)
+        .then((res) => {
+          console.log(res);
+          this.$toast.success("Borrat correctament");
+        })
+        .catch((err) => {
+          console.error(err);
+          this.$toast.error(err.response.data.message);
+        });
+    },
     // Edita assessor
     valida(id) {
+      let url = "validacompensacio";
+      for (let index = 0; index < this.compensacions.length; index++) {
+        if (this.compensacions[index].id == id) {
+          this.compensacions.splice(index, 1);
+        }
+      }
+      let params = {
+        id: id,
+      };
+      axios
+        .post(url, params)
+        .then((res) => {
+          console.log(res);
+          this.$toast.success("Has validat la compensació");
+        })
+        .catch((err) => {
+          this.$toast.error(err.response.data.message);
+        });
+    },
+    valida_moscosos(id) {
+      let url = "validacompensacio";
+      for (let index = 0; index < this.compensacions.length; index++) {
+        if (this.compensacions[index].id == id) {
+          this.compensacions.splice(index, 1);
+        }
+      }
+      let params = {
+        id: id,
+      };
+      axios
+        .post(url, params)
+        .then((res) => {
+          console.log(res);
+          this.$toast.success("Has validat la compensació");
+        })
+        .catch((err) => {
+          this.$toast.error(err.response.data.message);
+        });
+    },
+    valida_vacances(id) {
       let url = "validacompensacio";
       for (let index = 0; index < this.compensacions.length; index++) {
         if (this.compensacions[index].id == id) {

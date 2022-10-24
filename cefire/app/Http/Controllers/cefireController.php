@@ -71,6 +71,15 @@ class cefireController extends Controller
         //
         $data_hui = date('Y-m-d');
         $en4dies = date('Y-m-d', strtotime($data_hui. ' + 4 days'));
+        $any = date('Y');
+        $data_15_oct = date($any."-10-15");
+        $data_15_mai = date($any."-05-15");
+        $hora_Actual = date('H');  //Per a modificar l'hora a la que es pot fitxar com a màxim
+        if ($hora_Actual >= 22){
+            abort(403,"No pots fitxar a estes hores");
+        }
+
+
         if ($this->aparell == 1){
             if ($request->data != $data_hui){
                 return response("Està habilitat el fitxatge per dies. Has de fitxar cada dia", 403);
@@ -90,6 +99,28 @@ class cefireController extends Controller
                     // return cefire::where('data','=',$request->data)->where('user_id','=',auth()->id())->get();
                 } else {
                     $cef=cefire::where('id','=',$request->id)->first();
+
+                    $a = strtotime($hora);
+                    $b = strtotime($cef->inici);
+                    $interval = $a - $b;
+                    /**
+                     * Calculem una nova hora si excideixes de les hores que has fet. I et registra la nova data
+                     */
+                    //abort(403,$hora . "    " .  $cef->inici . "       " .$interval);
+                    if ($data_hui >= $data_15_oct || $data_hui <= $data_15_mai) {
+                        if ($interval > 27900){//27900
+                            //Calcular nova data $hora
+                            $nova_data = $a + 27900;
+                            $hora = date("H:i:s", $nova_data);
+                        }               
+                    } else {
+                        if ($interval > 26100){
+                            $nova_data = $a + 26100;
+                            $hora = date("H:i:s", $nova_data);
+                            //Calcular nova data $hora
+                        }    
+                    }
+
                     $cef->fi = $hora;
                     $cef->save();
                     $broad = array("data" => $cef->data, "nom" => auth()->user()->name, "id" => $cef->id, "inici" => $cef->inici->format('H:i:s'), "fi" => $cef->fi->format('H:i:s'));

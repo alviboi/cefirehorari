@@ -57,6 +57,7 @@ Route::get('/user_permis/{num}/{any}/{mes}', 'UserController@get_permis')->middl
 Route::get('/user_visita/{num}/{any}/{mes}', 'UserController@get_visita')->middleware('auth');
 Route::get('/user_all/{de}/{fins}', 'UserController@get_all')->middleware('auth');
 Route::get('/user_get', 'UserController@get_user')->middleware('auth');
+Route::get('/user_statistics', 'UserController@get_statistics')->middleware('auth');
 Route::post('/get_usuaris_ldap', 'UserController@get_usuaris_ldap')->middleware('auth');
 
 Route::prefix('complet')->group(function () {
@@ -69,16 +70,17 @@ Route::prefix('complet')->group(function () {
     Route::get('/incidencies/{any}/{mes}', 'IncidenciesController@get_data_index')->middleware('auth');
 });
 
-Route::get('/dia_cefire/{dia}/{mati}', 'UserController@dia_cefire')->name('dia_cefire')->middleware('auth');
-Route::get('/dia_compensa/{dia}/{mati}', 'UserController@dia_compensa')->name('dia_compensa')->middleware('auth');
-Route::get('/dia_curs/{dia}/{mati}', 'UserController@dia_curs')->name('dia_curs')->middleware('auth');
-Route::get('/dia_visita/{dia}/{mati}', 'UserController@dia_visita')->name('dia_vista')->middleware('auth');
-Route::get('/dia_guardia/{dia}/{mati}', 'UserController@dia_guardia')->name('dia_guardia')->middleware('auth');
-Route::get('/dia_permis/{dia}/{mati}', 'UserController@dia_permis')->name('dia_permis')->middleware('auth');
-Route::get('/dia_incidencies/{dia}/{mati}', 'UserController@dia_incidencies')->name('dia_incidencies')->middleware('auth');
-Route::get('/dia_moscosos/{dia}/{mati}', 'UserController@dia_moscoso')->name('dia_moscoso')->middleware('auth');
+Route::get('/dia_cefire/{dia}', 'UserController@dia_cefire')->name('dia_cefire')->middleware('auth');
+Route::get('/dia_compensa/{dia}', 'UserController@dia_compensa')->name('dia_compensa')->middleware('auth');
+Route::get('/dia_curs/{dia}', 'UserController@dia_curs')->name('dia_curs')->middleware('auth');
+Route::get('/dia_visita/{dia}', 'UserController@dia_visita')->name('dia_vista')->middleware('auth');
+Route::get('/dia_guardia/{dia}', 'UserController@dia_guardia')->name('dia_guardia')->middleware('auth');
+Route::get('/dia_permis/{dia}', 'UserController@dia_permis')->name('dia_permis')->middleware('auth');
+Route::get('/dia_incidencies/{dia}', 'UserController@dia_incidencies')->name('dia_incidencies')->middleware('auth');
+Route::get('/dia_moscosos/{dia}', 'UserController@dia_moscoso')->name('dia_moscoso')->middleware('auth');
+Route::get('/dia_vacances/{dia}', 'UserController@dia_vacances')->name('dia_moscoso')->middleware('auth');
 
-Route::get('/dia_tot/{dia}/{mati}', 'UserController@dia_tot')->name('dia_tot')->middleware('auth');
+Route::get('/dia_tot/{dia}', 'UserController@dia_tot')->name('dia_tot')->middleware('auth');
 
 Route::get('/guardia/totes/{mes}/{any}', 'guardiaController@get_data_index2')->name('guardia_totes')->middleware('auth');
 Route::get('/guardia/totes_les_guardies', 'guardiaController@get_numero_de_guardies')->name('guardia_totals')->middleware('auth');
@@ -116,7 +118,8 @@ Route::group(['middleware' => 'auth'], function() {
         'visita' => visitaController::class,
         'avisos' => avisosController::class,
         'incidencies' => IncidenciesController::class,
-        'moscosos' => MoscosoController::class
+        'moscosos' => MoscosoController::class,
+        'vacances' => VacancesController::class,
         ]);
 });
 

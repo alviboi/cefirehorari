@@ -248,11 +248,11 @@ class UserController extends Controller
      * @param  mixed $mati
      * @return array $ret2 amb tota la informació
      */
-    public function dia_cefire($dia,$mati)
+    public function dia_cefire($dia)
     {
         //
-        if ($mati == 'm') $control='<'; else $control='>';
-        $cefire = User::find(auth()->id())->cefire()->where('data','=',$dia)->where('fi',$control,'15:00:00')->get();
+        
+        $cefire = User::find(auth()->id())->cefire()->where('data','=',$dia)->get();
         $ret2=array();
         foreach ($cefire as $value) {
             $ret1 = array("id" => $value->id, "user_id" => $value->user_id,"inici" => $value->inici->format('H:i:s'),"fi" => $value->fi->format('H:i:s'));
@@ -272,11 +272,11 @@ class UserController extends Controller
      * @param  mixed $mati
      * @return array $ret2 amb tota la informació
      */
-    public function dia_guardia($dia,$mati)
+    public function dia_guardia($dia)
     {
         //
-        if ($mati == 'm') $control='<'; else $control='>';
-        $cefire = User::find(auth()->id())->guardia()->where('data','=',$dia)->where('fi',$control,'15:00:00')->get();
+        
+        $cefire = User::find(auth()->id())->guardia()->where('data','=',$dia)->get();
         return $cefire;
     }
     /**
@@ -288,11 +288,11 @@ class UserController extends Controller
      * @param  mixed $mati
      * @return array $ret2 amb tota la informació
      */
-    public function dia_incidencies($dia,$mati)
+    public function dia_incidencies($dia)
     {
         //
-        if ($mati == 'm') $control='<'; else $control='>';
-        $incidencies = User::find(auth()->id())->incidencies()->where('data','=',$dia)->where('fi',$control,'15:00:00')->get();
+        
+        $incidencies = User::find(auth()->id())->incidencies()->where('data','=',$dia)->get();
         return $incidencies;
     }
     /**
@@ -304,10 +304,25 @@ class UserController extends Controller
      * @param  mixed $mati
      * @return array $ret2 amb tota la informació
      */
-    public function dia_moscoso($dia,$mati)
+    public function dia_moscoso($dia)
     {
         //
         $moscoso = User::find(auth()->id())->moscoso()->where('data','=',$dia)->get();
+        return $moscoso;
+    }
+    /**
+     * dia_moscoso
+     *
+     * Torna la informació sol·licitada d'un moment concret del dia del recurs
+     *
+     * @param  mixed $dia
+     * @param  mixed $mati
+     * @return array $ret2 amb tota la informació
+     */
+    public function dia_vacances($dia)
+    {
+        //
+        $moscoso = User::find(auth()->id())->vacances()->where('data','=',$dia)->get();
         return $moscoso;
     }
     /**
@@ -319,11 +334,11 @@ class UserController extends Controller
      * @param  mixed $mati
      * @return array $ret2 amb tota la informació
      */
-    public function dia_curs($dia,$mati)
+    public function dia_curs($dia)
     {
         //
-        if ($mati == 'm') $control='<'; else $control='>';
-        $cefire = User::find(auth()->id())->curs()->where('data','=',$dia)->where('fi',$control,'15:00:00')->get();
+        
+        $cefire = User::find(auth()->id())->curs()->where('data','=',$dia)->get();
         return $cefire;
     }
     /**
@@ -335,11 +350,11 @@ class UserController extends Controller
      * @param  mixed $mati
      * @return array $ret2 amb tota la informació
      */
-    public function dia_compensa($dia,$mati)
+    public function dia_compensa($dia)
     {
         //
-        if ($mati == 'm') $control='<'; else $control='>';
-        $cefire = User::find(auth()->id())->compensa()->where('data','=',$dia)->where('fi',$control,'15:00:00')->get();
+        
+        $cefire = User::find(auth()->id())->compensa()->where('data','=',$dia)->get();
         return $cefire;
     }
     /**
@@ -351,11 +366,11 @@ class UserController extends Controller
      * @param  mixed $mati
      * @return array $ret2 amb tota la informació
      */
-    public function dia_visita($dia,$mati)
+    public function dia_visita($dia)
     {
         //
-        if ($mati == 'm') $control='<'; else $control='>';
-        $cefire = User::find(auth()->id())->visita()->where('data','=',$dia)->where('fi',$control,'15:00:00')->get();
+        
+        $cefire = User::find(auth()->id())->visita()->where('data','=',$dia)->get();
         return $cefire;
     }
     /**
@@ -367,27 +382,28 @@ class UserController extends Controller
      * @param  mixed $mati
      * @return array $ret2 amb tota la informació
      */
-    public function dia_permis($dia,$mati)
+    public function dia_permis($dia)
     {
         //
-        if ($mati == 'm') $control='<'; else $control='>';
-        $cefire = User::find(auth()->id())->permis()->where('data','=',$dia)->where('fi',$control,'15:00:00')->get();
+        
+        $cefire = User::find(auth()->id())->permis()->where('data','=',$dia)->get();
         return $cefire;
     }
 
-    public function dia_tot($dia,$mati)
+    public function dia_tot($dia)
     {
         //
         $cefire = array();
         $ret2=array();
         $ret3=array();
-        if ($mati == 'm') $control='<'; else $control='>';
-        $cefire['permis'] = User::find(auth()->id())->permis()->where('data','=',$dia)->where('fi',$control,'15:00:00')->get();
-        $cefire['visita'] = User::find(auth()->id())->visita()->where('data','=',$dia)->where('fi',$control,'15:00:00')->get();
-        $cefire['compensa'] = User::find(auth()->id())->compensa()->where('data','=',$dia)->where('fi',$control,'15:00:00')->get();
-        $cefire ['curs'] = User::find(auth()->id())->curs()->where('data','=',$dia)->where('fi',$control,'15:00:00')->get();
-        $cefire ['guardia'] = User::find(auth()->id())->guardia()->where('data','=',$dia)->where('fi',$control,'15:00:00')->get();
-        $ret2 = User::find(auth()->id())->cefire()->where('data','=',$dia)->where('fi',$control,'15:00:00')->get();
+        
+        $cefire['permis'] = User::find(auth()->id())->permis()->where('data','=',$dia)->get();
+        $cefire['visita'] = User::find(auth()->id())->visita()->where('data','=',$dia)->get();
+        $cefire['compensa'] = User::find(auth()->id())->compensa()->where('data','=',$dia)->get();
+        $cefire ['curs'] = User::find(auth()->id())->curs()->where('data','=',$dia)->get();
+        $cefire ['guardia'] = User::find(auth()->id())->guardia()->where('data','=',$dia)->get();
+        $cefire ['vacances'] = User::find(auth()->id())->vacances()->where('data','=',$dia)->get();
+        $ret2 = User::find(auth()->id())->cefire()->where('data','=',$dia)->get();
         
         foreach ($ret2 as $value) {
             $ret1 = array("id" => $value->id, "user_id" => $value->user_id,"inici" => $value->inici->format('H:i:s'),"fi" => $value->fi->format('H:i:s'));
@@ -547,6 +563,95 @@ class UserController extends Controller
             'visita' => $visita
         ];
         return $ret;
+
+    }
+
+    public function get_statistics()
+    {
+        $ret = array();
+        //$labels=['cefire','permis','curs','visita'];
+        $year = date('Y');
+        $mes = date('m');
+        $desde = date($year."-".$mes."-1");
+        $fins = date($year."-".$mes."-t");
+
+        $desde_any = date($year."-1-1");
+        $fins_any = date($year."-12-31");
+        
+
+        $cefire=user::find(auth()->id())->cefire()->whereBetween('data', [$desde, $fins])->get();
+        $permis=user::find(auth()->id())->permis()->whereBetween('data', [$desde, $fins])->get();
+        $compensa=user::find(auth()->id())->compensa()->whereBetween('data', [$desde, $fins])->get();
+        $curs=user::find(auth()->id())->curs()->whereBetween('data', [$desde, $fins])->get();
+        $visita=user::find(auth()->id())->visita()->whereBetween('data', [$desde, $fins])->get();
+        $moscosos=user::find(auth()->id())->moscoso()->whereBetween('data', [$desde_any, $fins_any])->count();
+        $vacances=user::find(auth()->id())->vacances()->whereBetween('data', [$desde_any, $fins_any])->count();
+
+        $total_cef=0;
+        foreach($cefire as $cef){
+            $duration = $cef->inici->diffInMinutes($cef->fi);
+            $total_cef=$total_cef+$duration;
+        }
+        $cefire_count=user::find(auth()->id())->cefire()->whereBetween('data', [$desde, $fins])->count();
+        $ret['fitxatges'] = $total_cef. " minuts" . "(".$cefire_count." dies)";
+        $total_per=0;
+        foreach($permis as $perm){
+            $in = Carbon::parse($perm->inici);
+            $fi = Carbon::parse($perm->fi);
+            $duration = $in->diffInMinutes($fi);
+            $total_per=$total_per+$duration;
+        }
+        $ret['permís'] = $total_per. " minuts";
+        $total_comp=0;
+        foreach($compensa as $comp){
+            $in = Carbon::parse($comp->inici);
+            $fi = Carbon::parse($comp->fi);
+            $duration = $in->diffInMinutes($fi);
+            $total_comp=$total_comp+$duration;
+        }
+        $ret['compensa'] = $total_comp. " minuts";
+        $total_curs=0;
+        foreach($curs as $cu){
+            $in = Carbon::parse($cu->inici);
+            $fi = Carbon::parse($cu->fi);
+            $duration = $in->diffInMinutes($fi);
+            $total_curs=$total_curs+$duration;
+        }
+        $ret['curs'] = $total_curs. " minuts";
+        $total_visita=0;
+        foreach($visita as $vi){
+            $in = Carbon::parse($vi->inici);
+            $fi = Carbon::parse($vi->fi);
+            $duration = $in->diffInMinutes($fi);
+            $total_visita=$total_visita+$duration;
+        }
+        $ret['Com. Serv.'] = $total_visita. " minuts";
+        
+        $user = User::find(auth()->id());
+        $ret['moscosos (any)'] = $moscosos." de ".$user->moscosos." consumits";
+        $ret['vacances (any)'] = $vacances." de ".$user->vacances." consumits";
+        $ret['TOTAL TEMPS'] = ($total_visita+$total_curs+$total_cef). " minuts";
+        return $ret;
+
+        // $datos = [round($total_cef/60,2),round($total_per/60,2),round($total_comp/60,2),round($total_curs/60,2)];
+
+        // $ret = array('labels' => $labels, 'datos' => $datos);
+        // return ($ret);
+
+
+
+
+
+
+        //
+        // $ret = array();
+        // $user = User::find(auth()->id());
+        
+        
+
+
+
+        // return $user;
 
 
 

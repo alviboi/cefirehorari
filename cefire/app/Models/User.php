@@ -90,6 +90,14 @@ class User extends Authenticatable
     }
 
     /**
+     * Get the comments guardia data.
+     */
+    public function vacances()
+    {
+        return $this->hasMany('App\Models\Vacances');
+    }
+
+    /**
      * The attributes that are mass assignable.
      *
      * @var array

@@ -4,35 +4,62 @@
         <div class="arrere">
             <button @click="canvia('arr')" class="uk-button uk-button-primary uk-button-large uk-float-left"><span uk-icon="arrow-left"></span></button>
         </div>
-        <div class="mig uk-align-center">
-                <Datepicker
-                :language="ca"
-                :monday-first="true"
-                v-model="dia_aux"
-                @selected="canvia_data()"
-                placeholder="Escollix data a buscar"
-                input-class="uk-input"
-                >
-                </Datepicker>
-        </div>
+
+          <div class="mig uk-align-right">
+                  <Datepicker
+                  :language="ca"
+                  :monday-first="true"
+                  v-model="dia_aux"
+                  @selected="canvia_data()"
+                  placeholder="Escollix data a buscar"
+                  input-class="uk-input"
+                  >
+                  </Datepicker>
+          </div>
+          <div class="mig2 uk-align-left">
+              <button class="uk-button uk-button-default" @click="change_height">Estadístiques Mes Actual</button>
+          </div> 
+
+        
         <div class="avant">
             <button @click="canvia('av')" class="uk-button uk-button-primary uk-button-large uk-float-right"><span uk-icon="arrow-right"></span></button>
         </div>
     </div>
+    <div>
+            <collapse-transition dimension="height">
+                <div v-show="isOpen">      
+                        <table class="uk-table uk-table-divider uk-table-small uk-text-meta">
+                            <thead>
+
+                                    <tr >
+                                        <th v-for="(item, name,key) in user_statistic" :key="key"><b>{{ name }}</b></th>
+                                    </tr>
+
+                            </thead>
+                            <tbody>
+                                    <tr >
+                                        <td v-for="(item, name,key) in user_statistic" :key="key">{{ item }}</td>
+                                    </tr>
+                            </tbody>
+
+                        </table>
+                        <span class="uk-text-meta">TOTAL TEMPS és la suma de Fitxatges, Com. Serv. i Cursos</span>
+                </div>
+            </collapse-transition>
+        </div>
 	<hr>
 
     <div class="grid-container">
       <div v-for="(key, index) in 7" :key="key" :class="'d' + (index + 1) + ' z'+index">
         <dia-component
           :data="lloc[index + 1]"
-          mati="m"
           :key="index+componentKey+1000"
         />
-        <dia-component
+        <!-- <dia-component
           :data="lloc[index + 1]"
           mati="v"
           :key="index+componentKey"
-        />
+        /> -->
       </div>
     </div>
   </div>
@@ -46,6 +73,7 @@ Aquest component mostra tots el dies de la setmana present
 
 import Datepicker from "vuejs-datepicker";
 import { ca } from "vuejs-datepicker/dist/locale";
+import { CollapseTransition } from "@ivanv/vue-collapse-transition";
 export default {
   data() {
     return {
@@ -54,10 +82,30 @@ export default {
       lloc: [],
       fecha_escollida: null,
       ca: ca,
-      dia_aux: null
+      dia_aux: null,
+      isOpen: false,
+      user_statistic: []
     };
   },
   methods: {
+    change_height(){
+            //alert("est");
+            //document.getElementById("baix_este").style.height = "150px";
+            //this.get_total_guardies_per_user();
+            this.get_data_statistics();
+            this.isOpen = !this.isOpen;
+
+        },
+    get_data_statistics(){
+      axios.get("user_statistics")
+            .then(res => {
+                console.log(res);
+                this.user_statistic=res.data;
+            })
+            .catch(err => {
+                console.error(err);
+            })
+    },
     // Quan canviem la data, al buscar una data
     canvia_data (val) {
         let aux = new Date(val);
@@ -92,9 +140,11 @@ export default {
   },
   mounted() {
       this.dia_aux = this.dia;
+      this.get_data_statistics();
   },
   components: {
-        Datepicker,
+    CollapseTransition,
+    Datepicker,
   },
   watch: {
     dia_aux(newValue, oldValue) {
@@ -123,11 +173,16 @@ export default {
     grid-template-columns: 1fr 1fr 1fr 1fr
     grid-template-rows: 1fr
     gap: 0px 20px
-    grid-template-areas: "arrere mig mig avant"
+    grid-template-areas: "arrere mig mig2 avant"
     .arrere
         grid-area: arrere
     .mig
         grid-area: mig
+        text-align: center
+        margin-bottom: 0px
+        margin-top: 5px
+    .mig2
+        grid-area: mig2
         text-align: center
         margin-bottom: 0px
         margin-top: 5px
