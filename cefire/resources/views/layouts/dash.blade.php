@@ -7,7 +7,7 @@
         {{-- és necessari crear este element per a que axios puga llegit el token per a fer les peticions --}}
 
         <meta name="csrf-token" content="{{ csrf_token() }}">
-		<title>CEFIRE VALENCIA</title>
+		<title>SFP HORARI</title>
 		<!-- CSS -->
         <link href="{{ asset('css/app.css') }}" rel="stylesheet">
         <link rel="stylesheet" type="text/css" href="css/dashboard.css">
@@ -28,25 +28,25 @@
 							{{-- <a class="uk-logo" href="#"><img class="custom-logo" src="img/dashboard-logo-white.svg" alt=""></a> --}}
 						</div>
 						<ul class="uk-navbar-nav uk-visible@m">
-							{{-- <li><a href="#">Accounts</a></li> --}}
+							{{-- <li><a class="uk-navbar-dropdown-close" href="#">Accounts</a></li> --}}
 							<li>
 								<a href="#">Ferramentes <span data-uk-icon="icon: triangle-down"></span></a>
 								<div class="uk-navbar-dropdown">
 									<ul class="uk-nav uk-navbar-dropdown-nav">
 										<li class="uk-nav-header">EL TEU COMPTE</li>
-                                        <li><a href="#" @click="view = 'centresmeus'"><span data-uk-icon="icon: info"></span> Els meus centres</a></li>
+                                        <li><a class="uk-navbar-dropdown-close" href="#" @click="view = 'centresmeus'"><span data-uk-icon="icon: info"></span> Els meus centres</a></li>
                                         @if (Auth::user()->Perfil == 1)
-                                        <li><a href="#" @click="view = 'controlass'"><span data-uk-icon="icon: refresh"></span> Control d'Assessors</a></li>
-                                        <li><a href="#" @click="view = 'configuracio'"><span data-uk-icon="icon: settings"></span> Configuració</a></li>
+                                        <li><a class="uk-navbar-dropdown-close" href="#" @click="view = 'controlass'"><span data-uk-icon="icon: refresh"></span> Control d'Assessors</a></li>
+                                        <li><a class="uk-navbar-dropdown-close" href="#" @click="view = 'configuracio'"><span data-uk-icon="icon: settings"></span> Configuració</a></li>
                                         @endif
-                                        <li><a href="#" @click="showModal = true"><span data-uk-icon="icon: warning"></span> Escriu Avís</a></li>
-										<li><a href="#" @click="showModalInc = true"><span data-uk-icon="icon: lifesaver"></span> Escriu Incidència</a></li>
-										<li><a href="#" @click="showModalMosc = true"><span data-uk-icon="icon: tripadvisor"></span> Escriu Moscoso</a></li>
+                                        <li><a class="uk-navbar-dropdown-close" href="#" @click="showModal = true"><span data-uk-icon="icon: warning"></span> Escriu Avís</a></li>
+										<li><a class="uk-navbar-dropdown-close" href="#" @click="showModalInc = true"><span data-uk-icon="icon: lifesaver"></span> Escriu Incidència</a></li>
+										{{-- <li><a class="uk-navbar-dropdown-close" href="#" @click="showModalMosc = true"><span data-uk-icon="icon: tripadvisor"></span> Escriu Moscoso</a></li> --}}
 
 										<li class="uk-nav-divider"></li>
-										<li><a href="#" @click="view = 'personals'"><span data-uk-icon="icon: image"></span> Dades Personals</a></li>
+										<li><a class="uk-navbar-dropdown-close" href="#" @click="view = 'personals'"><span data-uk-icon="icon: image"></span> Dades Personals</a></li>
 										<li class="uk-nav-divider"></li>
-                                        <li><a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();"  ><span data-uk-icon="icon: sign-out"></span> Ix</a></li>
+                                        <li><a class="uk-navbar-dropdown-close" href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();"  ><span data-uk-icon="icon: sign-out"></span> Ix</a></li>
                                         <form id="logout-form" action="{{ route('logout') }}" method="POST"
                                             style="display: none;">
                                             @csrf
@@ -64,10 +64,10 @@
                             <li>
                                 <a href="{{ route('entrada') }}"><span data-uk-icon="icon: home"></span></a>
                             </li>
-							<li><a href="#" @click="showMissatge = true" data-uk-icon="icon:mail" title="Envia missatge a company" data-uk-tooltip></a></li>
-							{{-- <li><a href="#" data-uk-icon="icon: commenting" title="Ajuda" data-uk-tooltip></a></li> --}}
-							<li><a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" data-uk-icon="icon:  sign-out" title="Eixir" data-uk-tooltip></a></li>
-                        <li><a class="uk-navbar-toggle uk-inline" data-uk-toggle data-uk-navbar-toggle-icon href="#offcanvas-nav" title="Missatge rebuts" data-uk-tooltip>
+							<li><a class="uk-navbar-dropdown-close" href="#" @click="showMissatge = true" data-uk-icon="icon:mail" title="Envia missatge a company" data-uk-tooltip></a></li>
+							{{-- <li><a class="uk-navbar-dropdown-close" href="#" data-uk-icon="icon: commenting" title="Ajuda" data-uk-tooltip></a></li> --}}
+							<li><a class="uk-navbar-dropdown-close" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" data-uk-icon="icon:  sign-out" title="Eixir" data-uk-tooltip></a></li>
+                        <li><a class="uk-navbar-dropdown-close" class="uk-navbar-toggle uk-inline" data-uk-toggle data-uk-navbar-toggle-icon href="#offcanvas-nav" title="Missatge rebuts" data-uk-tooltip>
                             @if ($conta > 0)
                                 <span class="uk-badge uk-position-top-right" style="background-color: red; margin-top: 5px;"><b>?</b></span>
                             @endif
@@ -101,14 +101,14 @@
 				    <!-- dropdown -->
 				    <div class="uk-dropdown user-drop" data-uk-dropdown="mode: click; pos: bottom-center; animation: uk-animation-slide-bottom-small; duration: 150">
 				    	<ul class="uk-nav uk-dropdown-nav uk-text-left">
-                                <li><a href="#" @click="showEdita = true"><span data-uk-icon="icon: refresh"></span> Edita perfil</a></li>
+                                <li><a class="uk-navbar-dropdown-close" href="#" @click="showEdita = true"><span data-uk-icon="icon: refresh"></span> Edita perfil</a></li>
                                 @if (Auth::user()->Perfil == 1)
-                                <li><a href="#" @click="view = 'configuracio'"><span data-uk-icon="icon: settings"></span> Configuració</a></li>
+                                <li><a class="uk-navbar-dropdown-close" href="#" @click="view = 'configuracio'"><span data-uk-icon="icon: settings"></span> Configuració</a></li>
                                 @endif
 								<li class="uk-nav-divider"></li>
-								<li><a href="#" @click.prevent="view = 'personals'"><span data-uk-icon="icon: image"></span> Les teues dades</a></li>
+								<li><a class="uk-navbar-dropdown-close" href="#" @click.prevent="view = 'personals'"><span data-uk-icon="icon: image"></span> Les teues dades</a></li>
 								<li class="uk-nav-divider"></li>
-								<li><a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();"><span data-uk-icon="icon: sign-out"></span> Surt</a></li>
+								<li><a class="uk-navbar-dropdown-close" href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();"><span data-uk-icon="icon: sign-out"></span> Surt</a></li>
 					    </ul>
 				    </div>
 				    <!-- /user dropdown -->
@@ -118,24 +118,24 @@
 			<div class="left-nav-wrap">
 				<ul class="uk-nav uk-nav-default uk-nav-parent-icon" data-uk-nav>
                     <li class="uk-nav-header">QUÈ VOLS FER?</li>
-                    <li><a href="#" @click="view='horari'"><span data-uk-icon="icon: user" class="uk-margin-small-right"></span>Horari</a></li>
-                    <li><a href="#" @click="view='principal'"><span data-uk-icon="icon: info" class="uk-margin-small-right"></span>Avisos</a></li>
-                    <li><a href="#" @click="view='horaritots'"><span data-uk-icon="icon: users" class="uk-margin-small-right"></span>Horaris Assessors</a></li>
-					<li><a href="#" @click="view='buscaenhoraris'"><span data-uk-icon="icon: search" class="uk-margin-small-right"></span>Busca en horaris</a></li>
+                    <li><a class="uk-navbar-dropdown-close" href="#" @click="view='horari'"><span data-uk-icon="icon: user" class="uk-margin-small-right"></span>Horari</a></li>
+                    <li><a class="uk-navbar-dropdown-close" href="#" @click="view='principal'"><span data-uk-icon="icon: info" class="uk-margin-small-right"></span>Avisos</a></li>
+                    <li><a class="uk-navbar-dropdown-close" href="#" @click="view='horaritots'"><span data-uk-icon="icon: users" class="uk-margin-small-right"></span>Horaris Assessors</a></li>
+					<li><a class="uk-navbar-dropdown-close" href="#" @click="view='buscaenhoraris'"><span data-uk-icon="icon: search" class="uk-margin-small-right"></span>Busca en horaris</a></li>
                     @if (Auth::user()->Perfil == 1)
-                    <li><a href="#" @click="view='calendar'"><span data-uk-icon="icon: calendar" class="uk-margin-small-right"></span>Afegix guàrdies</a></li>
-					<li><a href="#" @click="view='compensacions'"><span data-uk-icon="icon: future" class="uk-margin-small-right"></span>Compensacions</a></li>
+                    <li><a class="uk-navbar-dropdown-close" href="#" @click="view='calendar'"><span data-uk-icon="icon: calendar" class="uk-margin-small-right"></span>Afegix guàrdies</a></li>
+					<li><a class="uk-navbar-dropdown-close" href="#" @click="view='compensacions'"><span data-uk-icon="icon: future" class="uk-margin-small-right"></span>Validacions</a></li>
                     @endif
-                    <li><a href="#" @click="view='centres'"><span data-uk-icon="icon: thumbnails" class="uk-margin-small-right"></span>Filtra centres</a></li>
-					<li><a href="#" @click="ajuda_f()"><span data-uk-icon="icon: lifesaver" class="uk-margin-small-right"></span>Ajuda</a></li>
+                    {{-- <li><a class="uk-navbar-dropdown-close" href="#" @click="view='centres'"><span data-uk-icon="icon: thumbnails" class="uk-margin-small-right"></span>Filtra centres</a></li> --}}
+					<li><a class="uk-navbar-dropdown-close" href="#" @click="ajuda_f()"><span data-uk-icon="icon: lifesaver" class="uk-margin-small-right"></span>Ajuda</a></li>
 					<li class="uk-parent">
 						<a href="#"><span data-uk-icon="icon: comments" class="uk-margin-small-right"></span>Reports</a>
 						<ul class="uk-nav-sub">
-							<li><a href="#" @click="view='report1'">Personal</a></li>
+							<li><a class="uk-navbar-dropdown-close" href="#" @click="view='report1'">Personal</a></li>
 							@if (Auth::user()->Perfil == 1)
-                            <li><a href="#" @click="view='llistatpermisos'">Llistat permisos</a></li>
-							<li><a href="#" @click="view='incidencies'">Incidències</a></li>
-							<li><a href="#" @click="view='fitxatgessuma'">Suma fitxatges mes</a></li>
+                            <li><a class="uk-navbar-dropdown-close" href="#" @click="view='llistatpermisos'">Llistat permisos</a></li>
+							<li><a class="uk-navbar-dropdown-close" href="#" @click="view='incidencies'">Incidències</a></li>
+							<li><a class="uk-navbar-dropdown-close" href="#" @click="view='fitxatgessuma'">Suma fitxatges mes</a></li>
 							@endif
 						</ul>
 					</li>

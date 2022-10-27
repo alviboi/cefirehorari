@@ -217,6 +217,8 @@ export default {
             this.get_element('guardia');
             this.get_element('permis');
             this.get_element('visita');
+            this.get_element('vacances');
+            this.get_element('moscosos');
         },
         // Petició de les dades de tots els usuaris per al desplegable
         agafa_users(){
@@ -259,6 +261,7 @@ export default {
             switch (element) {
                 case 'cefire':
                     num=1000000;
+                    element = "fitxatge";
                     clase="custom-date-class-blue";
                     toti="inici";
                     break;
@@ -284,11 +287,22 @@ export default {
                     break;
                 case 'visita':
                     num=6000000;
+                    element="Com. Serv.";
                     clase="custom-date-class-pink";
                     toti="centre";
                     break;
-                default:
+                case 'vacances':
                     num=7000000;
+                    clase="custom-date-class-black";
+                    toti="concepte";
+                    break;
+                case 'moscosos':
+                    num=8000000;
+                    clase="custom-date-class-violet";
+                    toti="concepte";
+                    break;
+                default:
+                    num=9000000;
                     clase="custom-date-class-red";
                     break;
             }
@@ -304,7 +318,7 @@ export default {
                 if (toti == 'inici') {
                     text = ele['inici']+'-'+ele['fi'];
                 } else {
-                    text = ele[toti];
+                    text = ele['inici']+'-'+ele['fi']+'-'+ele[toti];
                 }
 
                 let mati = (inici_int>=80000 && inici_int<150000) ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
@@ -335,8 +349,14 @@ export default {
                             if (id>=5000000) {
                                 if (id>=6000000) {
                                     if (id>=7000000) {
-                                        return "Error";
+                                        if (id>=8000000) {
+                                            if (id>=9000000) {
+                                                return "Error";
+                                            }
+                                        return "Moscoso";
                                         }
+                                    return "Vacances";
+                                    }
                                 return "Visita";
                                 }
                             return "Permís";
@@ -347,7 +367,7 @@ export default {
                     }
                 return "Compensa";
                 }
-            return "Cefire";
+            return "Fitxatge";
             }
         },
         envia_missatge(calendarItem, windowEvent) {
@@ -390,7 +410,7 @@ $linea: #dddddd
 item-general
     border: 1px solid $linea
     border-radius: 8px
-    font-size: 1.4em
+    font-size: 1.1em
 
 .cv-item.custom-date-class-red
     @extend item-general
@@ -415,6 +435,15 @@ item-general
 .cv-item.custom-date-class-pink
     @extend item-general
     background-color: pink
+
+.cv-item.custom-date-class-violet
+    @extend item-general
+    background-color: violet
+
+.cv-item.custom-date-class-black
+    @extend item-general
+    background-color: black
+
 
 .cv-item
     margin-top: 1px

@@ -2,16 +2,18 @@
 	<div>
 
         <div class="uk-grid-small uk-child-width-expand uk-margin" uk-grid>
-            <div class="uk-width-1-3">
-        <h3>Elements a buscar</h3>
+            <div class="uk-width-1-4">
+                <h3>Elements a buscar</h3>
             </div>
-            <div class="uk-width-1-3">
-                <label><input v-model="cefire" class="uk-checkbox" type="checkbox"> Cefire</label>
+            <div class="">
+                <label><input v-model="cefire" class="uk-checkbox" type="checkbox"> Fitxatge</label>
                 <label><input v-model="compensa" class="uk-checkbox" type="checkbox"> Compensa</label>
                 <label><input v-model="curs" class="uk-checkbox" type="checkbox"> Curs</label>
                 <label><input v-model="guardia" class="uk-checkbox" type="checkbox"> Guardia</label>
                 <label><input v-model="permis" class="uk-checkbox" type="checkbox"> Permis</label>
-                <label><input v-model="visita" class="uk-checkbox" type="checkbox"> Visita</label>
+                <label><input v-model="visita" class="uk-checkbox" type="checkbox"> Com. Serv.</label>
+                <label><input v-model="vacances" class="uk-checkbox" type="checkbox"> Vacances</label>
+                <label><input v-model="moscosos" class="uk-checkbox" type="checkbox"> Moscosos</label>
             </div>
         </div>
 
@@ -72,6 +74,8 @@ export default {
             guardia: false,
             permis: false,
             visita: false,
+            vacances: false,
+            moscosos: false,
 			dia: new Date(),
 			theme: "gcal",
 			items: Array()
@@ -108,6 +112,8 @@ export default {
             this.guardia= false;
             this.permis= false;
             this.visita= false;
+            this.vacances =false;
+            this.moscosos=false;
 
             //this.tots_els_elements_get();
         },
@@ -168,8 +174,18 @@ export default {
                     clase="custom-date-class-pink";
                     toti="centre";
                     break;
-                default:
+                case 'vacances':
                     num=7000000;
+                    clase="custom-date-class-black";
+                    toti="concepte";
+                    break;
+                case 'moscosos':
+                    num=8000000;
+                    clase="custom-date-class-violet";
+                    toti="concepte";
+                    break;
+                default:
+                    num=9000000;
                     clase="custom-date-class-red";
                     break;
             }
@@ -193,7 +209,7 @@ export default {
                 if (toti == 'inici') {
                     text = ele['inici']+'-'+ele['fi'];
                 } else {
-                    text = ele[toti];
+                    text = ele['inici']+'-'+ele['fi']+'-'+ele[toti];
                 }
                 // Es crea l'element ja formatat que anirà al calendari i s'afegix al array
                 let i = {
@@ -215,8 +231,14 @@ export default {
                             if (id>=5000000) {
                                 if (id>=6000000) {
                                     if (id>=7000000) {
-                                        return "Error";
+                                        if (id>=8000000) {
+                                            if (id>=9000000) {
+                                                return "Error";
+                                            }
+                                        return "Moscoso";
                                         }
+                                    return "Vacances";
+                                    }
                                 return "Visita";
                                 }
                             return "Permís";
@@ -227,7 +249,7 @@ export default {
                     }
                 return "Compensa";
                 }
-            return "Cefire";
+            return "Fitxatge";
             }
         },
         // Envia un missatge obrint el component modal corresponent enviant la petició al bus d'events
@@ -386,7 +408,31 @@ export default {
                     }
                 }
             }
-        }
+        },
+        vacances(newValue, oldValue) {
+            if (newValue == true){
+                this.get_element('vacances');
+            } else {
+                for (let index = this.items.length-1; index >= 0; index--) {
+                    if((this.items[index].id>=7000000) && (this.items[index].id<8000000)) {
+                        console.log(index);
+                        this.items.splice(index,1);
+                    }
+                }
+            }
+        },
+        moscosos(newValue, oldValue) {
+            if (newValue == true){
+                this.get_element('moscosos');
+            } else {
+                for (let index = this.items.length-1; index >= 0; index--) {
+                    if((this.items[index].id>=8000000) && (this.items[index].id<9000000)) {
+                        console.log(index);
+                        this.items.splice(index,1);
+                    }
+                }
+            }
+        },
     },
 
 
@@ -443,6 +489,14 @@ item-general
 .cv-item.custom-date-class-pink
     @extend item-general
     background-color: #cc00cc
+
+.cv-item.custom-date-class-violet
+    @extend item-general
+    background-color: violet
+
+.cv-item.custom-date-class-black
+    @extend item-general
+    background-color: black
 
 
 .calendari

@@ -225,17 +225,23 @@ class UserController extends Controller
     public function update(Request $request)
     {
         //
+
         if ($request->id == auth()->id() || auth()->user()->Perfil == 1) {
             $user = User::find($request->id);
             $user->name = $request->nom;
             $user->email = $request->mail;
             $user->Perfil = $request->perfil;
             $user->rfid = $request->rfid;
-            $user->moscosos = $request->moscosos;
-            if ($user->contrasenya != "") {
-                $user->password = $request->contrasenya;
+            if ($request->moscosos != null && auth()->user()->Perfil == 1){
+                $user->moscosos = $request->moscosos;
             }
-            $user->save();
+            if ($request->vacances != null  && auth()->user()->Perfil == 1){
+                $user->vacances = $request->vacances;
+            }            
+            if ($request->contrasenya != "") {
+                $user->password = Hash::make($request->contrasenya);
+            }
+            $user->update();
         } else {
             abort(403, "No tens permís per a realitzar aquesta acció");
         }
@@ -535,6 +541,35 @@ class UserController extends Controller
         return User::find($num)->permis()->whereMonth('data', '=', date($mes))->whereYear('data', '=', date($any))->get();
     }
 
+    public function get_vacances(Request $request, $num, $any, $mes)
+    {
+        //
+        $ret = User::find($num)->vacances()->whereMonth('data', '=', date($mes))->whereYear('data', '=', date($any))->get();
+        for ($i=0; $i < count($ret); $i++) { 
+            # code...
+            $ret[$i]['inici']="Tot el dia";
+            $ret[$i]['fi']="";
+            $ret[$i]['concepte']="Vacances";
+        }
+        
+        return $ret;
+
+    }
+
+    public function get_moscosos(Request $request, $num, $any, $mes)
+    {
+        //
+        $ret = User::find($num)->moscoso()->whereMonth('data', '=', date($mes))->whereYear('data', '=', date($any))->get();
+        for ($i=0; $i < count($ret); $i++) { 
+            # code...
+            $ret[$i]['inici']="Tot el dia";
+            $ret[$i]['fi']="";
+            $ret[$i]['moscoso']="Vacances";
+        }
+        
+        return $ret;
+    }
+
     // public function __invoke(Request $request)
     // {
     //     //
@@ -699,14 +734,13 @@ class UserController extends Controller
                 $vac1 = $value->vacances()->whereBetween('data',[$any."-".$mes."-01",$any."-".$mes."-15"])->count()*(26100/60);
                 $mosc2 = $value->moscoso()->whereBetween('data',[$any."-".$mes."-16",date("Y-m-t", strtotime($any."-".$mes."-16"))])->count()*(27900/60); 
                 $vac2 = $value->vacances()->whereBetween('data',[$any."-".$mes."-16",date("Y-m-t", strtotime($any."-".$mes."-16"))])->count()*(27900/60);           
+                $este['moscosos'] = $mosc1 + $mosc2; 
+                $este['vacances'] = $vac1 + $vac2;
+            
             } else {
-                $mosc1 = $value->moscoso()->whereBetween('data',[$dates[0]['data'],$dates->last()['data']])->count()*$total_dia; 
-                $vac1 = $value->vacances()->whereBetween('data',[$dates[0]['data'],$dates->last()['data']])->count()*$total_dia;
-                $mosc2 = $value->moscoso()->whereBetween('data',[$dates[0]['data'],$dates->last()['data']])->count()*$total_dia; 
-                $vac2 = $value->vacances()->whereBetween('data',[$dates[0]['data'],$dates->last()['data']])->count()*$total_dia;
+                $este['moscosos'] = $value->moscoso()->whereBetween('data',[$dates[0]['data'],$dates->last()['data']])->count()*$total_dia; 
+                $este['vacances'] = $value->vacances()->whereBetween('data',[$dates[0]['data'],$dates->last()['data']])->count()*$total_dia;
             }
-            $este['moscosos'] = $value->moscoso()->whereBetween('data',[$dates[0]['data'],$dates->last()['data']])->count()*$total_dia; 
-            $este['vacances'] = $value->vacances()->whereBetween('data',[$dates[0]['data'],$dates->last()['data']])->count()*$total_dia;
             
 
 

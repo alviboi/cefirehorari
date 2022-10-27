@@ -40,16 +40,17 @@
                             <input v-model="datos.rfid" class="uk-input" type="text" placeholder="rfid">
                         </div>
                     </div>
+
                     <div class="uk-margin">
                         <div class="uk-inline">
                             <span class="uk-form-icon" uk-icon="icon: lock"></span>
-                            <input v-model="contrasenya" class="uk-input" type="text" placeholder="contrasenya">
+                            <input v-model="contrasenya" class="uk-input" type="password" placeholder="contrasenya">
                         </div>
                     </div>
                     <div class="uk-margin">
                         <div class="uk-inline">
                             <span class="uk-form-icon" uk-icon="icon: lock"></span>
-                            <input v-model="contrasenya2" class="uk-input" type="text" placeholder="confirma contrasenya">
+                            <input v-model="contrasenya2" class="uk-input" type="password" placeholder="confirma contrasenya">
                         </div>
                     </div>
 

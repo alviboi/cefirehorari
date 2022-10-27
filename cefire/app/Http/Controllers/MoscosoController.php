@@ -24,6 +24,17 @@ class MoscosoController extends Controller
         return moscoso::get();
     }
 
+    public function get_data_index($any, $mes)
+    {
+        $ret = array();
+        $els = moscoso::whereMonth('data', '=', date($mes))->whereYear('data', '=', date($any))->get();
+        foreach ($els as $el) {
+            $item=array("id"=>$el->id, "name"=>$el->user['name'], "data"=>$el->data, "inici"=>"00:00:00", "fi"=>"23:00:00","concepte"=>"Moscosos");
+            array_push($ret, $item);
+        }
+        return $ret;
+    }
+
     /**
      * Show the form for creating a new resource.
      *

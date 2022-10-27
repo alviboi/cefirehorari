@@ -79,13 +79,13 @@
                     <div class="uk-margin">
                         <div class="uk-inline">
                             <span class="uk-form-icon"><i class="fa-solid fa-champagne-glasses"></i></span>
-                            <input v-model="edita_u.moscosos" class="uk-input" type="number" step="1" placeholder="moscosos">
+                            <input v-model="edita_u.moscosos" class="uk-input" type="number" min="0" step="1" placeholder="moscosos">
                         </div>
                     </div>
                     <div class="uk-margin">
                         <div class="uk-inline">
                             <span class="uk-form-icon"><i class="fa-solid fa-plane-departure"></i></span>
-                            <input v-model="edita_u.vacances" class="uk-input" type="number" step="1" placeholder="vacances">
+                            <input v-model="edita_u.vacances" class="uk-input" type="number" min="0" step="1" placeholder="vacances">
                         </div>
                     </div>
                     <div class="uk-margin">

@@ -55,6 +55,8 @@ Route::get('/user_curs/{num}/{any}/{mes}', 'UserController@get_curs')->middlewar
 Route::get('/user_guardia/{num}/{any}/{mes}', 'UserController@get_guardia')->middleware('auth');
 Route::get('/user_permis/{num}/{any}/{mes}', 'UserController@get_permis')->middleware('auth');
 Route::get('/user_visita/{num}/{any}/{mes}', 'UserController@get_visita')->middleware('auth');
+Route::get('/user_vacances/{num}/{any}/{mes}', 'UserController@get_vacances')->middleware('auth');
+Route::get('/user_moscosos/{num}/{any}/{mes}', 'UserController@get_moscosos')->middleware('auth');
 Route::get('/user_all/{de}/{fins}', 'UserController@get_all')->middleware('auth');
 Route::get('/user_get', 'UserController@get_user')->middleware('auth');
 Route::get('/user_statistics', 'UserController@get_statistics')->middleware('auth');
@@ -70,6 +72,8 @@ Route::prefix('complet')->group(function () {
     Route::get('/permis/{any}/{mes}', 'permisController@get_data_index')->middleware('auth');
     Route::get('/visita/{any}/{mes}', 'visitaController@get_data_index')->middleware('auth');
     Route::get('/incidencies/{any}/{mes}', 'IncidenciesController@get_data_index')->middleware('auth');
+    Route::get('/vacances/{any}/{mes}', 'VacancesController@get_data_index')->middleware('auth');
+    Route::get('/moscosos/{any}/{mes}', 'MoscosoController@get_data_index')->middleware('auth');
 });
 
 Route::get('/dia_cefire/{dia}', 'UserController@dia_cefire')->name('dia_cefire')->middleware('auth');

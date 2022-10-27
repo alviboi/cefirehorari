@@ -83,7 +83,7 @@
                 </div>
 
                 <div class="uk-text-small uk-text-muted uk-text-right uk-text-right@s uk-width-1-2@s">
-                    CEFIRE HORARI
+                    {{ config('app.name', 'Laravel') }}
             </div>
         </div>
     </footer>

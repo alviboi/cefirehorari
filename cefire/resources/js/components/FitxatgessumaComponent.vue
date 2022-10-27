@@ -4,7 +4,7 @@
         <div class="arrere">
             <button @click="canvia('arr')" class="uk-button uk-button-primary uk-button-large uk-float-left"><span uk-icon="arrow-left"></span></button>
         </div>
-        <div class="uk-text-lead">
+        <div class="uk-text-lead mig">
           Relació del temps: {{nom_mes}} de {{any}}
         </div>
           
@@ -64,6 +64,7 @@ export default {
     },
 
     get_data_statistics() {
+      //var here = this;
       axios
         .get("tots_els_dies_mes/" + this.any + "/" + this.mes)
         .then((res) => {
@@ -71,6 +72,19 @@ export default {
           this.users_statistic = res.data;
         })
         .catch((err) => {
+          for (let index = 0; index < this.users_statistic.length; index++) {            								
+            this.users_statistic[index]['cefire'] = 0;
+            this.users_statistic[index]['permis'] = 0;
+            this.users_statistic[index]['compensa'] = 0;
+            this.users_statistic[index]['curs'] = 0;
+            this.users_statistic[index]['visita'] = 0;
+            this.users_statistic[index]['moscosos'] = 0;
+            this.users_statistic[index]['vacances'] = 0;
+            this.users_statistic[index]['total'] = 0;
+            this.users_statistic[index]['diferència'] = 0;
+            
+          }
+          this.$toast.error(err.response.data.message);
           console.error(err);
         });
     },
@@ -140,10 +154,10 @@ export default {
 
 .cabecal
   display: grid
-  grid-template-columns: 1fr 1fr 1fr 1fr
+  grid-template-columns: 1fr 1fr 1fr
   grid-template-rows: 1fr
   gap: 0px 20px
-  grid-template-areas: "arrere mig mig2 avant"
+  grid-template-areas: "arrere mig avant"
   .arrere
     grid-area: arrere
     .mig

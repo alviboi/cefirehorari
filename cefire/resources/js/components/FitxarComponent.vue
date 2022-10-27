@@ -1,6 +1,6 @@
 <template>
   <div class="general2">
-    <div class="cabecal">
+    <div class="cabecal3">
         <div class="arrere">
             <button @click="canvia('arr')" class="uk-button uk-button-primary uk-button-large uk-float-left"><span uk-icon="arrow-left"></span></button>
         </div>
@@ -203,7 +203,7 @@ export default {
         .d#{$var}
             grid-area: d#{$var}
 
-.cabecal
+.cabecal3
     display: grid
     grid-template-columns: 1fr 1fr 1fr 1fr
     grid-template-rows: 1fr

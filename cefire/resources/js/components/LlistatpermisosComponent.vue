@@ -170,7 +170,7 @@ import { ca } from "vuejs-datepicker/dist/locale";
                 } else if (this.busca_ass != '') {
 
                     let any = this.hui.getFullYear();
-                    if (8 > this.hui.getMonth() >=0) {
+                    if (this.hui.getMonth() >=0 && this.hui.getMonth() < 8) {
                         this.desde = new Date((any-1)+'-09-01');
                     } else {
                         this.desde = new Date(any+'-09-01');
