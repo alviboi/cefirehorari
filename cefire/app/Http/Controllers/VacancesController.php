@@ -5,7 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Vacances;
 use App\Models\User;
 use Illuminate\Http\Request;
-
+use App\Jobs\SendAvisvacances;
+use Carbon\Carbon;
 class VacancesController extends Controller
 {
     /**
@@ -152,5 +153,45 @@ class VacancesController extends Controller
         } else {
             Vacances::find($id)->delete();
         }
+    }
+    public function vacancesnovalidades()
+    {
+        //
+        $ret = array();
+        $els = vacances::where('aprobada','=',false)->get();
+        $dias=array("Diumenge","Dilluns","Dimarts","Dimecres","Dijous","Divendres","Dissabte");
+
+        foreach ($els as $el) {
+            $da=date("d-m-Y", strtotime($el->data));
+            $da2=$dias[date("w", strtotime($el->data))];
+            
+            $item=array("id"=>$el->id, "name"=>$el->user['name'], "data"=>$da2.", ".$da);
+            array_push($ret, $item);
+        }
+        return $ret;
+    }
+
+    public function validavacances(Request $request)
+    {
+        //
+        $el = vacances::where('id',$request->id)->update(['aprobada'=>true]);
+
+        $compensa = vacances::find($request->id);
+
+        $link2 = "https://calendar.google.com/calendar/u/0/r/eventedit?text=VACANCES+CEFIRE&dates=" . str_replace("-", "", $compensa->data) . "&details=compensa+del+Cefire+de+Valencia+ELIMINADA&location=Valencia&trp=false#eventpage_6";
+
+        $datos2 = [
+            'nombre' => $compensa->user['name'],
+            'fecha' => date("d/m/Y", strtotime($compensa->data)),
+            'link' => $link2,
+            'estat' => 'Aprovada'
+        ];
+
+
+        $emailJob3 = (new SendAvisvacances($compensa->user['email'], $datos2))->delay(Carbon::now()->addSeconds(120));
+        dispatch($emailJob3);
+
+        //Mail::to($compensa->user['email'])->send(new Eliminarcompensa($datos2));
+
     }
 }

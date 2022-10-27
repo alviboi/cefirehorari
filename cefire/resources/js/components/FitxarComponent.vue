@@ -44,6 +44,28 @@
 
                         </table>
                         <span class="uk-text-meta">TOTAL TEMPS és la suma de Fitxatges, Com. Serv. i Cursos</span>
+                        <hr>
+                        <div class="uk-text-lead">Últims dies que has fitxat</div>
+                        <table class="uk-table uk-table-divider uk-table-small uk-text-meta">
+                            <thead>
+
+                                    <tr >
+                                        <th v-for="(item,key) in user_statistic_dies" :key="key"><b>{{ item.data }}</b></th>
+                                    </tr>
+
+                            </thead>
+                            <tbody>
+                                    <tr >
+                                        <td v-for="(item,key) in user_statistic_dies" :key="key"><div v-if="item.diferencia>0">{{ item.diferencia }} minuts
+                                              <span :class="(item.diferencia >= item.compara)? 'uk-text-success' : 'uk-text-warning'" :data-uk-icon="(item.diferencia >= item.compara)? 'icon: triangle-up' : 'icon: triangle-down'">{{item.diferencia-item.compara}}</span>
+                                        </div>
+                                        <div v-else>No s'ha fitxat l'eixida</div>
+                                        </td>
+                                    </tr>
+                            </tbody>
+
+                        </table>
+                        <span class="uk-text-meta">Si has faltat un dia, ací no apareix</span>
                 </div>
             </collapse-transition>
         </div>
@@ -84,7 +106,8 @@ export default {
       ca: ca,
       dia_aux: null,
       isOpen: false,
-      user_statistic: []
+      user_statistic: [],
+      user_statistic_dies: []
     };
   },
   methods: {
@@ -93,6 +116,7 @@ export default {
             //document.getElementById("baix_este").style.height = "150px";
             //this.get_total_guardies_per_user();
             this.get_data_statistics();
+            this.get_data_statistics_dies();
             this.isOpen = !this.isOpen;
 
         },
@@ -101,6 +125,16 @@ export default {
             .then(res => {
                 console.log(res);
                 this.user_statistic=res.data;
+            })
+            .catch(err => {
+                console.error(err);
+            })
+    },
+    get_data_statistics_dies(){
+      axios.get("ultims_dies_estadistica")
+            .then(res => {
+                console.log(res);
+                this.user_statistic_dies=res.data;
             })
             .catch(err => {
                 console.error(err);
@@ -141,6 +175,7 @@ export default {
   mounted() {
       this.dia_aux = this.dia;
       this.get_data_statistics();
+      this.get_data_statistics_dies();
   },
   components: {
     CollapseTransition,

@@ -58,6 +58,8 @@ Route::get('/user_visita/{num}/{any}/{mes}', 'UserController@get_visita')->middl
 Route::get('/user_all/{de}/{fins}', 'UserController@get_all')->middleware('auth');
 Route::get('/user_get', 'UserController@get_user')->middleware('auth');
 Route::get('/user_statistics', 'UserController@get_statistics')->middleware('auth');
+Route::get('/ultims_dies_estadistica', 'cefireController@ultims_dies_estadistica')->middleware('auth');
+
 Route::post('/get_usuaris_ldap', 'UserController@get_usuaris_ldap')->middleware('auth');
 
 Route::prefix('complet')->group(function () {
@@ -97,8 +99,16 @@ Route::post('permis_desde','permisController@permis_desde')->middleware('can:esA
 Route::post('permis_sense_arxiu','permisController@permis_sense_arxiu')->middleware('can:esAdmin');
 
 Route::post('compensacions_no_validades','compensaController@compensacionsnovalidades')->middleware('can:esAdmin');
-Route::post('validacompensacio','compensaController@validacompensacio')->middleware('can:esAdmin');
+Route::post('moscosos_no_validades','MoscosoController@moscososnovalidades')->middleware('can:esAdmin');
+Route::post('vacances_no_validades','VacancesController@vacancesnovalidades')->middleware('can:esAdmin');
 
+Route::post('validacompensacio','compensaController@validacompensacio')->middleware('can:esAdmin');
+Route::post('validamoscosos','MoscosoController@validamoscosos')->middleware('can:esAdmin');
+Route::post('validavacances','VacancesController@validavacances')->middleware('can:esAdmin');
+
+Route::get('/usuaris_oblit_fitxatge', 'cefireController@usuaris_oblit_fitxatge')->name('usuaris_oblit_fitxatge')->middleware('can:esAdmin');
+Route::post('/validaoblidat', 'cefireController@validaoblidat')->name('validaoblidat')->middleware('can:esAdmin');
+Route::get('/tots_els_dies_mes/{any}/{mes}', 'UserController@tots_els_dies_mes')->name('tots_els_dies_mes')->middleware('can:esAdmin');
 
 
 Route::resource('control', ControlController::class)->middleware('can:esAdmin');

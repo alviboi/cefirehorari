@@ -135,6 +135,7 @@
 							@if (Auth::user()->Perfil == 1)
                             <li><a href="#" @click="view='llistatpermisos'">Llistat permisos</a></li>
 							<li><a href="#" @click="view='incidencies'">Incidències</a></li>
+							<li><a href="#" @click="view='fitxatgessuma'">Suma fitxatges mes</a></li>
 							@endif
 						</ul>
 					</li>

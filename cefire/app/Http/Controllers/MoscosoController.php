@@ -4,8 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoremoscosoRequest;
 use App\Http\Requests\UpdatemoscosoRequest;
+use Illuminate\Http\Request;
+
 use App\Models\moscoso;
 use App\Models\User;
+use App\Jobs\SendAvismoscosos;
+use Carbon\Carbon;
 
 class MoscosoController extends Controller
 {
@@ -117,5 +121,47 @@ class MoscosoController extends Controller
             $moscoso->delete();
         }
         
+    }
+
+    public function moscososnovalidades()
+    {
+        //
+        $ret = array();
+        $els = moscoso::where('aprobada','=',false)->get();
+        $dias=array("Diumenge","Dilluns","Dimarts","Dimecres","Dijous","Divendres","Dissabte");
+
+        foreach ($els as $el) {
+            $da=date("d-m-Y", strtotime($el->data));
+            $da2=$dias[date("w", strtotime($el->data))];
+            
+            $item=array("id"=>$el->id, "name"=>$el->user['name'], "data"=>$da2.", ".$da);
+            array_push($ret, $item);
+        }
+        return $ret;
+    }
+
+    public function validamoscosos(Request $request)
+    {
+        //
+        
+        $el = moscoso::where('id',$request->id)->update(['aprobada'=>true]);
+
+        $moscoso = moscoso::find($request->id);
+
+        $link2 = "https://calendar.google.com/calendar/u/0/r/eventedit?text=MOSCOSO+CEFIRE&dates=" . str_replace("-", "", $moscoso->data) . "&details=compensa+del+Cefire+de+Valencia+ELIMINADA&location=Valencia&trp=false#eventpage_6";
+
+        $datos2 = [
+            'nombre' => $moscoso->user['name'],
+            'fecha' => date("d/m/Y", strtotime($moscoso->data)),
+            'link' => $link2,
+            'estat' => 'Aprovada'
+        ];
+
+
+        $emailJob3 = (new SendAvismoscosos($moscoso->user['email'], $datos2))->delay(Carbon::now()->addSeconds(120));
+        dispatch($emailJob3);
+
+        //Mail::to($compensa->user['email'])->send(new Eliminarcompensa($datos2));
+
     }
 }

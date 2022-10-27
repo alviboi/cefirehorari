@@ -223,4 +223,90 @@ class cefireController extends Controller
         $ret=array('labels' => $labels, 'data' => $data, 'total' => $total);
         return ($ret);
     }
+
+    public function usuaris_oblit_fitxatge() {
+        $data_hui = date('Y-m-d');
+        $cefires = cefire::where("fi","=","00:00:00")->where('data','<',$data_hui)->get();
+        $dias=array("Diumenge","Dilluns","Dimarts","Dimecres","Dijous","Divendres","Dissabte");
+        $ret = array();
+        foreach ($cefires as $el) {
+            $da=date("d-m-Y", strtotime($el->data));
+            $da2=$dias[date("w", strtotime($el->data))];
+            
+            $item=array("id"=>$el->id, "name"=>$el->user['name'], "data"=>$da2.", ".$da, "inici"=>$el->inici->format("H:i:s"), "fi"=>$el->inici->format("H:i:s"));
+            array_push($ret, $item);
+        }
+        return $ret;
+
+    }
+
+    public function validaoblidat(Request $request) {
+        $cefire = cefire::find($request->id);
+        $cefire->fi = $request->fi;
+        $cefire->save();
+        return;
+    }
+
+    public function ultims_dies_estadistica() {
+
+
+        $data_hui = date('Y-m-d');
+        $any = date('Y');
+        $data_15_oct = date($any."-10-15");
+        $data_15_mai = date($any."-05-15");
+        if ($data_hui >= $data_15_oct || $data_hui <= $data_15_mai) {
+            $interval_comp = 27900/60;       
+        } else {
+            $interval_comp = 26100/60;
+        }
+
+
+
+        $cefires = cefire::where('user_id','=',auth()->id())->orderBy('id', 'desc')->take(5)->get();
+        $ret =array();
+        foreach ($cefires as $key => $el) {
+            # code...
+            $a = strtotime($el->fi);
+            $b = strtotime($el->inici);
+            $interval = round(($a - $b)/60,0,PHP_ROUND_HALF_DOWN);
+            $item=array("id"=>$el->id, "name"=>$el->user['name'], "data"=>$el->data, "inici"=>$el->inici->format("H:i:s"), "fi"=>$el->fi->format("H:i:s"), "diferencia"=>$interval, "compara"=>$interval_comp);
+            array_push($ret, $item);
+        }
+        return $ret;
+    }
+
+    public function tots_els_dies_mes($any,$mes) {
+        $inici = date($any."-".$mes."-01");
+        $fi = $inici->format('Y-m-t');
+
+        $dates = cefire::select('data')->distinct()->whereBetween('data',[$inici,$fi])->get();
+        
+        
+        return $dates;
+
+        // $data_hui = date('Y-m-d');
+        // $any = date('Y');
+        // $data_15_oct = date($any."-10-15");
+        // $data_15_mai = date($any."-05-15");
+        // if ($data_hui >= $data_15_oct || $data_hui <= $data_15_mai) {
+        //     $interval_comp = 27900/60;       
+        // } else {
+        //     $interval_comp = 26100/60;
+        // }
+
+
+
+        // $cefires = cefire::where('user_id','=',auth()->id())->orderBy('id', 'desc')->take(5)->get();
+        // $ret =array();
+        // foreach ($cefires as $key => $el) {
+        //     # code...
+        //     $a = strtotime($el->fi);
+        //     $b = strtotime($el->inici);
+        //     $interval = round(($a - $b)/60,0,PHP_ROUND_HALF_DOWN);
+        //     $item=array("id"=>$el->id, "name"=>$el->user['name'], "data"=>$el->data, "inici"=>$el->inici->format("H:i:s"), "fi"=>$el->fi->format("H:i:s"), "diferencia"=>$interval, "compara"=>$interval_comp);
+        //     array_push($ret, $item);
+        // }
+        // return $ret;
+    }
+
 }

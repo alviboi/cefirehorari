@@ -111,6 +111,8 @@ Vue.component('pie-component', require('./components/Reports/PiegrafComponent.vu
 
 Vue.component('escriumoscoso-component', require('./components/Moscosos/EscriuMoscosoComponent.vue').default);
 Vue.component('escriuvacances-component', require('./components/Vacances/EscriuVacancesComponent.vue').default);
+Vue.component('fitxatgessuma-component', require('./components/FitxatgessumaComponent.vue').default);
+
 
 
 
@@ -203,6 +205,9 @@ const app = new Vue({
         },
         'compensacions': {
             template: '<div><llistatcompensacions-component /></div>',
+        },
+        'fitxatgessuma': {
+            template: '<div><fitxatgessuma-component /></div>',
         }
 
 
