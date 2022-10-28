@@ -619,7 +619,7 @@ class UserController extends Controller
         $fins_any = date($year . "-12-31");
 
 
-        $cefire = user::find(auth()->id())->cefire()->whereBetween('data', [$desde, $fins])->get();
+        $cefire = user::find(auth()->id())->cefire()->where('fi','!=','00:00:00')->whereBetween('data', [$desde, $fins])->get();
         $permis = user::find(auth()->id())->permis()->whereBetween('data', [$desde, $fins])->get();
         $compensa = user::find(auth()->id())->compensa()->whereBetween('data', [$desde, $fins])->get();
         $curs = user::find(auth()->id())->curs()->whereBetween('data', [$desde, $fins])->get();

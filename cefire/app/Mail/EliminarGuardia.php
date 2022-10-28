@@ -11,7 +11,7 @@ class EliminarGuardia extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $subject="GUARDIA DEL CEFIRE VALENCIA BORRADA";
+    public $subject="GUARDIA DEL SERVEI DE FORMACIÓ BORRADA";
 
     public $dat=array();
 

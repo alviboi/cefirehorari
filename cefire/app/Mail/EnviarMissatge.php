@@ -10,7 +10,7 @@ use Illuminate\Queue\SerializesModels;
 class EnviarMissatge extends Mailable
 {
     use Queueable, SerializesModels;
-    public $subject="MISSATGE DEL CEFIRE VALENCIA";
+    public $subject="MISSATGE INTERN DEL SERVEI DE FORMACIÓ";
 
     public $dat=array();
     /**

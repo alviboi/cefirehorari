@@ -11,7 +11,7 @@ class EnviarGuardia extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $subject="GUARDIA DEL CEFIRE VALENCIA";
+    public $subject="GUARDIA DEL SERVEI DE FORMACIÓ";
 
     public $dat=array();
 

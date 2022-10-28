@@ -11,7 +11,7 @@ class Aviscompensacio extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $subject="AVIS COMPENSACIÓ CEFIRE";
+    public $subject="AVIS COMPENSACIÓ SERVEI DE FORMACIÓ";
 
     public $dat=array();
 
