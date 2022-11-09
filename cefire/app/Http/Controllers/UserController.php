@@ -722,9 +722,9 @@ class UserController extends Controller
             # code...
             // Anar agafant-ho tot per dia
             $este['Nom'] = $value->name;
-            $este['cefire'] = intval($value->cefire()->select(DB::raw('SUM(TIME_TO_SEC(TIMEDIFF(fi,inici))/60) as total'))->whereBetween('data',[$dates[0]['data'],$dates->last()['data']])->where('fi','!=','00:00:00')->first()['total']);
+            $este['fitxatge'] = intval($value->cefire()->select(DB::raw('SUM(TIME_TO_SEC(TIMEDIFF(fi,inici))/60) as total'))->whereBetween('data',[$dates[0]['data'],$dates->last()['data']])->where('fi','!=','00:00:00')->first()['total']);
             
-            $este['permis'] = intval($value->permis()->select(DB::raw('SUM(TIME_TO_SEC(TIMEDIFF(fi,inici))/60) as total'))->whereBetween('data',[$dates[0]['data'],$dates->last()['data']])->first()['total']);
+            $este['permís'] = intval($value->permis()->select(DB::raw('SUM(TIME_TO_SEC(TIMEDIFF(fi,inici))/60) as total'))->whereBetween('data',[$dates[0]['data'],$dates->last()['data']])->first()['total']);
             $este['compensa'] = intval($value->compensa()->select(DB::raw('SUM(TIME_TO_SEC(TIMEDIFF(fi,inici))/60) as total'))->whereBetween('data',[$dates[0]['data'],$dates->last()['data']])->first()['total']);
             $este['curs'] = intval($value->curs()->select(DB::raw('SUM(TIME_TO_SEC(TIMEDIFF(fi,inici))/60) as total'))->whereBetween('data',[$dates[0]['data'],$dates->last()['data']])->first()['total']);
             $este['visita'] = intval($value->visita()->select(DB::raw('SUM(TIME_TO_SEC(TIMEDIFF(fi,inici))/60) as total'))->whereBetween('data',[$dates[0]['data'],$dates->last()['data']])->first()['total']);
@@ -744,7 +744,7 @@ class UserController extends Controller
             
 
 
-            $este['total'] = $este['cefire']+ $este['permis']+$este['compensa']+$este['curs']+$este['visita']+$este['moscosos']+$este['vacances'];
+            $este['total'] = $este['fitxatge']+ $este['permís']+$este['compensa']+$este['curs']+$este['visita']+$este['moscosos']+$este['vacances'];
             $este['diferència'] = $este['total'] - $total_mes;
             array_push($a,$este);
         }
