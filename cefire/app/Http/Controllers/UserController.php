@@ -619,7 +619,7 @@ class UserController extends Controller
         $fins_any = date($year . "-12-31");
 
 
-        $cefire = user::find(auth()->id())->cefire()->where('fi','!=','00:00:00')->whereBetween('data', [$desde, $fins])->get();
+        $cefire = user::find(auth()->id())->cefire()->whereBetween('data', [$desde, $fins])->where('fi','!=','00:00:00')->get();
         $permis = user::find(auth()->id())->permis()->whereBetween('data', [$desde, $fins])->get();
         $compensa = user::find(auth()->id())->compensa()->whereBetween('data', [$desde, $fins])->get();
         $curs = user::find(auth()->id())->curs()->whereBetween('data', [$desde, $fins])->get();
@@ -632,7 +632,7 @@ class UserController extends Controller
             $duration = $cef->inici->diffInMinutes($cef->fi);
             $total_cef = $total_cef + $duration;
         }
-        $cefire_count = user::find(auth()->id())->cefire()->whereBetween('data', [$desde, $fins])->count();
+        $cefire_count = user::find(auth()->id())->cefire()->where('fi','!=','00:00:00')->whereBetween('data', [$desde, $fins])->count();
         $ret['fitxatges'] = $total_cef . " minuts" . "(" . $cefire_count . " dies)";
         $total_per = 0;
         foreach ($permis as $perm) {
