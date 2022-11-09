@@ -722,7 +722,7 @@ class UserController extends Controller
             # code...
             // Anar agafant-ho tot per dia
             $este['Nom'] = $value->name;
-            $este['cefire'] = intval($value->cefire()->select(DB::raw('SUM(TIME_TO_SEC(TIMEDIFF(fi,inici))/60) as total'))->whereBetween('data',[$dates[0]['data'],$dates->last()['data']])->first()['total']);
+            $este['cefire'] = intval($value->cefire()->select(DB::raw('SUM(TIME_TO_SEC(TIMEDIFF(fi,inici))/60) as total'))->whereBetween('data',[$dates[0]['data'],$dates->last()['data']])->where('fi','!=','00:00:00')->first()['total']);
             
             $este['permis'] = intval($value->permis()->select(DB::raw('SUM(TIME_TO_SEC(TIMEDIFF(fi,inici))/60) as total'))->whereBetween('data',[$dates[0]['data'],$dates->last()['data']])->first()['total']);
             $este['compensa'] = intval($value->compensa()->select(DB::raw('SUM(TIME_TO_SEC(TIMEDIFF(fi,inici))/60) as total'))->whereBetween('data',[$dates[0]['data'],$dates->last()['data']])->first()['total']);
