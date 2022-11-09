@@ -23,11 +23,11 @@
                   <span v-else>Altres</span>
               </div>
               <div class="moscosos">
-                  <span><i class="fa-solid fa-champagne-glasses"  title="Moscosos" uk-tooltip ></i></span>
+                  <span title="Moscosos" uk-tooltip><i class="fa-solid fa-champagne-glasses" ></i></span>
                   {{ item.moscosos }}
               </div>
               <div class="vacances">
-                  <span><i class="fa-solid fa-plane-departure"  title="Vacances" uk-tooltip ></i></span>
+                  <span title="Vacances" uk-tooltip><i class="fa-solid fa-plane-departure"></i></span>
                   {{ item.vacances }}
               </div>
               <div class="rfid">
