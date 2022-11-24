@@ -153,7 +153,7 @@
             :key="'vac' + vac.id"
           >
             <span @click="borra_par('vacances', vac.id)" class="cerrar" />
-            <span :class="(vac.aprobada!=1) ? 'falta_validar' : ''"></span>
+            <span :class="(vac.Aprobada!=1) ? 'falta_validar' : ''"></span>
           </div>
           <div
             v-for="perm in permis"
