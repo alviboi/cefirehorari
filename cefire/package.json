@@ -26,12 +26,21 @@
         "vue-template-compiler": "^2.6.10"
     },
     "dependencies": {
+        "@babel/core": "^7.20.2",
+        "@babel/plugin-proposal-object-rest-spread": "^7.20.2",
+        "@babel/plugin-syntax-dynamic-import": "^7.8.3",
+        "@babel/plugin-transform-runtime": "^7.19.6",
+        "@babel/preset-env": "^7.20.2",
         "@fortawesome/fontawesome-free": "^6.2.0",
         "@ivanv/vue-collapse-transition": "^1.0.2",
+        "@popperjs/core": "^2.11.6",
         "chart.js": "^2.9.4",
+        "css-loader": "^6.7.2",
         "laravel-echo": "^1.10.0",
         "pdfmake": "^0.2.6",
+        "postcss": "^8.4.19",
         "pusher-js": "^7.0.2",
+        "v-calendar": "^2.4.1",
         "vue-chartjs": "^3.5.1",
         "vue-simple-calendar": "^5.0.0",
         "vue-table-dynamic": "^0.3.3",
@@ -39,6 +48,8 @@
         "vue-uniq-ids": "^1.0.0",
         "vue2-timepicker": "^1.1.6",
         "vuejs": "^3.0.1",
-        "vuejs-datepicker": "^1.6.2"
+        "vuejs-datepicker": "^1.6.2",
+        "webpack": "^5.75.0",
+        "webpack-cli": "^5.0.0"
     }
 }

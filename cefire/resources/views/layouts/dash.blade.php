@@ -34,8 +34,10 @@
 								<div class="uk-navbar-dropdown">
 									<ul class="uk-nav uk-navbar-dropdown-nav">
 										<li class="uk-nav-header">EL TEU COMPTE</li>
-                                        <li><a class="uk-navbar-dropdown-close" href="#" @click="view = 'centresmeus'"><span data-uk-icon="icon: info"></span> Els meus centres</a></li>
+                                        {{-- <li><a class="uk-navbar-dropdown-close" href="#" @click="view = 'centresmeus'"><span data-uk-icon="icon: info"></span> Els meus centres</a></li> --}}
                                         @if (Auth::user()->Perfil == 1)
+										<li><a class="uk-navbar-dropdown-close" href="#" @click="view = 'afegirvacances'"><span data-uk-icon="icon: calendar"></span> Dies de vacances</a></li>
+
                                         <li><a class="uk-navbar-dropdown-close" href="#" @click="view = 'controlass'"><span data-uk-icon="icon: refresh"></span> Control d'Assessors</a></li>
                                         <li><a class="uk-navbar-dropdown-close" href="#" @click="view = 'configuracio'"><span data-uk-icon="icon: settings"></span> Configuració</a></li>
                                         @endif
@@ -60,7 +62,7 @@
 						</ul>
 					</div>
 					<div class="uk-navbar-right">
-						<ul class="uk-navbar-nav">
+						<ul class="uk-navbar-nav" style="gap: 5px;">
                             <li>
                                 <a href="{{ route('entrada') }}"><span data-uk-icon="icon: home"></span></a>
                             </li>

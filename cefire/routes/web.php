@@ -113,6 +113,7 @@ Route::post('validavacances','VacancesController@validavacances')->middleware('c
 Route::get('/usuaris_oblit_fitxatge', 'cefireController@usuaris_oblit_fitxatge')->name('usuaris_oblit_fitxatge')->middleware('can:esAdmin');
 Route::post('/validaoblidat', 'cefireController@validaoblidat')->name('validaoblidat')->middleware('can:esAdmin');
 Route::get('/tots_els_dies_mes/{any}/{mes}', 'UserController@tots_els_dies_mes')->name('tots_els_dies_mes')->middleware('can:esAdmin');
+//Route::get('/vacancesoficials/{from}/{to}', 'VacancesOficialsController@agafavacancescurs')->name('agafavacancescurs')->middleware('can:esAdmin');
 
 
 Route::resource('control', ControlController::class)->middleware('can:esAdmin');
@@ -134,6 +135,7 @@ Route::group(['middleware' => 'auth'], function() {
         'incidencies' => IncidenciesController::class,
         'moscosos' => MoscosoController::class,
         'vacances' => VacancesController::class,
+        'vacancesoficials' => VacancesOficialsController::class,
         ]);
 });
 

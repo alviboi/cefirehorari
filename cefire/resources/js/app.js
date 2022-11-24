@@ -9,7 +9,7 @@ require('./home.js');
 
 import Toast from "vue-toastification";
 import "vue-toastification/dist/index.css";
-
+import VCalendar from 'v-calendar';
 
 
 // import Echo from "laravel-echo"
@@ -112,8 +112,18 @@ Vue.component('pie-component', require('./components/Reports/PiegrafComponent.vu
 Vue.component('escriumoscoso-component', require('./components/Moscosos/EscriuMoscosoComponent.vue').default);
 Vue.component('escriuvacances-component', require('./components/Vacances/EscriuVacancesComponent.vue').default);
 Vue.component('fitxatgessuma-component', require('./components/FitxatgessumaComponent.vue').default);
+Vue.component('afegirvacances-component', require('./components/Vacances/AfegirVacancesComponent.vue').default);
 
 
+Vue.use(VCalendar, {
+    componentPrefix: 'v',
+    screens: {
+        tablet: '576px',
+        este2: '1293px',
+        este1: '1621px',
+      },  // Use <vc-calendar /> instead of <v-calendar />
+
+  });
 
 
 
@@ -208,6 +218,9 @@ const app = new Vue({
         },
         'fitxatgessuma': {
             template: '<div><fitxatgessuma-component /></div>',
+        },
+        'afegirvacances': {
+            template: '<div><afegirvacances-component /></div>',
         }
 
 

@@ -13,7 +13,8 @@ class UpdatemoscosoRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        if (auth()->id())
+        return true;
     }
 
     /**

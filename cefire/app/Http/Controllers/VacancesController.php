@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Vacances;
+use App\Models\vacances_oficials;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Jobs\SendAvisvacances;
@@ -48,6 +49,12 @@ class VacancesController extends Controller
 
     public function getWorkingDays($startDate, $endDate)
     {
+        $vacancesoficials = vacances_oficials::get('data')->toArray();
+        $vacaofcarr = array();
+        foreach ($vacancesoficials as $key => $value) {
+            # code...
+            array_push($vacaofcarr,$value['data']);
+        }
         // do strtotime calculations just once
         $endDatea = strtotime($endDate);
         $startDatea = strtotime($startDate);
@@ -63,7 +70,9 @@ class VacancesController extends Controller
             # code...
             $dia = date('Y-m-d', strtotime($startDate. ' + '.$i.' days'));
             if (!$this->isWeekend($dia)){
-                array_push($tots_els_dies,$dia);
+                if (!in_array($dia, $vacaofcarr)){
+                    array_push($tots_els_dies,$dia);
+                }
             }       
         }
         
@@ -100,7 +109,7 @@ class VacancesController extends Controller
         }
 
         if (($total+ count($dies_a_afegir)) > $vacances_total->vacances){
-            abort(403, "Estàs passant-te dels dies que tens de vacances".($total+ count($dies_a_afegir))."  ".$vacances_total);
+            abort(403, "Estàs passant-te dels dies que tens de vacances");
         } 
                
         foreach ($dies_a_afegir as $key => $value) {
@@ -155,10 +164,10 @@ class VacancesController extends Controller
      */
     public function destroy($id)
     {
-        $vac = Vacances::find($id)->first();
-        
-        $data_hui = date('Y-m-d');
-        if ($vac->data < $data_hui){
+        $vac = Vacances::where("id","=",$id)->first();
+        $data = date($vac->data);
+        $data_hui = date("Y-m-d");
+        if ($data_hui > $data){
             abort(403,"No pots borrar aquestes vacances");
             //return "No pots borrar aquest moscós";
         } else {
