@@ -11,6 +11,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use App\Jobs\SendPasswordMail;
+//use App\Controllers\VacancesController;
 use DateTime;
 
 
@@ -677,14 +678,21 @@ class UserController extends Controller
     public function tots_els_dies_mes($any,$mes)
     {
 
+        $vacances = new VacancesController();
+        //VacancesController
+        
+
         $inici = date($any."-".$mes."-01");
         $fi = date("Y-m-t", strtotime($inici));
+
+        $dates = $vacances->getWorkingDays($inici,$fi);
         
-        $dates = cefire::select('data')->distinct()->whereBetween('data',[$inici,$fi])->orderBy('data', 'ASC')->get();
-        if ($dates->isEmpty()){
+        //$dates = cefire::select('data')->distinct()->whereBetween('data',[$inici,$fi])->orderBy('data', 'ASC')->get();
+        
+        if (count($dates) == 0){
             abort(403,"No hi ha cap resultat");
         }
-        $total_dies = $dates->count();
+        $total_dies = count($dates);
         $usuaris = User::orderBy('name', 'ASC')->get();
 
 
@@ -722,12 +730,12 @@ class UserController extends Controller
             # code...
             // Anar agafant-ho tot per dia
             $este['Nom'] = $value->name;
-            $este['fitxatge'] = intval($value->cefire()->select(DB::raw('SUM(TIME_TO_SEC(TIMEDIFF(fi,inici))/60) as total'))->whereBetween('data',[$dates[0]['data'],$dates->last()['data']])->where('fi','!=','00:00:00')->first()['total']);
+            $este['fitxatge'] = intval($value->cefire()->select(DB::raw('SUM(TIME_TO_SEC(TIMEDIFF(fi,inici))/60) as total'))->whereBetween('data',[$inici,$fi])->where('fi','!=','00:00:00')->first()['total']);
             
-            $este['permís'] = intval($value->permis()->select(DB::raw('SUM(TIME_TO_SEC(TIMEDIFF(fi,inici))/60) as total'))->whereBetween('data',[$dates[0]['data'],$dates->last()['data']])->first()['total']);
-            $este['compensa'] = intval($value->compensa()->select(DB::raw('SUM(TIME_TO_SEC(TIMEDIFF(fi,inici))/60) as total'))->whereBetween('data',[$dates[0]['data'],$dates->last()['data']])->first()['total']);
-            $este['curs'] = intval($value->curs()->select(DB::raw('SUM(TIME_TO_SEC(TIMEDIFF(fi,inici))/60) as total'))->whereBetween('data',[$dates[0]['data'],$dates->last()['data']])->first()['total']);
-            $este['visita'] = intval($value->visita()->select(DB::raw('SUM(TIME_TO_SEC(TIMEDIFF(fi,inici))/60) as total'))->whereBetween('data',[$dates[0]['data'],$dates->last()['data']])->first()['total']);
+            $este['permís'] = intval($value->permis()->select(DB::raw('SUM(TIME_TO_SEC(TIMEDIFF(fi,inici))/60) as total'))->whereBetween('data',[$inici,$fi])->first()['total']);
+            $este['compensa'] = intval($value->compensa()->select(DB::raw('SUM(TIME_TO_SEC(TIMEDIFF(fi,inici))/60) as total'))->whereBetween('data',[$inici,$fi])->first()['total']);
+            $este['curs'] = intval($value->curs()->select(DB::raw('SUM(TIME_TO_SEC(TIMEDIFF(fi,inici))/60) as total'))->whereBetween('data',[$inici,$fi])->first()['total']);
+            $este['visita'] = intval($value->visita()->select(DB::raw('SUM(TIME_TO_SEC(TIMEDIFF(fi,inici))/60) as total'))->whereBetween('data',[$inici,$fi])->first()['total']);
             
             if ($mes == 5 || $mes == 10){
                 $mosc1 = $value->moscoso()->whereBetween('data',[$any."-".$mes."-01",$any."-".$mes."-15"])->count()*(26100/60); 
@@ -738,13 +746,13 @@ class UserController extends Controller
                 $este['vacances'] = $vac1 + $vac2;
             
             } else {
-                $este['moscosos'] = $value->moscoso()->whereBetween('data',[$dates[0]['data'],$dates->last()['data']])->count()*$total_dia; 
-                $este['vacances'] = $value->vacances()->whereBetween('data',[$dates[0]['data'],$dates->last()['data']])->count()*$total_dia;
+                $este['moscosos'] = $value->moscoso()->whereBetween('data',[$inici,$fi])->count()*$total_dia; 
+                $este['vacances'] = $value->vacances()->whereBetween('data',[$inici,$fi])->count()*$total_dia;
             }
             
 
 
-            $este['total'] = $este['fitxatge']+ $este['permís']+$este['compensa']+$este['curs']+$este['visita']+$este['moscosos']+$este['vacances'];
+            $este['total'] = $este['fitxatge']+ $este['permís']-$este['compensa']+$este['curs']+$este['visita']+$este['moscosos']+$este['vacances'];
             $este['diferència'] = $este['total'] - $total_mes;
             array_push($a,$este);
         }

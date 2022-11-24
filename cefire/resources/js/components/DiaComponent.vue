@@ -573,7 +573,7 @@ export default {
             }
         })
         .catch((err) => {
-          this.$toast.error(err.response.data);
+          this.$toast.error(err.response.data.message);
         });
     },
     // Afegix qualsevol altre element que necessite hora a la base de dades
