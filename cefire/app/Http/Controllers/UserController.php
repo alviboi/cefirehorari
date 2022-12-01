@@ -110,6 +110,10 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
+
+        //Control de usuatis perfil
+
+
         $input = $request->all();
         $message = "";
         for ($i = 0; $i < count($input); $i++) {
@@ -231,7 +235,11 @@ class UserController extends Controller
             $user = User::find($request->id);
             $user->name = $request->nom;
             $user->email = $request->mail;
-            $user->Perfil = $request->perfil;
+            if (auth()->user()->Perfil == 1){
+                $user->Perfil = $request->perfil;
+            } else {
+                abort(403, "No tens permisos per a canviar el rol");
+            }            
             $user->rfid = $request->rfid;
             if ($request->moscosos != null && auth()->user()->Perfil == 1){
                 $user->moscosos = $request->moscosos;
