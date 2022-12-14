@@ -125,7 +125,7 @@ class MoscosoController extends Controller
     {
         //
         $data_hui = date('Y-m-d');
-        if ($moscoso->data < $data_hui){
+        if ($moscoso->data < $data_hui && $moscoso->user['Perfil'] != 1){
             abort(403,"No pots borrar aquest moscós");
             //return "No pots borrar aquest moscós";
         } else {

@@ -11,6 +11,7 @@
           title="FITXATGE"
           @click="afegix_cefire()"
           class="btn btn-primary btn-sm"
+          :disabled="vac_oficials == 1? true : false"
         >
           <i class="fa-solid fa-user-check"></i>
         </button>
@@ -20,6 +21,7 @@
           title="CURS"
           :uk-toggle="'target: #curs-modal'+this._uid"
           class="btn btn-primary btn-sm"
+          :disabled="vac_oficials == 1? true : false"
         >
           <i class="fas fa-chalkboard-teacher"></i>
         </button>
@@ -29,6 +31,7 @@
           title="GUARDIA"
           @click="afegix('guardia')"
           class="btn btn-primary btn-sm"
+          :disabled="vac_oficials == 1? true : false"
         >
           <i class="fas fa-dog"></i>
         </button>
@@ -38,6 +41,7 @@
           title="COMPENSA"
           class="btn btn-primary btn-sm"
           :uk-toggle="'target: #compensa-modal'+this._uid"
+          :disabled="vac_oficials == 1? true : false"
         >
           <i class="fas fa-umbrella-beach"></i>
         </button>
@@ -47,6 +51,7 @@
           title="COM. SERV."
           class="btn btn-primary btn-sm"
           :uk-toggle="'target: #visita-modal'+this._uid"
+          :disabled="vac_oficials == 1? true : false"
         >
           <i class="fas fa-school"></i>
         </button>
@@ -56,6 +61,7 @@
           title="MOSCOSO"
           class="btn btn-primary btn-sm"
           @click="emitix('obre-moscoso')"
+          :disabled="vac_oficials == 1? true : false"
         >
           <i class="fa-solid fa-champagne-glasses"></i>
         </button>
@@ -65,6 +71,7 @@
           title="VACANCES"
           class="btn btn-primary btn-sm"
           @click="emitix('obre-vacances')"
+          :disabled="vac_oficials == 1? true : false"
         >
           <i class="fa-solid fa-plane-departure"></i>
         </button>
@@ -74,13 +81,14 @@
           title="PERMIS"
           class="btn btn-primary btn-sm"
           @click="obre_permis()"
+          :disabled="vac_oficials == 1? true : false"
         >
           <i class="fa-solid fa-bed-pulse"></i>
         </button>
       </div>
       <!-- COLUMNA LATERAL DESPLEGABLE -->
       <!-- ESPAI ON ES POSEN LES ETIQUETES -->
-      <div id="principal" class="principal">
+      <div id="principal" class="principal" :style="vac_oficials == 1? 'background: #ededf4;' : ''"> 
         <transition-group name="list-complete" tag="div">
           <div
             v-for="cef in cefire"
@@ -122,6 +130,7 @@
             :title="vis.centre"
           >
             <span @click="borra_par('visita', vis.id)" class="cerrar" />
+            <span :class="(vis.aprobada!=1) ? 'falta_validar' : ''"></span>
           </div>
           <div
             v-for="gua in guardia"
@@ -255,7 +264,7 @@
               v-model="visita_i"
               class="uk-form-large data-uk-input uk-width-1-1"
               type="text"
-              placeholder="Visita a realitzar"
+              placeholder="Com.serveis a realitzar"
             />
           </div>
           <div class="uk-margin">                        
@@ -355,6 +364,7 @@ export default {
       moscosos: {},
       vacances: {},
       permis: {},
+      vac_oficials: 0,
       curs_i: "",
       compensa_i: "",
       visita_i: "",
@@ -515,6 +525,7 @@ export default {
           this["permis"] = res.data["permis"];
           this["moscosos"] = res.data["moscosos"];
           this["vacances"] = res.data["vacances"];
+          this["vac_oficials"] = res.data["vac_oficials"];
            // this.get_de_bd("cefire");
     // this.get_de_bd();
     // this.get_de_bd();
@@ -573,7 +584,7 @@ export default {
             }
         })
         .catch((err) => {
-          this.$toast.error(err.response.data.message);
+          this.$toast.error(err.response.data);
         });
     },
     // Afegix qualsevol altre element que necessite hora a la base de dades
@@ -710,9 +721,11 @@ export default {
     this.get_dia_mes();
     this.channel_create();
     this.channel_borra();
+    //this.oculta_botons();
     this.$eventBus.$on('incidencia-enviada', this.get_incidencia);
     this.$eventBus.$on('moscoso-enviat', this.get_moscosos);
     this.$eventBus.$on('vacances-enviat', this.get_vacances);
+    
   },
   beforeDestroy() {
       this.$eventBus.$off('incidencia-enviada');
@@ -774,6 +787,9 @@ $fondo:  #f1faee
         -webkit-overflow-scrolling: touch
         z-index: 0
     //Llistat d'elelments
+    .principal_dis
+      background: red
+
     .principal
         grid-area: 1 / 1 / 6 / 6
         display: inline-flex

@@ -237,10 +237,12 @@ class UserController extends Controller
             $user->email = $request->mail;
             if (auth()->user()->Perfil == 1){
                 $user->Perfil = $request->perfil;
+                $user->rfid = $request->rfid;
+                $user->reduccio = $request->reduccio?1:0;
             } else {
-                abort(403, "No tens permisos per a canviar el rol");
+                abort(403, "No tens permisos per a canviar eixos paràmetres");
             }            
-            $user->rfid = $request->rfid;
+            
             if ($request->moscosos != null && auth()->user()->Perfil == 1){
                 $user->moscosos = $request->moscosos;
             }
@@ -431,6 +433,10 @@ class UserController extends Controller
         }
         $cefire['cefire'] = $ret3;
         $cefire['moscosos'] = User::find(auth()->id())->moscoso()->where('data', '=', $dia)->get();
+
+        $vac = new VacancesOficialsController();
+
+        $cefire['vac_oficials'] = $vac->es_vacances($dia);
 
 
         return $cefire;
@@ -679,7 +685,7 @@ class UserController extends Controller
         $user = User::find(auth()->id());
         $ret['moscosos (any)'] = $moscosos . " de " . $user->moscosos . " consumits";
         $ret['vacances (any)'] = $vacances . " de " . $user->vacances . " consumits";
-        $ret['TOTAL TEMPS'] = ($total_visita + $total_curs + $total_cef) . " minuts";
+        $ret['TOTAL TEMPS'] = ($total_visita + $total_curs + $total_cef + $total_per - $total_comp) . " minuts";
         return $ret;
 
     }

@@ -70,7 +70,7 @@
                 uk-icon="check"
               ></div>
               <div
-                @click.prevent="borra(item.id)"
+                @click.prevent="borra_vacances(item.id)"
                 class="uk-icon-button uk-text-danger"
                 uk-icon="close"
               ></div>
@@ -101,7 +101,38 @@
                 uk-icon="check"
               ></div>
               <div
-                @click.prevent="borra(item.id)"
+                @click.prevent="borra_moscosos(item.id)"
+                class="uk-icon-button uk-text-danger"
+                uk-icon="close"
+              ></div>
+            </div>
+          </div>
+        </div>
+      </transition-group>
+      <!-- VISITES -->
+      <hr />
+      <h1 v-if="moscosos" class="uk-heading-line uk-text-center">COMISSIONS DE SERVEIS</h1>
+      <transition-group name="list3" tag="div">
+        <div v-for="item in visita" :key="item.id">
+          <div class="llistatcomp">
+            <div class="data">
+              <span data-uk-icon="icon: calendar"></span>
+              {{ item.data }}
+            </div>
+            <div class="nom">
+              <span data-uk-icon="icon: user"></span>
+              <b>{{ item.name }}</b>
+            </div>
+            <div class="mati"></div>
+            <div class="motiu"></div>
+            <div class="botons">
+              <div
+                @click.prevent="valida_visita(item.id)"
+                class="uk-icon-button uk-text-success"
+                uk-icon="check"
+              ></div>
+              <div
+                @click.prevent="borra_visita(item.id)"
                 class="uk-icon-button uk-text-danger"
                 uk-icon="close"
               ></div>
@@ -179,6 +210,7 @@ export default {
       moscosos: {},
       vacances: {},
       oblits: {},
+      visita: {}
     };
   },
   components: {
@@ -233,6 +265,18 @@ export default {
           this.$toast.error(err.response.data.message);
         });
     },
+    agafa_visita() {
+      let url = "visita_no_validades";
+      axios
+        .post(url)
+        .then((res) => {
+          this.visita = res.data;
+          console.log(res);
+        })
+        .catch((err) => {
+          this.$toast.error(err.response.data.message);
+        });
+    },
     borra(id) {
       let url = "compensa/" + id;
       for (let index = 0; index < this.compensacions.length; index++) {
@@ -253,9 +297,9 @@ export default {
     },
     borra_moscosos(id) {
       let url = "moscosos/" + id;
-      for (let index = 0; index < this.compensacions.length; index++) {
-        if (this.compensacions[index].id == id) {
-          this.compensacions.splice(index, 1);
+      for (let index = 0; index < this.moscosos.length; index++) {
+        if (this.moscosos[index].id == id) {
+          this.moscosos.splice(index, 1);
         }
       }
       axios
@@ -271,9 +315,27 @@ export default {
     },
     borra_vacances(id) {
       let url = "vacances/" + id;
-      for (let index = 0; index < this.compensacions.length; index++) {
-        if (this.compensacions[index].id == id) {
-          this.compensacions.splice(index, 1);
+      for (let index = 0; index < this.vacances.length; index++) {
+        if (this.vacances[index].id == id) {
+          this.vacances.splice(index, 1);
+        }
+      }
+      axios
+        .delete(url)
+        .then((res) => {
+          console.log(res);
+          this.$toast.success("Borrat correctament");
+        })
+        .catch((err) => {
+          console.error(err);
+          this.$toast.error(err.response.data.message);
+        });
+    },
+    borra_visita(id) {
+      let url = "visita/" + id;
+      for (let index = 0; index < this.visita.length; index++) {
+        if (this.visita[index].id == id) {
+          this.visita.splice(index, 1);
         }
       }
       axios
@@ -378,6 +440,26 @@ export default {
           this.$toast.error(err.response.data.message);
         });
     },
+    valida_visita(id) {
+      let url = "validavisita";
+      for (let index = 0; index < this.visita.length; index++) {
+        if (this.visita[index].id == id) {
+          this.visita.splice(index, 1);
+        }
+      }
+      let params = {
+        id: id,
+      };
+      axios
+        .post(url, params)
+        .then((res) => {
+          console.log(res);
+          this.$toast.success("Has validat la comissió de serveis");
+        })
+        .catch((err) => {
+          this.$toast.error(err.response.data.message);
+        });
+    },
     valida_tot(nom) {
       let filtrat = this.vacances.filter((vacances) => vacances.name == nom);
 
@@ -410,6 +492,7 @@ export default {
     this.agafa_moscosos();
     this.agafa_vacances();
     this.agafa_oblits();
+    this.agafa_visita();
   },
   watch: {},
 };

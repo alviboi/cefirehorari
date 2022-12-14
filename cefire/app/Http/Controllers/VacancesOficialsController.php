@@ -37,6 +37,16 @@ class VacancesOficialsController extends Controller
         return vacances_oficials::whereBetween('data', [$data_1_set, $data_31_agost])->get();
     }
 
+    public function es_vacances (String $dia) {
+        $vac = vacances_oficials::where('data', "=", $dia)->get();
+        if (!$vac->isEmpty()){
+            return 1;
+        } else {
+            return 0;
+        }
+
+    }
+
     /**
      * Show the form for creating a new resource.
      *

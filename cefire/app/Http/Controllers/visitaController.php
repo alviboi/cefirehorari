@@ -65,4 +65,46 @@ class visitaController extends Controller
         //
         visita::find($visita)->delete();
     }
+
+    public function visitanovalidades()
+    {
+        //
+        $ret = array();
+        $els = visita::where('aprobada','=',false)->get();
+        $dias=array("Diumenge","Dilluns","Dimarts","Dimecres","Dijous","Divendres","Dissabte");
+
+        foreach ($els as $el) {
+            $da=date("d-m-Y", strtotime($el->data));
+            $da2=$dias[date("w", strtotime($el->data))];
+            
+            $item=array("id"=>$el->id, "name"=>$el->user['name'], "data"=>$da2.", ".$da);
+            //$item=array("id"=>$el->id, "name"=>"", "data"=>$da2.", ".$da);
+            array_push($ret, $item);
+        }
+        return $ret;
+    }
+
+    public function validavisita(Request $request)
+    {
+        //
+        $el = visita::where('id',$request->id)->update(['aprobada'=>true]);
+
+        $compensa = visita::find($request->id);
+
+        $link2 = "https://calendar.google.com/calendar/u/0/r/eventedit?text=COM.+SERVEIS+CEFIRE&dates=" . str_replace("-", "", $compensa->data) . "&details=compensa+del+Cefire+de+Valencia+ELIMINADA&location=Valencia&trp=false#eventpage_6";
+
+        $datos2 = [
+            'nombre' => $compensa->user['name'],
+            'fecha' => date("d/m/Y", strtotime($compensa->data)),
+            'link' => $link2,
+            'estat' => 'Aprovada'
+        ];
+
+
+        //$emailJob3 = (new SendAvisvisita($compensa->user['email'], $datos2))->delay(Carbon::now()->addSeconds(120));
+        //dispatch($emailJob3);
+
+        //Mail::to($compensa->user['email'])->send(new Eliminarcompensa($datos2));
+
+    }
 }

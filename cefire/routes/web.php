@@ -105,10 +105,12 @@ Route::post('permis_sense_arxiu','permisController@permis_sense_arxiu')->middlew
 Route::post('compensacions_no_validades','compensaController@compensacionsnovalidades')->middleware('can:esAdmin');
 Route::post('moscosos_no_validades','MoscosoController@moscososnovalidades')->middleware('can:esAdmin');
 Route::post('vacances_no_validades','VacancesController@vacancesnovalidades')->middleware('can:esAdmin');
+Route::post('visita_no_validades','visitaController@visitanovalidades')->middleware('can:esAdmin'); //NOU
 
 Route::post('validacompensacio','compensaController@validacompensacio')->middleware('can:esAdmin');
 Route::post('validamoscosos','MoscosoController@validamoscosos')->middleware('can:esAdmin');
 Route::post('validavacances','VacancesController@validavacances')->middleware('can:esAdmin');
+Route::post('validavisita','visitaController@validavisita')->middleware('can:esAdmin'); //NOU
 
 Route::get('/usuaris_oblit_fitxatge', 'cefireController@usuaris_oblit_fitxatge')->name('usuaris_oblit_fitxatge')->middleware('can:esAdmin');
 Route::post('/validaoblidat', 'cefireController@validaoblidat')->name('validaoblidat')->middleware('can:esAdmin');

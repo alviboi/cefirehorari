@@ -51,47 +51,53 @@
             <div class="uk-modal-body bac">
 
                     <div class="uk-margin">
-                        <div class="uk-inline">
+                        <div class="uk-inline" title="Identificador assessor" uk-tooltip >
                             <span class="uk-form-icon" uk-icon="icon: sign-in"></span>
                             <input :value="edita_u.id" class="uk-input" type="text" placeholder="id" disabled>
                         </div>
                     </div>
 
-                    <div class="uk-margin">
+                    <div class="uk-margin" title="Nom de l'assessor" uk-tooltip >
                         <div class="uk-inline">
                             <span class="uk-form-icon" uk-icon="icon: user"></span>
                             <input v-model="edita_u.nom" class="uk-input" type="text" placeholder="Nom">
                         </div>
                     </div>
 
-                    <div class="uk-margin">
+                    <div title="Email i nom de l'usuari" uk-tooltip  class="uk-margin">
                         <div class="uk-inline">
                             <span class="uk-form-icon" uk-icon="icon: mail"></span>
                             <input v-model="edita_u.mail" class="uk-input" type="text" placeholder="Mail">
                         </div>
                     </div>
-                    <div class="uk-margin">
+                    <div title="Perfil, 1 Administrador, 2 Assessor" uk-tooltip  class="uk-margin">
                         <div class="uk-inline">
                             <span class="uk-form-icon" uk-icon="icon: world"></span>
                             <input v-model="edita_u.perfil" class="uk-input" type="number" min="0" max="3" step="1" placeholder="Perfil">
                         </div>
                     </div>
-                    <div class="uk-margin">
+                    <div title="Dies moscosos" uk-tooltip  class="uk-margin">
                         <div class="uk-inline">
                             <span class="uk-form-icon"><i class="fa-solid fa-champagne-glasses"></i></span>
                             <input v-model="edita_u.moscosos" class="uk-input" type="number" min="0" step="1" placeholder="moscosos">
                         </div>
                     </div>
-                    <div class="uk-margin">
+                    <div title="Dies de vacances" uk-tooltip  class="uk-margin">
                         <div class="uk-inline">
                             <span class="uk-form-icon"><i class="fa-solid fa-plane-departure"></i></span>
                             <input v-model="edita_u.vacances" class="uk-input" type="number" min="0" step="1" placeholder="vacances">
                         </div>
                     </div>
-                    <div class="uk-margin">
+                    <div title="Número de sèrie de la targeta identificadora" uk-tooltip  class="uk-margin">
                         <div class="uk-inline">
                             <span class="uk-form-icon" uk-icon="icon: credit-card"></span>
                             <input v-model="edita_u.rfid" class="uk-input" type="text" placeholder="rfid">
+                        </div>
+                    </div>
+                    <div title="Reducció horària setmanal" uk-tooltip class="uk-margin">
+                        <div class="uk-inline">
+                            <input v-model="edita_u.reduccio" type="checkbox" placeholder="rfid">
+                            <span>Reducció horària</span>
                         </div>
                     </div>
             </div>
@@ -121,7 +127,9 @@ export default {
                 mail: "",
                 perfil: 0,
                 moscosos: 0,
-                rfid: ""
+                vacances: 0,
+                rfid: "",
+                reduccio: false
             }
         }
     },
@@ -153,6 +161,7 @@ export default {
         // Edita assessor
         edita(id){
             let results = this.users.filter((item => item.id == id));
+            this.edita_u.reduccio=(results[0].reduccio==1)?true:false;
             this.edita_u.id=results[0].id;
             this.edita_u.nom=results[0].name;
             this.edita_u.mail=results[0].email;
@@ -160,6 +169,7 @@ export default {
             this.edita_u.rfid=results[0].rfid;
             this.edita_u.moscosos=results[0].moscosos;
             this.edita_u.vacances=results[0].vacances;
+            
             UIkit.modal("#edita").show();
         },
         // Agafa usuaris
