@@ -114,6 +114,8 @@ Vue.component('escriuvacances-component', require('./components/Vacances/EscriuV
 Vue.component('fitxatgessuma-component', require('./components/FitxatgessumaComponent.vue').default);
 Vue.component('afegirvacances-component', require('./components/Vacances/AfegirVacancesComponent.vue').default);
 
+Vue.component('borsahores-component', require('./components/BorsaHores/BorsahoresComponent.vue').default);
+
 
 Vue.use(VCalendar, {
     componentPrefix: 'v',
@@ -161,6 +163,7 @@ const app = new Vue({
         showModalInc: false,
         showModalMosc: false,
         showModalVac: false,
+        showModalBorsa: false,
         // calendar: false,
         // horari: false,
         showEdita: false,
@@ -241,6 +244,10 @@ const app = new Vue({
             // alert('hola');
             this.showMissatge=false;
         },
+        tanca_borsahores() {
+            // alert('hola');
+            this.showModalBorsa=false;
+        },
         tanca_edita() {
             // alert('hola');
             this.showEdita=false;
@@ -287,6 +294,7 @@ const app = new Vue({
         this.$eventBus.$on('tanca-moscoso', this.tanca_moscoso);
         this.$eventBus.$on('tanca-vacances', this.tanca_vacances);
         this.$eventBus.$on('tanca-missatge', this.tanca_missatge);
+        this.$eventBus.$on('tanca-borsahores', this.tanca_borsahores);
         this.$eventBus.$on('tanca-edita', this.tanca_edita);
         this.$eventBus.$on('obre-moscoso', this.obre_moscoso);
         this.$eventBus.$on('obre-vacances', this.obre_vacances);
@@ -296,6 +304,7 @@ const app = new Vue({
     beforeDestroy() {
         this.$eventBus.$off('tanca-avis');
         this.$eventBus.$off('tanca-missatge');
+        this.$eventBus.$off('tanca-borsahores');
         this.$eventBus.$off('tanca-edita');
         this.$eventBus.$off('tanca-incidencia');
         this.$eventBus.$off('tanca-moscoso');

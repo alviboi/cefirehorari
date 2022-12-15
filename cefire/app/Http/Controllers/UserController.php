@@ -50,12 +50,13 @@ class UserController extends Controller
     public function contar($desde, $fins)
     {
 
-        $labels = ['cefire', 'permis', 'compensa', 'curs'];
+        $labels = ['fitxatges', 'permís', 'compensa', 'curs', 'com. serv.'];
 
         $cefire = user::find(auth()->id())->cefire()->whereBetween('data', [$desde, $fins])->get();
         $permis = user::find(auth()->id())->permis()->whereBetween('data', [$desde, $fins])->get();
         $compensa = user::find(auth()->id())->compensa()->whereBetween('data', [$desde, $fins])->get();
         $curs = user::find(auth()->id())->curs()->whereBetween('data', [$desde, $fins])->get();
+        $visita = user::find(auth()->id())->visita()->whereBetween('data', [$desde, $fins])->get();
 
         $total_cef = 0;
         foreach ($cefire as $cef) {
@@ -86,7 +87,14 @@ class UserController extends Controller
             $duration = $in->diffInMinutes($fi);
             $total_curs = $total_curs + $duration;
         }
-        $datos = [round($total_cef / 60, 2), round($total_per / 60, 2), round($total_comp / 60, 2), round($total_curs / 60, 2)];
+        $total_vis = 0;
+        foreach ($visita as $cu) {
+            $in = Carbon::parse($cu->inici);
+            $fi = Carbon::parse($cu->fi);
+            $duration = $in->diffInMinutes($fi);
+            $total_vis = $total_vis + $duration;
+        }
+        $datos = [round($total_cef / 60, 2), round($total_per / 60, 2), round($total_comp / 60, 2), round($total_curs / 60, 2), round($total_vis / 60, 2)];
 
         $ret = array('labels' => $labels, 'datos' => $datos);
         return ($ret);

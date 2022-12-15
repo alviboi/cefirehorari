@@ -111,7 +111,9 @@
       </transition-group>
       <!-- VISITES -->
       <hr />
-      <h1 v-if="moscosos" class="uk-heading-line uk-text-center">COMISSIONS DE SERVEIS</h1>
+      <h1 v-if="moscosos" class="uk-heading-line uk-text-center">
+        COMISSIONS DE SERVEIS
+      </h1>
       <transition-group name="list3" tag="div">
         <div v-for="item in visita" :key="item.id">
           <div class="llistatcomp">
@@ -142,8 +144,16 @@
       </transition-group>
       <!-- FITXATGES OBLIDATS -->
       <hr />
-      <h1 v-if="moscosos" class="uk-heading-line uk-text-center">
-        FITXATGES OBLIDATS
+      <h1 class="uk-heading-line uk-text-center">
+        <div class="uk-inline">
+          FITXATGES OBLIDATS
+          <button
+            :uk-toggle="'target: #cefire_afg-modal'"
+            class="uk-icon-button uk-button-primary"
+            uk-icon="icon: plus"
+            
+          ></button>
+        </div>
       </h1>
       <transition-group name="list3" tag="div">
         <div
@@ -193,6 +203,87 @@
         </div>
       </transition-group>
     </div>
+    <!-- Visita modal -->
+    <div :id="'cefire_afg-modal'" uk-modal>
+      <div class="uk-modal-dialog uk-modal-body">
+        <fieldset class="uk-fieldset">
+          <div class="uk-margin">
+            <div class="uk-text-medium">
+              Aquest fitxatge és sols en cas que se li haja oblidat tant
+              l'entrada com la sortida
+            </div>
+            <div class="uk-margin">
+              <form
+                class="uk-width-expand uk-search uk-search-default"
+                autocomplete="on"
+              >
+                <div class="uk-margin">
+                  <label for="seleccio">Selecciona assessor</label>
+                  <select
+                    id="seleccio"
+                    v-model="busca_ass"
+                    class="uk-select"
+                    aria-label="Select"
+                  >
+                    <option
+                      v-for="(user, key) in users"
+                      :key="key"
+                      :value="user.id"
+                    >
+                      {{ user.name }}
+                    </option>
+                  </select>
+                </div>
+              </form>
+            </div>
+            <div class="uk-child-width-expand@s" uk-grid>
+              <div>
+                <label>Dia fitxatge: </label>
+                <Datepicker
+                  :language="ca"
+                  :monday-first="true"
+                  v-model="data"
+                  placeholder="Selecciona dia:"
+                  input-class="uk-input uk-inline"
+                >
+                </Datepicker>
+              </div>
+              <div>
+                <label>Hora entrada: </label>
+                <vue-timepicker
+                  :hour-range="[[7, 19]]"
+                  :minute-interval="5"
+                  v-model="inici"
+                ></vue-timepicker>
+              </div>
+              <div>
+                <span> Hora sortida: </span>
+                <vue-timepicker
+                  :hour-range="[[7, 19]]"
+                  :minute-interval="5"
+                  v-model="fi"
+                ></vue-timepicker>
+              </div>
+            </div>
+          </div>
+        </fieldset>
+        <p class="uk-text-right">
+          <button
+            class="uk-button uk-button-default uk-modal-close"
+            type="button"
+          >
+            Cancel·la
+          </button>
+          <button
+            @click.prevent="afegix_cefire"
+            class="uk-button uk-button-primary"
+            type="button"
+          >
+            Fitxa
+          </button>
+        </p>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -200,6 +291,8 @@
 /**
  * En aquest component es mostren tots els justificants de tots els permisos dels assessors, es pot buscar per assessor i per dades concretes
  */
+import Datepicker from "vuejs-datepicker";
+import { ca } from "vuejs-datepicker/dist/locale";
 import VueTimepicker from "vue2-timepicker";
 import "vue2-timepicker/dist/VueTimepicker.css";
 export default {
@@ -210,13 +303,32 @@ export default {
       moscosos: {},
       vacances: {},
       oblits: {},
-      visita: {}
+      visita: {},
+      inici: "",
+      fi: "",
+      users: [],
+      busca_ass: "",
+      data: null,
+      ca: ca,
     };
   },
   components: {
     VueTimepicker,
+    Datepicker,
   },
   methods: {
+    // Petició de les dades de tots els usuaris per al desplegable
+    agafa_users() {
+      axios
+        .get("user")
+        .then((res) => {
+          console.log(res);
+          this.users = res.data;
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    },
     agafa_compensacions() {
       let url = "compensacions_no_validades";
       axios
@@ -486,6 +598,30 @@ export default {
           this.$toast.error(err.response.data.message);
         });
     },
+    afegix_cefire() {
+      //alert(this.data);
+      if (this.data === null || this.inici == "" || this.fi == "" || this.busca_ass == ""){
+        this.$toast.error("Cal que emplenes totes les dades");
+        return 0;
+      }
+      var params = {
+        id: this.busca_ass,
+        data: data_db(this.data),
+        inici: this.inici,
+        fi: this.fi,
+      };
+      axios
+        .post("cefire_fitxa_oblit", params)
+        .then((res) => {
+          this.$toast.success(res.data);
+        })
+        .catch((err) => {
+          this.$toast.error(err.response.data.message);
+        });
+    },
+    afegix_fitxatge() {
+      //Obri finestra
+    },
   },
   mounted() {
     this.agafa_compensacions();
@@ -493,6 +629,7 @@ export default {
     this.agafa_vacances();
     this.agafa_oblits();
     this.agafa_visita();
+    this.agafa_users();
   },
   watch: {},
 };
@@ -520,13 +657,13 @@ $fondo: #EEC49A
   align-items: center
   background-color: $fondo
   comu
-    overflow: hidden
-    .data
+  overflow: hidden
+  .data
+    @extend comu
+    grid-area: data
+    .nom
       @extend comu
-      grid-area: data
-      .nom
-        @extend comu
-        grid-area: nom
+      grid-area: nom
       .mati
         @extend comu
         grid-area: mati

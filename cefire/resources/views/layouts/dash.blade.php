@@ -41,8 +41,11 @@
                                         <li><a class="uk-navbar-dropdown-close" href="#" @click="view = 'controlass'"><span data-uk-icon="icon: refresh"></span> Control d'Assessors</a></li>
                                         <li><a class="uk-navbar-dropdown-close" href="#" @click="view = 'configuracio'"><span data-uk-icon="icon: settings"></span> Configuració</a></li>
                                         @endif
+										<li class="uk-nav-divider"></li>
                                         <li><a class="uk-navbar-dropdown-close" href="#" @click="showModal = true"><span data-uk-icon="icon: warning"></span> Escriu Avís</a></li>
 										<li><a class="uk-navbar-dropdown-close" href="#" @click="showModalInc = true"><span data-uk-icon="icon: lifesaver"></span> Escriu Incidència</a></li>
+										<li><a class="uk-navbar-dropdown-close" href="#" @click="showModalBorsa = true"><span data-uk-icon="icon: future"></span> Borsa hores</a></li>
+
 										{{-- <li><a class="uk-navbar-dropdown-close" href="#" @click="showModalMosc = true"><span data-uk-icon="icon: tripadvisor"></span> Escriu Moscoso</a></li> --}}
 
 										<li class="uk-nav-divider"></li>

@@ -28,7 +28,7 @@
                 </div>
                 <p class="uk-text-right">
                     <transition-group name="list-complete2">
-                    <button :key="1+id" @click.prevent="ix" class="uk-button uk-button-default" type="button">Cancel·la</button>
+                    <button :key="1+id" @click.prevent="ix" class="uk-button uk-button-default uk-button-close" type="button">Cancel·la</button>
                     <button :key="2+id" @click.prevent="envia" class="uk-button uk-button-primary" type="button">Envia</button>
                     </transition-group>
                 </p>

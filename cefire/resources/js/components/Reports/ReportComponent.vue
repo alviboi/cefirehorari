@@ -110,9 +110,9 @@ export default {
       labels: [],
       datos2: [],
       labels2: [],
-      nom: "Gràfica dels minuts fets al cefire",
+      nom: "Gràfica dels minuts de fitxatges",
       nom2: "Distribució d'hores realitzades",
-      nom_datos: "Cefire",
+      nom_datos: "Fitxatges",
       refresca: 0,
     };
   },

@@ -309,4 +309,18 @@ class cefireController extends Controller
         // return $ret;
     }
 
+    public function cefire_fitxa_oblit(Request $request) {
+        $dat = new cefire();
+        $dat->data = $request->data;
+        $dat->inici = $request->inici;
+        $dat->fi = $request->fi;
+        $dat->user_id = $request->id;
+        $ok = $dat->save();
+        if ($ok) {
+            return "Fitxat correctament";
+        } else {
+            abort(403, "Alguna cosa ha anat malament");
+        }
+    }
+
 }

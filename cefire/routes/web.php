@@ -1,5 +1,7 @@
 <?php
 
+//use App\Http\Controllers\BorsaSolicitudsController;
+//use App\Models\BorsaSolicituds;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Schema;
 use App\Models\control;
@@ -112,6 +114,8 @@ Route::post('validamoscosos','MoscosoController@validamoscosos')->middleware('ca
 Route::post('validavacances','VacancesController@validavacances')->middleware('can:esAdmin');
 Route::post('validavisita','visitaController@validavisita')->middleware('can:esAdmin'); //NOU
 
+Route::post('cefire_fitxa_oblit','cefireController@cefire_fitxa_oblit')->middleware('can:esAdmin'); //NOU
+
 Route::get('/usuaris_oblit_fitxatge', 'cefireController@usuaris_oblit_fitxatge')->name('usuaris_oblit_fitxatge')->middleware('can:esAdmin');
 Route::post('/validaoblidat', 'cefireController@validaoblidat')->name('validaoblidat')->middleware('can:esAdmin');
 Route::get('/tots_els_dies_mes/{any}/{mes}', 'UserController@tots_els_dies_mes')->name('tots_els_dies_mes')->middleware('can:esAdmin');
@@ -138,6 +142,8 @@ Route::group(['middleware' => 'auth'], function() {
         'moscosos' => MoscosoController::class,
         'vacances' => VacancesController::class,
         'vacancesoficials' => VacancesOficialsController::class,
+        'borsahores' => BorsaHoresController::class,
+        'borsasolicituds' => BorsaSolicitudsController::class
         ]);
 });
 
