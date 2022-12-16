@@ -16,7 +16,7 @@
         <div class="uk-margin">
           <div class="uk-inline">
             <span class="uk-text-medium"
-              >Nombre de minuts que vols afegir a la borsa:</span
+              >Nombre de minuts que has fet de més(no has de posar el número de minuts multiplicat))</span
             >
             <input
               class="uk-input uk-inline"

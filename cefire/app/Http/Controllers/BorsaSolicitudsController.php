@@ -16,6 +16,16 @@ class BorsaSolicitudsController extends Controller
     public function index()
     {
         //
+        //return BorsaSolicituds::get();
+
+        $borsol=BorsaSolicituds::orderby('id','DESC')->where("aprobada","=",0)->get();
+        $ret=array();
+        foreach ($borsol as $bors) {
+            # code...
+            $el = ["nom"=>$bors->user['name'],"any"=>$bors->any,"mes"=>$bors->mes,"minuts"=>$bors->minuts,"justificacio"=>$bors->justificacio,"id"=>$bors->id,"user_id"=>$bors->user_id];
+            array_push($ret,$el);
+        }
+        return $ret;
     }
 
     /**

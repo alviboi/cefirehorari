@@ -109,6 +109,40 @@
           </div>
         </div>
       </transition-group>
+      <!-- BORSA D'HORES -->
+      <hr />
+      <h1 v-if="moscosos" class="uk-heading-line uk-text-center">BORSA D'HORES</h1>
+      <transition-group name="list3" tag="div">
+        <div v-for="item in borsahores" :key="item.id">
+          <div class="llistatcomp">
+            <div class="data">
+              <span data-uk-icon="icon: calendar"></span>
+              {{ item.mes }} - {{ item.any }}
+            </div>
+            <div class="nom">
+              <span data-uk-icon="icon: user"></span>
+              <b>{{ item.nom }}</b>
+            </div>
+            <!-- <div class="mati"></div> -->
+            <div class="motiu">
+              <p>{{ item.justificacio }}</p>
+            </div>
+
+            <div class="botons">
+              <div
+                @click.prevent="valida_borsahores(item.id,item.user_id)"
+                class="uk-icon-button uk-text-success"
+                uk-icon="check"
+              ></div>
+              <div
+                @click.prevent="borra_moscosos(item.id)"
+                class="uk-icon-button uk-text-danger"
+                uk-icon="close"
+              ></div>
+            </div>
+          </div>
+        </div>
+      </transition-group>
       <!-- VISITES -->
       <hr />
       <h1 v-if="moscosos" class="uk-heading-line uk-text-center">
@@ -151,7 +185,6 @@
             :uk-toggle="'target: #cefire_afg-modal'"
             class="uk-icon-button uk-button-primary"
             uk-icon="icon: plus"
-            
           ></button>
         </div>
       </h1>
@@ -304,6 +337,7 @@ export default {
       vacances: {},
       oblits: {},
       visita: {},
+      borsahores: {},
       inici: "",
       fi: "",
       users: [],
@@ -383,6 +417,18 @@ export default {
         .post(url)
         .then((res) => {
           this.visita = res.data;
+          console.log(res);
+        })
+        .catch((err) => {
+          this.$toast.error(err.response.data.message);
+        });
+    },
+    agafa_borsa_hores() {
+      let url = "borsasolicituds";
+      axios
+        .get(url)
+        .then((res) => {
+          this.borsahores = res.data;
           console.log(res);
         })
         .catch((err) => {
@@ -598,9 +644,35 @@ export default {
           this.$toast.error(err.response.data.message);
         });
     },
+    valida_borsa_hores(id,user_id) {
+      // let url = "validavisita";
+      // for (let index = 0; index < this.visita.length; index++) {
+      //   if (this.visita[index].id == id) {
+      //     this.visita.splice(index, 1);
+      //   }
+      // }
+      // let params = {
+      //   id: id,
+      // };
+      // axios
+      //   .post(url, params)
+      //   .then((res) => {
+      //     console.log(res);
+      //     this.$toast.success("Has validat la comissió de serveis");
+      //   })
+      //   .catch((err) => {
+      //     this.$toast.error(err.response.data.message);
+      //   });
+    },
+    
     afegix_cefire() {
       //alert(this.data);
-      if (this.data === null || this.inici == "" || this.fi == "" || this.busca_ass == ""){
+      if (
+        this.data === null ||
+        this.inici == "" ||
+        this.fi == "" ||
+        this.busca_ass == ""
+      ) {
         this.$toast.error("Cal que emplenes totes les dades");
         return 0;
       }
@@ -630,6 +702,7 @@ export default {
     this.agafa_oblits();
     this.agafa_visita();
     this.agafa_users();
+    this.agafa_borsa_hores();
   },
   watch: {},
 };
