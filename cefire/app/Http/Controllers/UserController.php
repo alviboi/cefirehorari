@@ -722,8 +722,7 @@ class UserController extends Controller
         $any = date('Y');
         $data_15_oct = date($any."-10-15");
         $data_15_mai = date($any."-05-15");
-        $desde_any = date($year . "-1-1");
-        $fins_any = date($year . "-12-31");
+        
 
         $total_mes = 0;
         foreach ($dates as $key => $value) {
@@ -744,18 +743,8 @@ class UserController extends Controller
 
         $este=$this->agafa_dades_suma($usuari,$mes,$any,$inici,$fi,$total_mes,$total_dia,$total_dies);
         unset($este["Nom"]);
-        $vacances = user::find(auth()->id())->vacances()->whereBetween('data', [$desde_any, $fins_any])->count();
-        $borsahores = user::find(auth()->id())->borsahores()->first()->minuts;
-        $deutesmes = user::find(auth()->id())->deutesmes()->first()->minuts;
-        $moscosos = user::find(auth()->id())->moscoso()->whereBetween('data', [$desde_any, $fins_any])->count();
+        
 
-
-        $este['moscosos (any)'] = $moscosos . " de " . $usuari->moscosos . " consumits";
-        $este['vacances (any)'] = $vacances . " de " . $usuari->vacances . " consumits";
-        $este['borsa hores'] = $borsahores . " minuts";
-        if($deutesmes<0){
-            $este['deute mesos anteriors'] = $deutesmes . " minuts";
-        }
         
         return $este;
 
@@ -820,6 +809,8 @@ class UserController extends Controller
 
     function agafa_dades_suma($value,$mes,$any,$inici,$fi,$total_mes,$total_dia,$total_dies){
         $este = array();
+        $desde_any = date($any . "-1-1");
+        $fins_any = date($any . "-12-31");
         $este['Nom'] = $value->name;
         $este['fitxatge'] = intval($value->cefire()->select(DB::raw('SUM(TIME_TO_SEC(TIMEDIFF(fi,inici))/60) as total'))->whereBetween('data',[$inici,$fi])->where('fi','!=','00:00:00')->first()['total']);
         
@@ -840,8 +831,23 @@ class UserController extends Controller
             $este['moscosos'] = $value->moscoso()->whereBetween('data',[$inici,$fi])->count()*$total_dia; 
             $este['vacances'] = $value->vacances()->whereBetween('data',[$inici,$fi])->count()*$total_dia;
         }
-        
+        $deutesmes = $value->deutesmes()->first()->minuts;
+        if($deutesmes<0){
+            $este['deute mesos anteriors'] = $deutesmes . " min";
+        }
+        $vacances = $value->vacances()->whereBetween('data', [$desde_any, $fins_any])->count();
+        $borsahores = $value->borsahores()->first();
+        if ($borsahores){
+            $este['borsa hores'] = $borsahores->minuts . " min";
+        } else {
+            $este['borsa hores'] = 0;
+        }
+        $moscosos = $value->moscoso()->whereBetween('data', [$desde_any, $fins_any])->count();
 
+
+        $este['moscosos (any)'] = $moscosos . " de " . $value->moscosos . " cons";
+        $este['vacances (any)'] = $vacances . " de " . $value->vacances . " cons";
+        
 
         $este['total'] = $este['fitxatge']+ $este['permís']+$este['compensa']/*Es suma perquè les està gaudint d'un excés que ha fet altre mes*/+$este['curs']+$este['visita']+$este['moscosos']+$este['vacances'];
 

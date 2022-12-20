@@ -110,7 +110,7 @@ class User extends Authenticatable
      */
     public function borsahores()
     {
-        return $this->hasMany('App\Models\BorsaHores');
+        return $this->hasOne('App\Models\BorsaHores');
     }
 
     /**

@@ -43,7 +43,7 @@
                             </tbody>
 
                         </table>
-                        <span class="uk-text-meta">TOTAL TEMPS és la suma de Fitxatges, Com. Serv. i Cursos</span>
+                        <span class="uk-text-meta">TOTAL és la suma del que has fet. DIFERÈNCIA és el que et falta en este mes sense contar deute de mesos anteriors.</span>
                         <hr>
                         <div class="uk-text-lead">Últims dies que has fitxat</div>
                         <table class="uk-table uk-table-divider uk-table-small uk-text-meta">
