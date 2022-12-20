@@ -122,7 +122,8 @@ export default {
                     this.$toast.success("Dades guardades correctament");
                 })
                 .catch(err => {
-                    console.error(err);
+                    this.$toast.error(err.response.data.message);
+                    console.error(err.response.data.message);
                 })
 
             } else {

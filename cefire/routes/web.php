@@ -113,6 +113,11 @@ Route::post('validacompensacio','compensaController@validacompensacio')->middlew
 Route::post('validamoscosos','MoscosoController@validamoscosos')->middleware('can:esAdmin');
 Route::post('validavacances','VacancesController@validavacances')->middleware('can:esAdmin');
 Route::post('validavisita','visitaController@validavisita')->middleware('can:esAdmin'); //NOU
+Route::post('borsasolicitudsvalida','BorsaSolicitudsController@borsasolicitudsvalida')->middleware('can:esAdmin'); //NOU
+
+
+
+
 
 Route::post('cefire_fitxa_oblit','cefireController@cefire_fitxa_oblit')->middleware('can:esAdmin'); //NOU
 
@@ -120,6 +125,7 @@ Route::get('/usuaris_oblit_fitxatge', 'cefireController@usuaris_oblit_fitxatge')
 Route::post('/validaoblidat', 'cefireController@validaoblidat')->name('validaoblidat')->middleware('can:esAdmin');
 Route::get('/tots_els_dies_mes/{any}/{mes}', 'UserController@tots_els_dies_mes')->name('tots_els_dies_mes')->middleware('can:esAdmin');
 //Route::get('/vacancesoficials/{from}/{to}', 'VacancesOficialsController@agafavacancescurs')->name('agafavacancescurs')->middleware('can:esAdmin');
+Route::get('/calcula_deutes_mes_un_usuari', 'UserController@calcula_deutes_mes_un_usuari')->name('calcula_deutes_mes_un_usuari')->middleware('auth');
 
 
 Route::resource('control', ControlController::class)->middleware('can:esAdmin');

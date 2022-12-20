@@ -8,6 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class Incidencies extends Model
 {
     use HasFactory;
+    //protected $fillable = ['active'];
+    public $table = 'incidencies';
+
     /**
      * user
      *

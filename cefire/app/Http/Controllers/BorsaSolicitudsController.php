@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
 use App\Http\Requests\StoreBorsaSolicitudsRequest;
 use App\Http\Requests\UpdateBorsaSolicitudsRequest;
+use App\Models\BorsaHores;
 use App\Models\BorsaSolicituds;
 
 class BorsaSolicitudsController extends Controller
@@ -110,8 +112,27 @@ class BorsaSolicitudsController extends Controller
      * @param  \App\Models\BorsaSolicituds  $borsaSolicituds
      * @return \Illuminate\Http\Response
      */
-    public function destroy(BorsaSolicituds $borsaSolicituds)
+    public function destroy($borsaSolicituds)
     {
-        //
+        $ret = BorsaSolicituds::find($borsaSolicituds)->delete();
+        //$a = $borsaSolicituds->id;
+        return $ret;
+        //return "sfsdaf";
+    }
+
+
+    public function borsasolicitudsvalida(Request $request) {
+        $bs = BorsaSolicituds::find($request->id);
+        $BorsaHores = new BorsaHoresController();
+        $ret = $BorsaHores->crea($request->user_id, $request->minuts);
+        if ($ret > 0){
+            $bs->aprobada = 1;
+            $bs->save();
+            return "La borsa ara és de ".$ret." minuts.";
+        } else {
+            abort(403, "Ha hagut un error.");
+        }
+        
+
     }
 }

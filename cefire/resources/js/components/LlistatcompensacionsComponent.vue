@@ -111,7 +111,7 @@
       </transition-group>
       <!-- BORSA D'HORES -->
       <hr />
-      <h1 v-if="moscosos" class="uk-heading-line uk-text-center">BORSA D'HORES</h1>
+      <h1 class="uk-heading-line uk-text-center">BORSA D'HORES</h1>
       <transition-group name="list3" tag="div">
         <div v-for="item in borsahores" :key="item.id">
           <div class="llistatcomp">
@@ -123,19 +123,32 @@
               <span data-uk-icon="icon: user"></span>
               <b>{{ item.nom }}</b>
             </div>
+            <div class="mati">
+              <span data-uk-icon="icon: clock"></span>
+              <span
+                ><b>{{ (item.minuts / 60).toFixed(2) }} hores</b></span
+              >
+            </div>
             <!-- <div class="mati"></div> -->
-            <div class="motiu">
-              <p>{{ item.justificacio }}</p>
+            <div class="motiu" @click="mostra(item.justificacio)">
+              <span data-uk-icon="icon: comments"></span>
+              {{
+                item.justificacio.length > 20
+                  ? item.justificacio.slice(0, 20) + "..."
+                  : item.justificacio
+              }}
             </div>
 
             <div class="botons">
               <div
-                @click.prevent="valida_borsahores(item.id,item.user_id)"
+                @click.prevent="
+                  valida_borsa_hores(item.id, item.user_id, item.minuts)
+                "
                 class="uk-icon-button uk-text-success"
                 uk-icon="check"
               ></div>
               <div
-                @click.prevent="borra_moscosos(item.id)"
+                @click.prevent="borra_borsahores(item.id)"
                 class="uk-icon-button uk-text-danger"
                 uk-icon="close"
               ></div>
@@ -145,9 +158,7 @@
       </transition-group>
       <!-- VISITES -->
       <hr />
-      <h1 v-if="moscosos" class="uk-heading-line uk-text-center">
-        COMISSIONS DE SERVEIS
-      </h1>
+      <h1 class="uk-heading-line uk-text-center">COMISSIONS DE SERVEIS</h1>
       <transition-group name="list3" tag="div">
         <div v-for="item in visita" :key="item.id">
           <div class="llistatcomp">
@@ -351,6 +362,9 @@ export default {
     Datepicker,
   },
   methods: {
+    mostra(aux) {
+      UIkit.modal.dialog('<p class="uk-padding uk-text-large">' + aux + "</p>");
+    },
     // Petició de les dades de tots els usuaris per al desplegable
     agafa_users() {
       axios
@@ -507,7 +521,25 @@ export default {
           this.$toast.error(err.response.data.message);
         });
     },
-    borra_oblidat(id) {
+    borra_visita(id) {
+      let url = "visita/" + id;
+      for (let index = 0; index < this.visita.length; index++) {
+        if (this.visita[index].id == id) {
+          this.visita.splice(index, 1);
+        }
+      }
+      axios
+        .delete(url)
+        .then((res) => {
+          console.log(res);
+          this.$toast.success("Borrat correctament");
+        })
+        .catch((err) => {
+          console.error(err);
+          this.$toast.error(err.response.data.message);
+        });
+    },
+    borra_borsahores(id) {
       var here = this;
       UIkit.modal
         .confirm(
@@ -515,17 +547,17 @@ export default {
         )
         .then(
           function () {
-            let url = "cefire/" + id;
-            for (let index = 0; index < here.oblits.length; index++) {
-              if (here.oblits[index].id == id) {
-                here.oblits.splice(index, 1);
+            let url = "borsasolicituds/" + id;
+            for (let index = 0; index < here.borsahores.length; index++) {
+              if (here.borsahores[index].id == id) {
+                here.borsahores.splice(index, 1);
               }
             }
             axios
               .delete(url)
               .then((res) => {
                 console.log(res);
-                here.$toast.success("Borrat correctament");
+                here.$toast.success(res.data);
               })
               .catch((err) => {
                 console.error(err);
@@ -644,27 +676,30 @@ export default {
           this.$toast.error(err.response.data.message);
         });
     },
-    valida_borsa_hores(id,user_id) {
-      // let url = "validavisita";
-      // for (let index = 0; index < this.visita.length; index++) {
-      //   if (this.visita[index].id == id) {
-      //     this.visita.splice(index, 1);
-      //   }
-      // }
-      // let params = {
-      //   id: id,
-      // };
-      // axios
-      //   .post(url, params)
-      //   .then((res) => {
-      //     console.log(res);
-      //     this.$toast.success("Has validat la comissió de serveis");
-      //   })
-      //   .catch((err) => {
-      //     this.$toast.error(err.response.data.message);
-      //   });
+    valida_borsa_hores(id, user_id, minuts) {
+      let url = "borsasolicitudsvalida";
+
+      let params = {
+        id: id,
+        user_id: user_id,
+        minuts: minuts,
+      };
+      axios
+        .post(url, params)
+        .then((res) => {
+          console.log(res);
+          this.$toast.success(res.data);
+          for (let index = 0; index < this.borsahores.length; index++) {
+            if (this.borsahores[index].id == id) {
+              this.borsahores.splice(index, 1);
+            }
+          }
+        })
+        .catch((err) => {
+          this.$toast.error(err.response.data.message);
+        });
     },
-    
+
     afegix_cefire() {
       //alert(this.data);
       if (

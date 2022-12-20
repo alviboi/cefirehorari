@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\BorsaHores;
 use App\Models\cefire;
+use App\Models\deutesmes;
 use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -223,7 +225,7 @@ class cefireController extends Controller
         $ret=array('labels' => $labels, 'data' => $data, 'total' => $total);
         return ($ret);
     }
-
+    
     public function usuaris_oblit_fitxatge() {
         $data_hui = date('Y-m-d');
         $cefires = cefire::where("fi","=","00:00:00")->where('data','<',$data_hui)->get();
@@ -240,12 +242,6 @@ class cefireController extends Controller
 
     }
 
-    public function validaoblidat(Request $request) {
-        $cefire = cefire::find($request->id);
-        $cefire->fi = $request->fi;
-        $cefire->save();
-        return;
-    }
 
     public function ultims_dies_estadistica() {
 
@@ -316,11 +312,35 @@ class cefireController extends Controller
         $dat->fi = $request->fi;
         $dat->user_id = $request->id;
         $ok = $dat->save();
+        $duration = $dat->inici->diffInMinutes($dat->fi);
+        $data_hui_mes = date('m');
+        $data_hui_a = explode('-',$dat->data);
+        $data_hui = $data_hui_a[1];
+        if ($data_hui_mes != $data_hui) {
+            $deute = new DeutesmesController();
+            $deute->afegix_a_mes_anterior($dat->user_id,$duration);
+        } 
         if ($ok) {
             return "Fitxat correctament";
         } else {
             abort(403, "Alguna cosa ha anat malament");
         }
+    }
+
+    public function validaoblidat(Request $request) {
+        $cefire = cefire::find($request->id);
+        $cefire->fi = $request->fi;
+        $duration = $cefire->inici->diffInMinutes($cefire->fi);
+        $cefire->save();
+        
+        $data_hui_mes = date('m');
+        $data_hui_a = explode('-',$cefire->data);
+        $data_hui = $data_hui_a[1];
+        if ($data_hui_mes != $data_hui) {
+            $deute = new DeutesmesController();
+            $deute->afegix_a_mes_anterior($cefire->user_id,$duration);
+        } 
+        return;
     }
 
 }

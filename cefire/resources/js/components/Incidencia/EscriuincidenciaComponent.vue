@@ -82,13 +82,12 @@ export default {
         ix() {
             this.$eventBus.$emit('tanca-incidencia');
             this.resposta="";
-            this.cap="";
-            this.avis="";
+
 
         },
         // Envia la informació emplenada
         envia() {
-            console.log(this.incidencia.length);
+            console.log(this.incidencia.length+" "+this.inici.length+" "+this.fi.length);
             if (this.incidencia.length===0 || this.inici.length===0 || this.fi.length===0) {
                 this.$toast.error("Falta algun paràmetre");
             } else {
@@ -106,8 +105,6 @@ export default {
                     this.$toast.success("Incidència registrada");
                     this.$eventBus.$emit('incidencia-enviada');
                     this.incidencia="";
-                    this.inici="";
-                    this.fi="";
                 })
                 .catch(err => {
                     console.error(err);

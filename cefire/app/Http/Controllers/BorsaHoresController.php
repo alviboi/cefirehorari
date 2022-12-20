@@ -27,6 +27,8 @@ class BorsaHoresController extends Controller
     public function create()
     {
         //
+
+
     }
 
     /**
@@ -83,5 +85,30 @@ class BorsaHoresController extends Controller
     public function destroy(BorsaHores $borsaHores)
     {
         //
+    }
+
+    public function crea($user_id, $minuts_a_afegir)
+    {
+        //
+        $existeix = BorsaHores::where("user_id", "=", $user_id)->first();
+        if (!$existeix) {
+            $dat = new BorsaHores();
+            $dat->user_id = $user_id;
+            $dat->minuts = $minuts_a_afegir;
+            $dat->save();
+            return $minuts_a_afegir;
+        } else {
+            $add = $existeix->minuts + $minuts_a_afegir;
+            $existeix->minuts = $add;
+            $existeix->save();
+            return $add;
+        }
+        return 0;
+
+    }
+
+    public function borraborsa() {
+        BorsaHores::truncate();
+        return 1;
     }
 }
