@@ -835,6 +835,8 @@ class UserController extends Controller
         if($deutesmes){
             $a = $deutesmes->minuts;
             $este['deute mesos anteriors'] = $a . " min";
+        } else {
+            $este['deute mesos anteriors'] = "0 min";
         }
         $vacances = $value->vacances()->whereBetween('data', [$desde_any, $fins_any])->count();
         $borsahores = $value->borsahores()->first();
