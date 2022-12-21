@@ -42,7 +42,7 @@
       </div>
     </transition-group>
 
-    <div id="edita" uk-modal>
+    <div :id="'edita'+this.id" uk-modal>
         <div class="uk-modal-dialog">
             <button class="uk-modal-close-default" type="button" uk-close></button>
             <div class="uk-modal-header">
@@ -160,6 +160,7 @@ export default {
         },
         // Edita assessor
         edita(id){
+            this.edita_u = {};
             let results = this.users.filter((item => item.id == id));
             this.edita_u.reduccio=(results[0].reduccio==1)?true:false;
             this.edita_u.id=results[0].id;
@@ -170,10 +171,11 @@ export default {
             this.edita_u.moscosos=results[0].moscosos;
             this.edita_u.vacances=results[0].vacances;
             
-            UIkit.modal("#edita").show();
+            UIkit.modal("#edita"+this.id).show();
         },
         // Agafa usuaris
         agafa_users(){
+            this.users = [];
             axios.get("user")
             .then(res => {
                 console.log(res);
@@ -186,6 +188,7 @@ export default {
 
     },
     mounted() {
+        this.id = this._uid;
         this.agafa_users();
     },
 }
