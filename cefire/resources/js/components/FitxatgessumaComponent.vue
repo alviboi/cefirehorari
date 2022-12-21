@@ -5,7 +5,7 @@
             <button @click="canvia('arr')" class="uk-button uk-button-primary uk-button-large uk-float-left"><span uk-icon="arrow-left"></span></button>
         </div>
         <div class="uk-text-lead mig">
-          Relació del temps: {{nom_mes}} de {{any}}
+          Relació del temps en minuts: {{nom_mes}} de {{any}}
         </div>
           
         <div class="avant">
@@ -154,7 +154,7 @@ export default {
 
 .cabecal
   display: grid
-  grid-template-columns: 1fr 1fr 1fr
+  grid-template-columns: 1fr 2fr 1fr
   grid-template-rows: 1fr
   gap: 0px 20px
   grid-template-areas: "arrere mig avant"

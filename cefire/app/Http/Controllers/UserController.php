@@ -817,7 +817,7 @@ class UserController extends Controller
         $este['permís'] = intval($value->permis()->select(DB::raw('SUM(TIME_TO_SEC(TIMEDIFF(fi,inici))/60) as total'))->whereBetween('data',[$inici,$fi])->first()['total']);
         $este['compensa'] = intval($value->compensa()->select(DB::raw('SUM(TIME_TO_SEC(TIMEDIFF(fi,inici))/60) as total'))->whereBetween('data',[$inici,$fi])->first()['total']);
         $este['curs'] = intval($value->curs()->select(DB::raw('SUM(TIME_TO_SEC(TIMEDIFF(fi,inici))/60) as total'))->whereBetween('data',[$inici,$fi])->first()['total']);
-        $este['visita'] = intval($value->visita()->select(DB::raw('SUM(TIME_TO_SEC(TIMEDIFF(fi,inici))/60) as total'))->whereBetween('data',[$inici,$fi])->first()['total']);
+        $este['com.serv.'] = intval($value->visita()->select(DB::raw('SUM(TIME_TO_SEC(TIMEDIFF(fi,inici))/60) as total'))->whereBetween('data',[$inici,$fi])->first()['total']);
         
         if ($mes == 5 || $mes == 10){
             $mosc1 = $value->moscoso()->whereBetween('data',[$any."-".$mes."-01",$any."-".$mes."-15"])->count()*(26100/60); 
@@ -849,7 +849,7 @@ class UserController extends Controller
         $este['vacances (any)'] = $vacances . " de " . $value->vacances . " cons";
         
 
-        $este['total'] = $este['fitxatge']+ $este['permís']+$este['compensa']/*Es suma perquè les està gaudint d'un excés que ha fet altre mes*/+$este['curs']+$este['visita']+$este['moscosos']+$este['vacances'];
+        $este['total'] = $este['fitxatge']+ $este['permís']+$este['compensa']/*Es suma perquè les està gaudint d'un excés que ha fet altre mes*/+$este['curs']+$este['com.serv.']+$este['moscosos']+$este['vacances'];
 
 
         $este['diferència'] = ($este['total']) - $total_mes + ($value->reduccio * 60 * $total_dies);//El total dels dies del mes multiplicat per 60

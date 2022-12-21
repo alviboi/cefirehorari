@@ -819,9 +819,9 @@ $fondo:  #f1faee
                 @extend .s-
                 background-color: $blue
                 &:before
-                    @media (min-width: 1280px)
+                    @media (min-width: 1380px)
                         content: "FITXATGE"
-                    @media (max-width: 1280px)
+                    @media (max-width: 1380px)
                         content: "FITX..."
             &compensa
                 @extend .s-
@@ -846,10 +846,10 @@ $fondo:  #f1faee
                 @extend .s-
                 background-color: pink
                 &:before
-                    @media (min-width: 1024px)
-                        content: "VISITA"
-                    @media (max-width: 1024px)
-                        content: "VIS..."
+                    @media (min-width: 1524px)
+                        content: "COM.SERV."
+                    @media (max-width: 1524px)
+                        content: "CS..."
 
             &curs
                 @extend .s-
@@ -876,17 +876,17 @@ $fondo:  #f1faee
                 @extend .s-
                 background-color: white
                 &:before
-                    @media (min-width: 1280px)
+                    @media (min-width: 1480px)
                         content: "VACANCES"
-                    @media (max-width: 1280px)
+                    @media (max-width: 1480px)
                         content: "VAC..."
             &incidencia
                 @extend .s-
                 background-color: MediumVioletRed
                 &:before
-                    @media (min-width: 1280px)
+                    @media (min-width: 1480px)
                         content: "INCIDÈNCIA"
-                    @media (max-width: 1280px)
+                    @media (max-width: 1480px)
                         content: "INC..."
 
 
