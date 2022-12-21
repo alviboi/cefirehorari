@@ -831,9 +831,10 @@ class UserController extends Controller
             $este['moscosos'] = $value->moscoso()->whereBetween('data',[$inici,$fi])->count()*$total_dia; 
             $este['vacances'] = $value->vacances()->whereBetween('data',[$inici,$fi])->count()*$total_dia;
         }
-        $deutesmes = $value->deutesmes()->first()->minuts;
-        if($deutesmes<0){
-            $este['deute mesos anteriors'] = $deutesmes . " min";
+        $deutesmes = $value->deutesmes()->first();
+        if($deutesmes){
+            $a = $deutesmes->minuts;
+            $este['deute mesos anteriors'] = $a . " min";
         }
         $vacances = $value->vacances()->whereBetween('data', [$desde_any, $fins_any])->count();
         $borsahores = $value->borsahores()->first();
