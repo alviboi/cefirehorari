@@ -102,26 +102,32 @@ class cefireController extends Controller
                 } else {
                     $cef=cefire::where('id','=',$request->id)->first();
 
-                    $a = strtotime($hora);
+                    $a = strtotime($hora)+480;
                     $b = strtotime($cef->inici);
                     $interval = $a - $b;
+
+                    
+                    $hora = date("H:i:s", $a);
                     /**
                      * Calculem una nova hora si excideixes de les hores que has fet. I et registra la nova data
                      */
                     //abort(403,$hora . "    " .  $cef->inici . "       " .$interval);
-                    if ($data_hui >= $data_15_oct || $data_hui <= $data_15_mai) {
-                        if ($interval > 27900){//27900
-                            //Calcular nova data $hora
-                            $nova_data = $a + 27900;
-                            $hora = date("H:i:s", $nova_data);
-                        }               
-                    } else {
-                        if ($interval > 26100){
-                            $nova_data = $a + 26100;
-                            $hora = date("H:i:s", $nova_data);
-                            //Calcular nova data $hora
-                        }    
-                    }
+
+                    //S'eliminen les hores màximes per a fitxar
+
+                    // if ($data_hui >= $data_15_oct || $data_hui <= $data_15_mai) {
+                    //     if ($interval > 27900){//27900
+                    //         //Calcular nova data $hora
+                    //         $nova_data = $a + 27900;
+                    //         $hora = date("H:i:s", $nova_data);
+                    //     }               
+                    // } else {
+                    //     if ($interval > 26100){
+                    //         $nova_data = $a + 26100;
+                    //         $hora = date("H:i:s", $nova_data);
+                    //         //Calcular nova data $hora
+                    //     }    
+                    // }
 
                     $cef->fi = $hora;
                     $cef->save();

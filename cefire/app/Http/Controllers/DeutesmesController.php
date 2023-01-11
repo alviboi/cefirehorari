@@ -94,11 +94,13 @@ class DeutesmesController extends Controller
         foreach ($usuaris as $key => $value) {
             # code...
             $este = $user_controller->calcula_deutes_mes_usuari($value->id);
-            if ($este['diferència'] < 0) {
-                $this->afegix_deutes_mes($value->id, $este['diferència']);
-            } else {
-                $this->afegix_deutes_mes($value->id, 0); //No sobrecarrega ja que este valor s'utilitzarà bastant i este càlcul es fa una vegada al mes
-            }
+            //Tant positiu com negatiu
+            $this->afegix_deutes_mes($value->id, $este['diferència']);
+            // if ($este['diferència'] < 0) {
+            //     $this->afegix_deutes_mes($value->id, $este['diferència']);
+            // } else {
+            //     $this->afegix_deutes_mes($value->id, 0); //No sobrecarrega ja que este valor s'utilitzarà bastant i este càlcul es fa una vegada al mes
+            // }
         }
     }
 

@@ -86,7 +86,16 @@ class compensaController extends Controller
         $dat->fi = $request->fi;
         $dat->user_id = auth()->id();
         $dat->motiu = $request->motiu;
-        $borsahores = BorsaHores::where('user_id', "=", auth()->id())->first();
+        
+        try {
+            //code...
+            $borsahores = BorsaHores::where('user_id', "=", auth()->id())->first();
+        } catch (\Throwable $th) {
+            //throw $th;
+            abort(403, "Sembla que no existeix la teua borsa d'hores");
+        }
+
+
         $duration = $this->calcula_diferencia($request->inici,$request->fi);
         $calcul = ($borsahores->minuts)-$duration;
         if ($calcul < 0) {
@@ -94,6 +103,7 @@ class compensaController extends Controller
         }
         $borsahores->minuts = $calcul;
         $dat->save();
+ 
         $borsahores->save();
         return $dat->toArray();
     }

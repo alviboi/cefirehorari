@@ -77,7 +77,7 @@ class visitaController extends Controller
             $da=date("d-m-Y", strtotime($el->data));
             $da2=$dias[date("w", strtotime($el->data))];
             
-            $item=array("id"=>$el->id, "name"=>$el->user['name'], "data"=>$da2.", ".$da);
+            $item=array("id"=>$el->id, "name"=>$el->user['name'], "data"=>$da2.", ".$da,"motiu"=>$el->centre, "inici"=>$el->inici,"fi"=>$el->fi);
             //$item=array("id"=>$el->id, "name"=>"", "data"=>$da2.", ".$da);
             array_push($ret, $item);
         }

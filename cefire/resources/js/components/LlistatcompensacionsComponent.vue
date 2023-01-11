@@ -170,8 +170,14 @@
               <span data-uk-icon="icon: user"></span>
               <b>{{ item.name }}</b>
             </div>
-            <div class="mati"></div>
-            <div class="motiu"></div>
+            <div class="mati">
+              <span data-uk-icon="icon: clock"></span>
+              <span>{{ item.inici }} - {{ item.fi }}</span>
+            </div>
+            <div class="motiu">
+              <span data-uk-icon="icon: comments"></span>
+              <b>{{ item.motiu }}</b>
+            </div>
             <div class="botons">
               <div
                 @click.prevent="valida_visita(item.id)"
