@@ -349,4 +349,11 @@ class cefireController extends Controller
         return;
     }
 
+    // public function borraoblidat(Request $request) {
+    //     $cefire = cefire::find($request->id);
+    //     $cefire->delete();
+        
+    //     return;
+    // }
+
 }

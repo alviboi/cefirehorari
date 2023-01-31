@@ -70,7 +70,7 @@
                             <input v-model="edita_u.mail" class="uk-input" type="text" placeholder="Mail">
                         </div>
                     </div>
-                    <div title="Perfil, 1 Administrador, 2 Assessor" uk-tooltip  class="uk-margin">
+                    <div title="Perfil, 1 Administrador, 0 Assessor" uk-tooltip  class="uk-margin">
                         <div class="uk-inline">
                             <span class="uk-form-icon" uk-icon="icon: world"></span>
                             <input v-model="edita_u.perfil" class="uk-input" type="number" min="0" max="3" step="1" placeholder="Perfil">

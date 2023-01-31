@@ -238,18 +238,21 @@ class UserController extends Controller
     public function update(Request $request)
     {
         //
+        //abort(403, gettype(auth()->id()));
+        
+
 
         if ($request->id == auth()->id() || auth()->user()->Perfil == 1) {
             $user = User::find($request->id);
             $user->name = $request->nom;
             $user->email = $request->mail;
-            if (auth()->user()->Perfil == 1){
+            if (auth()->user()->Perfil != 1 && ($request->perfil != $user->Perfil || $request->rfid != $user->rfid || $request->reduccio != $user->reduccio)){
+                abort(403, "No tens permisos per a canviar eixos paràmetres");
+            } else {
                 $user->Perfil = $request->perfil;
                 $user->rfid = $request->rfid;
                 $user->reduccio = $request->reduccio?1:0;
-            } else {
-                abort(403, "No tens permisos per a canviar eixos paràmetres");
-            }            
+            }           
             
             if ($request->moscosos != null && auth()->user()->Perfil == 1){
                 $user->moscosos = $request->moscosos;
@@ -261,6 +264,7 @@ class UserController extends Controller
                 $user->password = Hash::make($request->contrasenya);
             }
             $user->update();
+            return "Dades actualitzades";
         } else {
             abort(403, "No tens permís per a realitzar aquesta acció");
         }
