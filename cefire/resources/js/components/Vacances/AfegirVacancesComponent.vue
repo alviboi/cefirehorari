@@ -89,8 +89,9 @@ export default {
     },
     agafa_curs() {
       var dia_avui = new Date();
-      if (dia_avui.getMonth < 7) {
-        this.from = new Date(dia_avui.getFullYear() - 1 + "-09-01");
+      console.log("El mes es" + (dia_avui.getMonth()));
+      if (dia_avui.getMonth() < 7) {
+        this.from = new Date((dia_avui.getFullYear() - 1) + "-09-01");
         this.to = new Date(dia_avui.getFullYear() + "-08-31");
       } else {
         this.from = new Date(dia_avui.getFullYear() + "-09-01");
