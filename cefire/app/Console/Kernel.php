@@ -28,7 +28,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         // $schedule->command('inspire')->hourly();
-        $schedule->command("calcula:deute")->monthly();
+        $schedule->command("calcula:deute")->monthly(); //Run the task on the first day of every month at 00:00
         $schedule->command("borra:borsahores")->yearlyOn(8, 31, '00:00');
         //$schedule->command("calcula:mesdeute")->everyMinute();
     }
