@@ -83,6 +83,9 @@ class cefireController extends Controller
 
 
         if ($this->aparell == 1){
+            
+
+
             if ($request->data != $data_hui){
                 return response("Està habilitat el fitxatge per dies. Has de fitxar cada dia", 403);
                 //abort(403, 'Està habilitat el fitxatge per dies. Has de fitxar cada dia');
@@ -101,8 +104,12 @@ class cefireController extends Controller
                     // return cefire::where('data','=',$request->data)->where('user_id','=',auth()->id())->get();
                 } else {
                     $cef=cefire::where('id','=',$request->id)->first();
-
-                    $a = strtotime($hora)+480;
+                    $modificador = 1;
+                    $hi_ha_fitxat=cefire::where('user_id','=',auth()->id())->where('data','=',$request->data)->where('fi','!=',"00:00:00")->first();
+                    if ($hi_ha_fitxat){
+                        $modificador = 0;
+                    }
+                    $a = strtotime($hora)+480*$modificador;
                     $b = strtotime($cef->inici);
                     $interval = $a - $b;
 
@@ -262,6 +269,9 @@ class cefireController extends Controller
             $interval_comp = 26100/60;
         }
 
+        if(auth()->user()->reduccio){
+            $interval_comp = $interval_comp - 60;
+        }
 
 
         $cefires = cefire::where('user_id','=',auth()->id())->orderBy('id', 'desc')->take(5)->get();

@@ -925,7 +925,7 @@ class UserController extends Controller
         }
 
         $este=$this->agafa_dades_suma($usuari,$mes,$any,$inici,$fi,$total_mes,$total_dia,$total_dies);
-        $este['diferència'] = 100;
+        //$este['diferència'] = 100;
         return $este;
         
     }

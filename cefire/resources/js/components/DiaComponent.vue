@@ -127,7 +127,7 @@
             class="s-visita list-complete-item"
             :key="'vis' + vis.id"
             data-uk-tooltip="pos: right; animation: true; offset: 12;"
-            :title="vis.centre"
+            :title="vis.inici+'-'+vis.fi+' '+vis.centre"
           >
             <span @click="borra_par('visita', vis.id)" class="cerrar" />
             <span :class="(vis.aprobada!=1) ? 'falta_validar' : ''"></span>
