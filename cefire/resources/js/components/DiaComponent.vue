@@ -106,7 +106,7 @@
             class="s-compensa list-complete-item"
             :key="'com' + com.id"
             data-uk-tooltip="pos: right; animation: true; offset: 12;"
-            :title="com.motiu"
+            :title="com.inici+'-'+com.fi+' '+com.motiu"
           >
             <span @click="borra_par('compensa', com.id)" class="cerrar" />
             <span :class="(com.confirmat!=1) ? 'falta_validar' : ''"></span>
@@ -118,7 +118,7 @@
             class="s-curs list-complete-item"
             :key="'cur' + cur.id"
             data-uk-tooltip="pos: right; animation: true; offset: 12;"
-            :title="cur.curs"
+            :title="curs.inici + '-' + curs.fi +' ' + cur.curs"
           >
             <span @click="borra_par('curs', cur.id)" class="cerrar" />
           </div>
@@ -169,7 +169,7 @@
             class="s-permis list-complete-item"
             :key="'perm' + perm.id"
             data-uk-tooltip="pos: right; animation: true; offset: 12;"
-            :title="perm.motiu"
+            :title="perm.inici+'-'+perm.fi+' '+perm.motiu"
           >
             <span @click="borra_par('permis', perm.id)" class="cerrar" />
             <span @click="mira_arxiu('/'+perm.arxiu)" class="arxiu" />

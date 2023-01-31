@@ -162,7 +162,8 @@ class VacancesController extends Controller
         $vac = Vacances::where("id","=",$id)->first();
         $data = date($vac->data);
         $data_hui = date("Y-m-d");
-        if ($data_hui > $data && $vac->user['Perfil'] != 1){
+        
+        if ($data_hui > $data && auth()->user()->Perfil != 1){
             abort(403,"No pots borrar aquestes vacances");
             //return "No pots borrar aquest moscós";
         } else {
