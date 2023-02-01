@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use DB;
 
 use Illuminate\Routing\Controller;
@@ -239,27 +240,27 @@ class UserController extends Controller
     {
         //
         //abort(403, gettype(auth()->id()));
-        
+
 
 
         if ($request->id == auth()->id() || auth()->user()->Perfil == 1) {
             $user = User::find($request->id);
             $user->name = $request->nom;
             $user->email = $request->mail;
-            if (auth()->user()->Perfil != 1 && ($request->perfil != $user->Perfil || $request->rfid != $user->rfid || $request->reduccio != $user->reduccio)){
+            if (auth()->user()->Perfil != 1 && ($request->perfil != $user->Perfil)) {
                 abort(403, "No tens permisos per a canviar eixos paràmetres");
             } else {
                 $user->Perfil = $request->perfil;
+                $user->reduccio = $request->reduccio ? 1 : 0;
                 $user->rfid = $request->rfid;
-                $user->reduccio = $request->reduccio?1:0;
-            }           
-            
-            if ($request->moscosos != null && auth()->user()->Perfil == 1){
+            }
+
+            if ($request->moscosos != null && auth()->user()->Perfil == 1) {
                 $user->moscosos = $request->moscosos;
             }
-            if ($request->vacances != null  && auth()->user()->Perfil == 1){
+            if ($request->vacances != null && auth()->user()->Perfil == 1) {
                 $user->vacances = $request->vacances;
-            }            
+            }
             if ($request->contrasenya != "") {
                 $user->password = Hash::make($request->contrasenya);
             }
@@ -573,13 +574,13 @@ class UserController extends Controller
     {
         //
         $ret = User::find($num)->vacances()->whereMonth('data', '=', date($mes))->whereYear('data', '=', date($any))->get();
-        for ($i=0; $i < count($ret); $i++) { 
+        for ($i = 0; $i < count($ret); $i++) {
             # code...
-            $ret[$i]['inici']="Tot el dia";
-            $ret[$i]['fi']="";
-            $ret[$i]['concepte']="Vacances";
+            $ret[$i]['inici'] = "Tot el dia";
+            $ret[$i]['fi'] = "";
+            $ret[$i]['concepte'] = "Vacances";
         }
-        
+
         return $ret;
 
     }
@@ -588,13 +589,13 @@ class UserController extends Controller
     {
         //
         $ret = User::find($num)->moscoso()->whereMonth('data', '=', date($mes))->whereYear('data', '=', date($any))->get();
-        for ($i=0; $i < count($ret); $i++) { 
+        for ($i = 0; $i < count($ret); $i++) {
             # code...
-            $ret[$i]['inici']="Tot el dia";
-            $ret[$i]['fi']="";
-            $ret[$i]['moscoso']="Vacances";
+            $ret[$i]['inici'] = "Tot el dia";
+            $ret[$i]['fi'] = "";
+            $ret[$i]['moscoso'] = "Vacances";
         }
-        
+
         return $ret;
     }
 
@@ -709,66 +710,66 @@ class UserController extends Controller
         /****************************************************************************TODO: */
         $vacances_con = new VacancesController();
         //VacancesController
-        
+
         $year = date('Y');
         $mes = date('m');
         $inici = date($year . "-" . $mes . "-1");
         $fi = date($year . "-" . $mes . "-t");
 
-        $dates = $vacances_con->getWorkingDays($inici,$fi);
-        
+        $dates = $vacances_con->getWorkingDays($inici, $fi);
+
         //$dates = cefire::select('data')->distinct()->whereBetween('data',[$inici,$fi])->orderBy('data', 'ASC')->get();
 
         $total_dies = count($dates);
-        $usuari = user::where("id","=",auth()->id())->first();
-        
+        $usuari = user::where("id", "=", auth()->id())->first();
+
         $data_hui = date('Y-m-d');
         $any = date('Y');
-        $data_15_oct = date($any."-10-15");
-        $data_15_mai = date($any."-05-15");
-        
+        $data_15_oct = date($any . "-10-15");
+        $data_15_mai = date($any . "-05-15");
+
 
         $total_mes = 0;
         foreach ($dates as $key => $value) {
             # code...
             if ($value >= $data_15_oct || $value <= $data_15_mai) {
-                $total_mes += (27900/60);    
+                $total_mes += (27900 / 60);
             } else {
-                $total_mes += (26100/60);
+                $total_mes += (26100 / 60);
             }
 
         }
 
         if ($data_hui >= $data_15_oct || $data_hui <= $data_15_mai) {
-            $total_dia = (27900/60);    
+            $total_dia = (27900 / 60);
         } else {
-            $total_dia = (26100/60);
+            $total_dia = (26100 / 60);
         }
 
-        $este=$this->agafa_dades_suma($usuari,$mes,$any,$inici,$fi,$total_mes,$total_dia,$total_dies);
+        $este = $this->agafa_dades_suma($usuari, $mes, $any, $inici, $fi, $total_mes, $total_dia, $total_dies);
         unset($este["Nom"]);
-        
 
-        
+
+
         return $este;
 
     }
-    public function tots_els_dies_mes($any,$mes)
+    public function tots_els_dies_mes($any, $mes)
     {
 
         $vacances = new VacancesController();
         //VacancesController
-        
 
-        $inici = date($any."-".$mes."-01");
+
+        $inici = date($any . "-" . $mes . "-01");
         $fi = date("Y-m-t", strtotime($inici));
 
-        $dates = $vacances->getWorkingDays($inici,$fi);
-        
+        $dates = $vacances->getWorkingDays($inici, $fi);
+
         //$dates = cefire::select('data')->distinct()->whereBetween('data',[$inici,$fi])->orderBy('data', 'ASC')->get();
-        
-        if (count($dates) == 0){
-            abort(403,"No hi ha cap resultat");
+
+        if (count($dates) == 0) {
+            abort(403, "No hi ha cap resultat");
         }
         $total_dies = count($dates);
         $usuaris = User::orderBy('name', 'ASC')->get();
@@ -776,34 +777,34 @@ class UserController extends Controller
 
         $este = array();
         $a = array();
-        
+
         $data_hui = date('Y-m-d');
         $any = date('Y');
-        $data_15_oct = date($any."-10-15");
-        $data_15_mai = date($any."-05-15");
+        $data_15_oct = date($any . "-10-15");
+        $data_15_mai = date($any . "-05-15");
 
         $total_mes = 0;
         foreach ($dates as $key => $value) {
             # code...
             if ($value >= $data_15_oct || $value <= $data_15_mai) {
-                $total_mes += (27900/60);    
+                $total_mes += (27900 / 60);
             } else {
-                $total_mes += (26100/60);
+                $total_mes += (26100 / 60);
             }
 
         }
 
         if ($data_hui >= $data_15_oct || $data_hui <= $data_15_mai) {
-            $total_dia = (27900/60);    
+            $total_dia = (27900 / 60);
         } else {
-            $total_dia = (26100/60);
+            $total_dia = (26100 / 60);
         }
 
         foreach ($usuaris as $key => $value) {
             # code...
             // Anar agafant-ho tot per dia
-            $este=$this->agafa_dades_suma($value,$mes,$any,$inici,$fi,$total_mes,$total_dia,$total_dies);
-            array_push($a,$este);
+            $este = $this->agafa_dades_suma($value, $mes, $any, $inici, $fi, $total_mes, $total_dia, $total_dies);
+            array_push($a, $este);
         }
 
 
@@ -811,32 +812,33 @@ class UserController extends Controller
 
     }
 
-    function agafa_dades_suma($value,$mes,$any,$inici,$fi,$total_mes,$total_dia,$total_dies){
+    function agafa_dades_suma($value, $mes, $any, $inici, $fi, $total_mes, $total_dia, $total_dies)
+    {
         $este = array();
         $desde_any = date($any . "-1-1");
         $fins_any = date($any . "-12-31");
         $este['Nom'] = $value->name;
-        $este['fitxatge'] = intval($value->cefire()->select(DB::raw('SUM(TIME_TO_SEC(TIMEDIFF(fi,inici))/60) as total'))->whereBetween('data',[$inici,$fi])->where('fi','!=','00:00:00')->first()['total']);
-        
-        $este['permís'] = intval($value->permis()->select(DB::raw('SUM(TIME_TO_SEC(TIMEDIFF(fi,inici))/60) as total'))->whereBetween('data',[$inici,$fi])->first()['total']);
-        $este['compensa'] = intval($value->compensa()->select(DB::raw('SUM(TIME_TO_SEC(TIMEDIFF(fi,inici))/60) as total'))->whereBetween('data',[$inici,$fi])->first()['total']);
-        $este['curs'] = intval($value->curs()->select(DB::raw('SUM(TIME_TO_SEC(TIMEDIFF(fi,inici))/60) as total'))->whereBetween('data',[$inici,$fi])->first()['total']);
-        $este['com.serv.'] = intval($value->visita()->select(DB::raw('SUM(TIME_TO_SEC(TIMEDIFF(fi,inici))/60) as total'))->whereBetween('data',[$inici,$fi])->first()['total']);
-        
-        if ($mes == 5 || $mes == 10){
-            $mosc1 = $value->moscoso()->whereBetween('data',[$any."-".$mes."-01",$any."-".$mes."-15"])->count()*(26100/60); 
-            $vac1 = $value->vacances()->whereBetween('data',[$any."-".$mes."-01",$any."-".$mes."-15"])->count()*(26100/60);
-            $mosc2 = $value->moscoso()->whereBetween('data',[$any."-".$mes."-16",date("Y-m-t", strtotime($any."-".$mes."-16"))])->count()*(27900/60); 
-            $vac2 = $value->vacances()->whereBetween('data',[$any."-".$mes."-16",date("Y-m-t", strtotime($any."-".$mes."-16"))])->count()*(27900/60);           
-            $este['moscosos'] = $mosc1 + $mosc2; 
+        $este['fitxatge'] = intval($value->cefire()->select(DB::raw('SUM(TIME_TO_SEC(TIMEDIFF(fi,inici))/60) as total'))->whereBetween('data', [$inici, $fi])->where('fi', '!=', '00:00:00')->first()['total']);
+
+        $este['permís'] = intval($value->permis()->select(DB::raw('SUM(TIME_TO_SEC(TIMEDIFF(fi,inici))/60) as total'))->whereBetween('data', [$inici, $fi])->first()['total']);
+        $este['compensa'] = intval($value->compensa()->select(DB::raw('SUM(TIME_TO_SEC(TIMEDIFF(fi,inici))/60) as total'))->whereBetween('data', [$inici, $fi])->first()['total']);
+        $este['curs'] = intval($value->curs()->select(DB::raw('SUM(TIME_TO_SEC(TIMEDIFF(fi,inici))/60) as total'))->whereBetween('data', [$inici, $fi])->first()['total']);
+        $este['com.serv.'] = intval($value->visita()->select(DB::raw('SUM(TIME_TO_SEC(TIMEDIFF(fi,inici))/60) as total'))->whereBetween('data', [$inici, $fi])->first()['total']);
+
+        if ($mes == 5 || $mes == 10) {
+            $mosc1 = $value->moscoso()->whereBetween('data', [$any . "-" . $mes . "-01", $any . "-" . $mes . "-15"])->count() * (26100 / 60);
+            $vac1 = $value->vacances()->whereBetween('data', [$any . "-" . $mes . "-01", $any . "-" . $mes . "-15"])->count() * (26100 / 60);
+            $mosc2 = $value->moscoso()->whereBetween('data', [$any . "-" . $mes . "-16", date("Y-m-t", strtotime($any . "-" . $mes . "-16"))])->count() * (27900 / 60);
+            $vac2 = $value->vacances()->whereBetween('data', [$any . "-" . $mes . "-16", date("Y-m-t", strtotime($any . "-" . $mes . "-16"))])->count() * (27900 / 60);
+            $este['moscosos'] = $mosc1 + $mosc2;
             $este['vacances'] = $vac1 + $vac2;
-        
+
         } else {
-            $este['moscosos'] = $value->moscoso()->whereBetween('data',[$inici,$fi])->count()*$total_dia; 
-            $este['vacances'] = $value->vacances()->whereBetween('data',[$inici,$fi])->count()*$total_dia;
+            $este['moscosos'] = $value->moscoso()->whereBetween('data', [$inici, $fi])->count() * $total_dia;
+            $este['vacances'] = $value->vacances()->whereBetween('data', [$inici, $fi])->count() * $total_dia;
         }
         $deutesmes = $value->deutesmes()->first();
-        if($deutesmes){
+        if ($deutesmes) {
             $a = $deutesmes->minuts;
             $este['deute mesos anteriors'] = $a . " min";
         } else {
@@ -844,7 +846,7 @@ class UserController extends Controller
         }
         $vacances = $value->vacances()->whereBetween('data', [$desde_any, $fins_any])->count();
         $borsahores = $value->borsahores()->first();
-        if ($borsahores){
+        if ($borsahores) {
             $este['borsa hores'] = $borsahores->minuts . " min";
         } else {
             $este['borsa hores'] = 0;
@@ -854,17 +856,18 @@ class UserController extends Controller
 
         $este['moscosos (any)'] = $moscosos . " de " . $value->moscosos . " cons";
         $este['vacances (any)'] = $vacances . " de " . $value->vacances . " cons";
-        
-
-        $este['total'] = $este['fitxatge']+ $este['permís']+$este['compensa']/*Es suma perquè les està gaudint d'un excés que ha fet altre mes*/+$este['curs']+$este['com.serv.']+$este['moscosos']+$este['vacances'];
 
 
-        $este['diferència'] = ($este['total']) - $total_mes + ($value->reduccio * 60 * $total_dies);//El total dels dies del mes multiplicat per 60
+        $este['total'] = $este['fitxatge'] + $este['permís'] + $este['compensa'] /*Es suma perquè les està gaudint d'un excés que ha fet altre mes*/+ $este['curs'] + $este['com.serv.'] + $este['moscosos'] + $este['vacances'];
+
+
+        $este['diferència'] = ($este['total']) - $total_mes + ($value->reduccio * 60 * $total_dies); //El total dels dies del mes multiplicat per 60
         return $este;
     }
 
 
-    function calcula_deutes_mes_tots_els_usuaris(){
+    function calcula_deutes_mes_tots_els_usuaris()
+    {
 
     }
     /**
@@ -874,7 +877,8 @@ class UserController extends Controller
      * @return array
      */
 
-    function calcula_deutes_mes_un_usuari($fi_opt = null){
+    function calcula_deutes_mes_un_usuari($fi_opt = null)
+    {
         //$any, $mes
         $vacances = new VacancesController();
         //VacancesController
@@ -882,52 +886,52 @@ class UserController extends Controller
         $mes = date("m", strtotime("-1 months"));
 
 
-        $inici = date($any."-".$mes."-01");
-        if ($fi_opt === null){
+        $inici = date($any . "-" . $mes . "-01");
+        if ($fi_opt === null) {
             $fi = date("Y-m-t", strtotime($inici));
         } else {
             $fi = date($fi_opt);
         }
 
-        $dates = $vacances->getWorkingDays($inici,$fi);
-        
+        $dates = $vacances->getWorkingDays($inici, $fi);
+
         //$dates = cefire::select('data')->distinct()->whereBetween('data',[$inici,$fi])->orderBy('data', 'ASC')->get();
-        
-        if (count($dates) == 0){
-            abort(403,"No hi ha cap resultat");
+
+        if (count($dates) == 0) {
+            abort(403, "No hi ha cap resultat");
         }
         $total_dies = count($dates);
-        $usuari = User::where('id',"=",auth()->id())->first();
+        $usuari = User::where('id', "=", auth()->id())->first();
 
 
         $este = array();
         //$a = array();
-        
+
         $data_hui = date('Y-m-d');
         $any = date('Y');
-        $data_15_oct = date($any."-10-15");
-        $data_15_mai = date($any."-05-15");
+        $data_15_oct = date($any . "-10-15");
+        $data_15_mai = date($any . "-05-15");
 
         $total_mes = 0;
         foreach ($dates as $key => $value) {
             # code...
             if ($value >= $data_15_oct || $value <= $data_15_mai) {
-                $total_mes += (27900/60);    
+                $total_mes += (27900 / 60);
             } else {
-                $total_mes += (26100/60);
+                $total_mes += (26100 / 60);
             }
 
         }
         if ($data_hui >= $data_15_oct || $data_hui <= $data_15_mai) {
-            $total_dia = (27900/60);    
+            $total_dia = (27900 / 60);
         } else {
-            $total_dia = (26100/60);
+            $total_dia = (26100 / 60);
         }
 
-        $este=$this->agafa_dades_suma($usuari,$mes,$any,$inici,$fi,$total_mes,$total_dia,$total_dies);
+        $este = $this->agafa_dades_suma($usuari, $mes, $any, $inici, $fi, $total_mes, $total_dia, $total_dies);
         //$este['diferència'] = 100;
         return $este;
-        
+
     }
 
     /**
@@ -937,7 +941,8 @@ class UserController extends Controller
      * @param mixed $fi_opt
      * @return array
      */
-    function calcula_deutes_mes_usuari($user_id,$fi_opt = null){
+    function calcula_deutes_mes_usuari($user_id, $fi_opt = null)
+    {
         //$any, $mes
         $vacances = new VacancesController();
         //VacancesController
@@ -945,52 +950,52 @@ class UserController extends Controller
         $mes = date("m", strtotime("-1 months"));
 
 
-        $inici = date($any."-".$mes."-01");
-        if ($fi_opt === null){
+        $inici = date($any . "-" . $mes . "-01");
+        if ($fi_opt === null) {
             $fi = date("Y-m-t", strtotime($inici));
         } else {
             $fi = date($fi_opt);
         }
 
-        $dates = $vacances->getWorkingDays($inici,$fi);
-        
+        $dates = $vacances->getWorkingDays($inici, $fi);
+
         //$dates = cefire::select('data')->distinct()->whereBetween('data',[$inici,$fi])->orderBy('data', 'ASC')->get();
-        
-        if (count($dates) == 0){
-            abort(403,"No hi ha cap resultat");
+
+        if (count($dates) == 0) {
+            abort(403, "No hi ha cap resultat");
         }
         $total_dies = count($dates);
-        $usuari = User::where('id',"=",$user_id)->first();
+        $usuari = User::where('id', "=", $user_id)->first();
 
 
         $este = array();
         //$a = array();
-        
+
         $data_hui = date('Y-m-d');
         $any = date('Y');
-        $data_15_oct = date($any."-10-15");
-        $data_15_mai = date($any."-05-15");
+        $data_15_oct = date($any . "-10-15");
+        $data_15_mai = date($any . "-05-15");
 
         $total_mes = 0;
         foreach ($dates as $key => $value) {
             # code...
             if ($value >= $data_15_oct || $value <= $data_15_mai) {
-                $total_mes += (27900/60);    
+                $total_mes += (27900 / 60);
             } else {
-                $total_mes += (26100/60);
+                $total_mes += (26100 / 60);
             }
 
         }
         if ($data_hui >= $data_15_oct || $data_hui <= $data_15_mai) {
-            $total_dia = (27900/60);    
+            $total_dia = (27900 / 60);
         } else {
-            $total_dia = (26100/60);
+            $total_dia = (26100 / 60);
         }
 
-        $este=$this->agafa_dades_suma($usuari,$mes,$any,$inici,$fi,$total_mes,$total_dia,$total_dies);
+        $este = $this->agafa_dades_suma($usuari, $mes, $any, $inici, $fi, $total_mes, $total_dia, $total_dies);
         //$este['diferència'] = 100;
         return $este;
-        
+
     }
 
 
