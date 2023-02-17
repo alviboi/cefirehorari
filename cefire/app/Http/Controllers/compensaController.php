@@ -35,7 +35,7 @@ class compensaController extends Controller
         $ret = array();
         $els = compensa::whereMonth('data', '=', date($mes))->whereYear('data', '=', date($any))->get();
         foreach ($els as $el) {
-            $item=array("id"=>$el->id, "name"=>$el->user['name'], "data"=>$el->data, "inici"=>$el->inici, "fi"=>$el->fi, "motiu"=>$el->motiu);
+            $item = array("id" => $el->id, "name" => $el->user['name'], "data" => $el->data, "inici" => $el->inici, "fi" => $el->fi, "motiu" => $el->motiu);
             array_push($ret, $item);
         }
         return $ret;
@@ -61,24 +61,24 @@ class compensaController extends Controller
      */
     public function store(Request $request)
     {
-               
-        $aux2 = compensa::where('user_id','=',auth()->id())->where('data','=',$request->data)->where('inici','=',$request->inici)->get();
+
+        $aux2 = compensa::where('user_id', '=', auth()->id())->where('data', '=', $request->data)->where('inici', '=', $request->inici)->get();
         if (!$aux2->isEmpty()) {
-            abort(403,"Ja tens una compensació este dia");
-        } 
+            abort(403, "Ja tens una compensació este dia");
+        }
         $max_compensacions = control::first();
 
-        $aux = compensa::where('data','=',$request->data)->where('inici','=',$request->inici)->count();
-        if ($aux>=$max_compensacions->max_compensacions) {
-            abort(403,"El màxim de persones que poden compensar per dia són ".$max_compensacions->max_compensacions." i ja s'ha superat");
+        $aux = compensa::where('data', '=', $request->data)->where('inici', '=', $request->inici)->count();
+        if ($aux >= $max_compensacions->max_compensacions) {
+            abort(403, "El màxim de persones que poden compensar per dia són " . $max_compensacions->max_compensacions . " i ja s'ha superat");
         }
 
-        $data_hui = date("Y-m-d");
-        $data = date($request->data);
-        if ($data_hui > $data && !(auth()->user()->Perfil == 1)) {
-            abort(403, "No pots compensar dies del passat");
-        }
-        
+        // $data_hui = date("Y-m-d");
+        // $data = date($request->data);
+        // if ($data_hui > $data && !(auth()->user()->Perfil == 1)) {
+        //     abort(403, "No pots compensar dies del passat");
+        // }
+
 
         $dat = new compensa();
         $dat->data = $request->data;
@@ -86,7 +86,7 @@ class compensaController extends Controller
         $dat->fi = $request->fi;
         $dat->user_id = auth()->id();
         $dat->motiu = $request->motiu;
-        
+
         try {
             //code...
             $borsahores = BorsaHores::where('user_id', "=", auth()->id())->first();
@@ -96,19 +96,20 @@ class compensaController extends Controller
         }
 
 
-        $duration = $this->calcula_diferencia($request->inici,$request->fi);
-        $calcul = ($borsahores->minuts)-$duration;
+        $duration = $this->calcula_diferencia($request->inici, $request->fi);
+        $calcul = ($borsahores->minuts) - $duration;
         if ($calcul < 0) {
-            abort(403,"No tens prou minuts en la borsa d'hores");
+            abort(403, "No tens prou minuts en la borsa d'hores");
         }
         $borsahores->minuts = $calcul;
         $dat->save();
- 
+
         $borsahores->save();
         return $dat->toArray();
     }
 
-    public function calcula_diferencia($inici,$fin) {
+    public function calcula_diferencia($inici, $fin)
+    {
         $ini = explode(":", $inici);
         $fi = explode(":", $fin);
 
@@ -150,25 +151,25 @@ class compensaController extends Controller
         if ($data_hui > $data && !(auth()->user()->Perfil == 1)) {
             abort(403, "Aquesta compensació ja l'has gaudida. No pots borrar-la");
         }
-            
+
         $borsahores = BorsaHores::where('user_id', "=", auth()->id())->first();
         if (!$borsahores && !(auth()->user()->Perfil == 1)) {
             abort(403, "Estàs tractant de fer alguna cosa no permesa");
         }
-        $duration = $this->calcula_diferencia($compensa->inici,$compensa->fi);
-        $calcul = ($borsahores->minuts)+$duration;
+        $duration = $this->calcula_diferencia($compensa->inici, $compensa->fi);
+        $calcul = ($borsahores->minuts) + $duration;
 
         $borsahores->minuts = $calcul;
-        
 
 
 
 
-        
-        if($compensa->inici == "09:00:00"){
-            $m='matí';
-        }else{
-            $m='vesprada';
+
+
+        if ($compensa->inici == "09:00:00") {
+            $m = 'matí';
+        } else {
+            $m = 'vesprada';
         }
 
         $link2 = "https://calendar.google.com/calendar/u/0/r/eventedit?text=COMPENSACIÓ+CEFIRE+ELIMINADA&dates=" . str_replace("-", "", $compensa->data) . "T" . str_replace(":", "", $compensa->inici) . "/" . str_replace("-", "", $compensa->data) . "T" . str_replace(":", "", $compensa->fi) . "&details=compensa+del+Cefire+de+Valencia+ELIMINADA&location=Valencia&trp=false#eventpage_6";
@@ -195,14 +196,14 @@ class compensaController extends Controller
     {
         //
         $ret = array();
-        $els = compensa::where('confirmat','=',false)->get();
-        $dias=array("Diumenge","Dilluns","Dimarts","Dimecres","Dijous","Divendres","Dissabte");
+        $els = compensa::where('confirmat', '=', false)->get();
+        $dias = array("Diumenge", "Dilluns", "Dimarts", "Dimecres", "Dijous", "Divendres", "Dissabte");
 
         foreach ($els as $el) {
-            $da=date("d-m-Y", strtotime($el->data));
-            $da2=$dias[date("w", strtotime($el->data))];
-            
-            $item=array("id"=>$el->id, "name"=>$el->user['name'], "data"=>$da2.", ".$da, "inici"=>$el->inici, "fi"=>$el->fi, "motiu"=>$el->motiu);
+            $da = date("d-m-Y", strtotime($el->data));
+            $da2 = $dias[date("w", strtotime($el->data))];
+
+            $item = array("id" => $el->id, "name" => $el->user['name'], "data" => $da2 . ", " . $da, "inici" => $el->inici, "fi" => $el->fi, "motiu" => $el->motiu);
             array_push($ret, $item);
         }
         return $ret;
@@ -210,13 +211,13 @@ class compensaController extends Controller
     public function validacompensacio(Request $request)
     {
         //
-        $el = compensa::where('id',$request->id)->update(['confirmat'=>true]);
+        $el = compensa::where('id', $request->id)->update(['confirmat' => true]);
 
         $compensa = compensa::find($request->id);
-        if($compensa->inici == "09:00:00"){
-            $m='matí';
-        }else{
-            $m='vesprada';
+        if ($compensa->inici == "09:00:00") {
+            $m = 'matí';
+        } else {
+            $m = 'vesprada';
         }
 
         $link2 = "https://calendar.google.com/calendar/u/0/r/eventedit?text=COMPENSACIÓ+CEFIRE&dates=" . str_replace("-", "", $compensa->data) . "T" . str_replace(":", "", $compensa->inici) . "/" . str_replace("-", "", $compensa->data) . "T" . str_replace(":", "", $compensa->fi) . "&details=compensa+del+Cefire+de+Valencia+ELIMINADA&location=Valencia&trp=false#eventpage_6";
@@ -236,5 +237,5 @@ class compensaController extends Controller
         //Mail::to($compensa->user['email'])->send(new Eliminarcompensa($datos2));
 
     }
-    
+
 }
