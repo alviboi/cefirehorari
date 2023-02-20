@@ -51,6 +51,7 @@ class BorsaHoresController extends Controller
     public function show(BorsaHores $borsaHores)
     {
         //
+        return BorsaHores::where('user_id', '=', auth()->id())->first();
     }
 
     /**
@@ -62,6 +63,7 @@ class BorsaHoresController extends Controller
     public function edit(BorsaHores $borsaHores)
     {
         //
+
     }
 
     /**
@@ -107,7 +109,8 @@ class BorsaHoresController extends Controller
 
     }
 
-    public function borraborsa() {
+    public function borraborsa()
+    {
         BorsaHores::truncate();
         return 1;
     }

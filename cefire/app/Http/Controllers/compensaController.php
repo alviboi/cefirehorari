@@ -90,6 +90,10 @@ class compensaController extends Controller
         try {
             //code...
             $borsahores = BorsaHores::where('user_id', "=", auth()->id())->first();
+            if ($borsahores->minuts === null) {
+                abort(403, "Sembla que no existeix la teua borsa d'hores");
+            }
+            //abort(403, $borsahores);
         } catch (\Throwable $th) {
             //throw $th;
             abort(403, "Sembla que no existeix la teua borsa d'hores");

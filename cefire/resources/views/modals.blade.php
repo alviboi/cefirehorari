@@ -16,6 +16,11 @@
 
 <editaperfil-component :show-edita="this.showEdita"></editaperfil-component>
 
-<escriumsg-component :show-missatge="this.showMissatge"/></escriumsg-component>
+<escriumsg-component :show-missatge="this.showMissatge" />
+</escriumsg-component>
 
-<borsahores-component :show-borsahores="this.showModalBorsa"/></borsahores-component>
+<borsahores-component :show-borsahores="this.showModalBorsa" />
+</borsahores-component>
+
+<compensahores-component :show-Compensahores="this.showModalCompensaBorsa" />
+</compensahores-component>

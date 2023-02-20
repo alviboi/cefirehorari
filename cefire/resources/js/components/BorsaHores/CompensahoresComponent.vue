@@ -1,59 +1,55 @@
 <template>
-  <div :id="'modal_borsahores' + id" uk-modal>
+  <div :id="'modal_borsahores_compensa' + id" uk-modal>
     <div
       style="background-color: #f7f7f7"
       class="uk-modal-dialog uk-modal-body"
     >
       <fieldset class="uk-fieldset">
-        <legend class="uk-legend">Sol·licitud afegir a borsa hores</legend>
+        <legend class="uk-legend">
+          Sol·licitud per a compensar deute de mes per temps de borsa d'hores
+        </legend>
         <div class="uk-margin">
           <div class="uk-text-medium">
-            <div v-if="minuts_sobrants_mes_anterior > 0">
-              Tens un excés de
+            <div v-if="minuts_en_borsa > 0">
+              Tens
               <span class="uk-text-emphasis"
-                >{{ (minuts_sobrants_mes_anterior / 60).toFixed(2) }} ({{
-                  minuts_sobrants_mes_anterior
+                >{{ (minuts_en_borsa / 60).toFixed(2) }} hores ({{
+                  minuts_en_borsa
                 }}
                 minuts)</span
               >
-              hores el més anterior.
+              hores en la borsa y un
+              <span v-if="deute_mes >= 0">superàvit</span>
+              <span v-else>deute</span>
+              de
+              <span class="uk-text-emphasis uk-text-warning"
+                >{{ (deute_mes / 60).toFixed(2) }} hores ({{
+                  deute_mes
+                }}
+                minuts)</span
+              >
             </div>
-            <div v-else-if="minuts_sobrants_mes_anterior <= 0">
-              Tens un deute de
-              <span>{{ (minuts_sobrants_mes_anterior / 60).toFixed(2) }}</span>
-              hores del més anterior. Per tant no pots fer cap sol·licitud. Si
-              penses que és un error posat en contacte amb l'administrador.
+            <div v-else-if="minuts_en_borsa <= 0">
+              No tens temps en la borsa per a poder fer cap compensació.
             </div>
           </div>
         </div>
-        <div v-if="minuts_sobrants_mes_anterior > 0">
+        <div v-if="minuts_en_borsa > 0">
           <div class="uk-margin">
             <div class="uk-inline">
               <span class="uk-text-medium"
-                >Nombre de <b>minuts</b> que vols que t'afegixquen a la borsa
-                d'hores (has de posar el número de <b>minuts</b> multiplicat amb
-                els càclculs fets). Has de detallar correctament el càcul sino
-                se't denegarà la sol·licitud.</span
+                >Quants minuts vols trapasat de la borsa d'hores al deute de
+                mes?</span
               >
               <input
                 class="uk-input uk-inline"
                 type="number"
-                v-model="minuts_a_afegir"
-                :max="minuts_sobrants_mes_anterior * 2.5"
+                v-model="minuts_a_compensar"
+                :max="minuts_en_borsa"
                 min="0"
                 step="1"
               />
             </div>
-          </div>
-          <div class="uk-margin">
-            <label for="just">Justifica perquè fas aquesta sol·licitud:</label>
-            <textarea
-              id="just"
-              v-model="justificacio"
-              class="uk-textarea"
-              rows="5"
-              placeholder="Justificació"
-            ></textarea>
           </div>
         </div>
       </fieldset>
@@ -90,24 +86,26 @@
 export default {
   data() {
     return {
-      minuts_sobrants_mes_anterior: 0,
-      minuts_a_afegir: 0,
-      justificacio: "",
+      minuts_en_borsa: 0,
+      deute_mes: 0,
+      minuts_a_compensar: 0,
       id: 0,
     };
   },
-  props: ["show-borsahores"],
+  props: ["show-compensahores"],
   watch: {
-    showBorsahores() {
+    showCompensahores() {
       this.mostra_modal();
     },
   },
   methods: {
-    deutes_mes_un_usuari(id, user_id) {
+    minuts_en_borsa_f() {
       axios
-        .get("/calcula_deutes_mes_un_usuari")
+        .get("/borsahores/1")
         .then((res) => {
-          this.minuts_sobrants_mes_anterior = res.data["diferència"];
+          //console.log(res.data.minuts);
+          this.minuts_en_borsa = res.data.minuts;
+          //alert(this.minuts_en_borsa);
         })
         .catch((err) => {
           this.$toast.error(err.response.data.message);
@@ -115,34 +113,51 @@ export default {
     },
     // Surt del modal i reseteja totes les dades
     ix() {
-      this.$eventBus.$emit("tanca-borsahores");
-      UIkit.modal("#modal_borsahores" + this.id).hide();
-      //this.minuts_sobrants_mes_anterior = 0;
-      //this.minuts_a_afegir = 0;
+      this.$eventBus.$emit("tanca-compensahores");
+      UIkit.modal("#modal_borsahores_compensa" + this.id).hide();
+    },
+
+    deute_mes_f() {
+      axios
+        .get("/deutemes/1")
+        .then((res) => {
+          //console.log(res.data.minuts);
+          this.deute_mes = res.data.minuts;
+          //alert(this.minuts_en_borsa);
+        })
+        .catch((err) => {
+          this.$toast.error(err.response.data.message);
+        });
+    },
+    // Surt del modal i reseteja totes les dades
+    ix() {
+      this.$eventBus.$emit("tanca-compensahores");
+      UIkit.modal("#modal_borsahores_compensa" + this.id).hide();
     },
 
     // Envia el misstage
     envia() {
       //console.log(this.cap.length);
-      if (this.minuts_a_afegir > this.minuts_sobrants_mes_anterior * 2.5) {
+      if (this.minuts_a_compensar > this.minuts_en_borsa) {
         this.$toast.error("No pots demanar tants minuts");
         return 0;
       }
 
-      if (this.minuts_a_afegir == 0 || this.justificacio.length === 0) {
-        this.$toast.error("Falta algun paràmetre per emplenar");
+      if (this.minuts_a_compensar == 0) {
+        this.$toast.error("Has de demanar un temps");
       } else {
-        let url = "borsasolicituds";
+        let url = "minuts_a_compensar_solicitud";
         let params = {
-          minuts_a_afegir: this.minuts_a_afegir,
-          justificacio: this.justificacio,
+          minuts: this.minuts_a_compensar,
         };
         axios
           .post(url, params)
           .then((res) => {
             //console.log(res);
             //this.resposta=res.data;
-            this.$toast.success(res.data);
+            this.minuts_en_borsa = res.data.nou_borsa_hores;
+            this.deute_mes = res.data.nou_deute_mes;
+            this.$toast.success("Pareix que tot ha anat bé");
           })
           .catch((err) => {
             this.$toast.error(err.response.data.message);
@@ -153,23 +168,24 @@ export default {
     },
     // Mostra modal en funció del bus
     mostra_modal() {
-      if (this.showBorsahores == true) {
-        UIkit.modal("#modal_borsahores" + this.id, {
+      if (this.showCompensahores == true) {
+        UIkit.modal("#modal_borsahores_compensa" + this.id, {
           bgClose: false,
           escClose: false,
           modal: false,
           keyboard: false,
         }).show();
-        this.deutes_mes_un_usuari();
-      } // else {
-      //   UIkit.modal("#modal_borsahores").hide();
+        this.minuts_en_borsa_f();
+        this.deute_mes_f();
+      } //else {
+      //   UIkit.modal("#modal_borsahores_compensa").hide();
       // }
     },
     // Obre el missatge
     obre_missatge(envia) {
       this.cap = envia.assumpte;
       this.destinatari = envia.destinatari;
-      UIkit.modal("#modal_borsahores").show();
+      UIkit.modal("#modal_borsahores_compensa").show();
     },
   },
   mounted() {

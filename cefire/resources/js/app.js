@@ -4,13 +4,12 @@
  * building robust, powerful web applications using Vue and Laravel.
  */
 
-require('./bootstrap');
-require('./home.js');
+require("./bootstrap");
+require("./home.js");
 
 import Toast from "vue-toastification";
 import "vue-toastification/dist/index.css";
-import VCalendar from 'v-calendar';
-
+import VCalendar from "v-calendar";
 
 // import Echo from "laravel-echo"
 
@@ -28,16 +27,13 @@ import VCalendar from 'v-calendar';
  *
  */
 
-window.pusher = new Pusher('e5f9e09fa9fe46c9b61e',{
-    cluster: 'eu',
+window.pusher = new Pusher("e5f9e09fa9fe46c9b61e", {
+    cluster: "eu",
     encrypted: true,
-  });
-window.channel = pusher.subscribe('cefire');
+});
+window.channel = pusher.subscribe("cefire");
 
 // window.channel = pusher.subscribe('private-cefire');
-
-
-
 
 // Echo.private('chat')
 //   .listen('MessageSent', (e) => {
@@ -48,7 +44,7 @@ window.channel = pusher.subscribe('cefire');
 //   });
 
 //import Vue from 'vue';
-window.Vue = require('vue').default;
+window.Vue = require("vue").default;
 
 /**
  * The following block of code may be used to automatically register your
@@ -69,8 +65,12 @@ window.Vue = require('vue').default;
  * Eg. ./components/ExampleComponent.vue -> <example-component></example-component>
  */
 
- const files = require.context('./', true, /\.vue$/i)
- files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
+const files = require.context("./", true, /\.vue$/i);
+files
+    .keys()
+    .map((key) =>
+        Vue.component(key.split("/").pop().split(".")[0], files(key).default)
+    );
 
 /*Vue.component('configuracio-component', require('./components/ConfiguracioComponent.vue').default);
 Vue.component('editaperfil-component', require('./components/EditaperfilComponent.vue').default);
@@ -103,48 +103,69 @@ Vue.component('ajuda-component', require('./components/Ajuda/AjudaComponent.vue'
 Vue.component('escriuincidencia-component', require('./components/Incidencia/EscriuincidenciaComponent.vue').default);
 Vue.component('incidencies-component', require('./components/Incidencia/IncidenciesComponent.vue').default);*/
 
-Vue.component('centres-component', require('./components/Centres/CentresComponent.vue').default);
-Vue.component('buscahorari-component', require('./components/BuscahorariComponent.vue').default);
-Vue.component('line-component', require('./components/Reports/LinegrafComponent.vue').default);
-Vue.component('pie-component', require('./components/Reports/PiegrafComponent.vue').default);
+Vue.component(
+    "centres-component",
+    require("./components/Centres/CentresComponent.vue").default
+);
+Vue.component(
+    "buscahorari-component",
+    require("./components/BuscahorariComponent.vue").default
+);
+Vue.component(
+    "line-component",
+    require("./components/Reports/LinegrafComponent.vue").default
+);
+Vue.component(
+    "pie-component",
+    require("./components/Reports/PiegrafComponent.vue").default
+);
 //Vue.component('pie-component', require('./components/Reports/PiegrafComponent.vue').default);
 
-Vue.component('escriumoscoso-component', require('./components/Moscosos/EscriuMoscosoComponent.vue').default);
-Vue.component('escriuvacances-component', require('./components/Vacances/EscriuVacancesComponent.vue').default);
-Vue.component('fitxatgessuma-component', require('./components/FitxatgessumaComponent.vue').default);
-Vue.component('afegirvacances-component', require('./components/Vacances/AfegirVacancesComponent.vue').default);
+Vue.component(
+    "escriumoscoso-component",
+    require("./components/Moscosos/EscriuMoscosoComponent.vue").default
+);
+Vue.component(
+    "escriuvacances-component",
+    require("./components/Vacances/EscriuVacancesComponent.vue").default
+);
+Vue.component(
+    "fitxatgessuma-component",
+    require("./components/FitxatgessumaComponent.vue").default
+);
+Vue.component(
+    "afegirvacances-component",
+    require("./components/Vacances/AfegirVacancesComponent.vue").default
+);
 
-Vue.component('borsahores-component', require('./components/BorsaHores/BorsahoresComponent.vue').default);
+Vue.component(
+    "borsahores-component",
+    require("./components/BorsaHores/BorsahoresComponent.vue").default
+);
 
+Vue.component(
+    "compensahores-component",
+    require("./components/BorsaHores/CompensahoresComponent.vue").default
+);
 
 Vue.use(VCalendar, {
-    componentPrefix: 'v',
+    componentPrefix: "v",
     screens: {
-        tablet: '576px',
-        este2: '1293px',
-        este1: '1621px',
-      },  // Use <vc-calendar /> instead of <v-calendar />
-
-  });
-
-
-
+        tablet: "576px",
+        este2: "1293px",
+        este1: "1621px",
+    }, // Use <vc-calendar /> instead of <v-calendar />
+});
 
 //L'error més comú que tens quan modifiques una cosa d'ací, no està funcionant npm run watch, o compila a npm run dev
-
-
-
 
 Vue.use(Toast, {
     transition: "Vue-Toastification__bounce",
     maxToasts: 5,
-    newestOnTop: true
-  });
-
-
+    newestOnTop: true,
+});
 
 Vue.prototype.$eventBus = new Vue();
-
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -152,11 +173,8 @@ Vue.prototype.$eventBus = new Vue();
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-
-
-
 const app = new Vue({
-    el: '#app',
+    el: "#app",
     data: {
         showMissatge: false,
         showModal: false,
@@ -164,153 +182,155 @@ const app = new Vue({
         showModalMosc: false,
         showModalVac: false,
         showModalBorsa: false,
+        showModalCompensaBorsa: false,
         // calendar: false,
         // horari: false,
         showEdita: false,
-        view: 'principal',
-        ajuda: '',
+        view: "principal",
+        ajuda: "",
     },
     components: {
         /**
          * En funció del valor de la variable view es canviarà el component a mostrar
          */
-        'calendar': {
-          template: '<div><calendar-component/></div>'
+        calendar: {
+            template: "<div><calendar-component/></div>",
         },
-        'horari': {
-          template: '<div><fitxar-component /></div>'
+        horari: {
+            template: "<div><fitxar-component /></div>",
         },
-        'horaritots': {
-            template: '<div><horaris-component/></div>'
+        horaritots: {
+            template: "<div><horaris-component/></div>",
         },
-        'buscaenhoraris': {
-            template: '<div><buscahorari-component/></div>'
+        buscaenhoraris: {
+            template: "<div><buscahorari-component/></div>",
         },
-        'principal': {
-            template: '<div><avisos-component /></div>'
+        principal: {
+            template: "<div><avisos-component /></div>",
         },
-        'centres': {
-            template: '<div><centres-component :editable="true"/></div>'
+        centres: {
+            template: '<div><centres-component :editable="true"/></div>',
         },
-        'centresmeus': {
-            template: '<div><centresmeus-component /></div>'
+        centresmeus: {
+            template: "<div><centresmeus-component /></div>",
         },
-        'report1': {
-            template: '<div><report-component /></div>'
+        report1: {
+            template: "<div><report-component /></div>",
         },
-        'controlass': {
-            template: '<div><controlass-component /></div>'
+        controlass: {
+            template: "<div><controlass-component /></div>",
         },
-        'personals': {
-            template: '<div><dadespersonals-component /></div>'
+        personals: {
+            template: "<div><dadespersonals-component /></div>",
         },
-        'configuracio': {
-            template: '<div><configuracio-component /></div>'
+        configuracio: {
+            template: "<div><configuracio-component /></div>",
         },
-        'llistatpermisos': {
-            template: '<div><llistatpermisos-component /></div>'
+        llistatpermisos: {
+            template: "<div><llistatpermisos-component /></div>",
         },
-        'ajuda': {
-            template: '<div><ajuda-component /></div>',
+        ajuda: {
+            template: "<div><ajuda-component /></div>",
         },
-        'incidencies': {
-            template: '<div><incidencies-component /></div>',
+        incidencies: {
+            template: "<div><incidencies-component /></div>",
         },
-        'compensacions': {
-            template: '<div><llistatcompensacions-component /></div>',
+        compensacions: {
+            template: "<div><llistatcompensacions-component /></div>",
         },
-        'fitxatgessuma': {
-            template: '<div><fitxatgessuma-component /></div>',
+        fitxatgessuma: {
+            template: "<div><fitxatgessuma-component /></div>",
         },
-        'afegirvacances': {
-            template: '<div><afegirvacances-component /></div>',
-        }
-
-
-      },
+        afegirvacances: {
+            template: "<div><afegirvacances-component /></div>",
+        },
+    },
     methods: {
         /**
          * Tenim diferents metodes per a obrir i tancar alguns modals
          */
         canvi() {
-            this.horari=false;
-            this.calendar=true;
+            this.horari = false;
+            this.calendar = true;
         },
         tanca_avis() {
             // alert('hola');
-            this.showModal=false;
+            this.showModal = false;
         },
         tanca_missatge() {
             // alert('hola');
-            this.showMissatge=false;
+            this.showMissatge = false;
         },
         tanca_borsahores() {
             // alert('hola');
-            this.showModalBorsa=false;
+            this.showModalBorsa = false;
+        },
+        tanca_compensahores() {
+            //alert("hola");
+            this.showModalCompensaBorsa = false;
         },
         tanca_edita() {
             // alert('hola');
-            this.showEdita=false;
+            this.showEdita = false;
         },
         tanca_incidencia() {
             // alert('hola');
-            this.showModalInc=false;
+            this.showModalInc = false;
         },
         tanca_moscoso() {
             // alert('hola');
-            this.showModalMosc=false;
+            this.showModalMosc = false;
         },
         obre_moscoso() {
             // alert('hola');
-            this.showModalMosc=true;
+            this.showModalMosc = true;
         },
         tanca_vacances() {
             // alert('hola');
-            this.showModalVac=false;
+            this.showModalVac = false;
         },
         obre_vacances() {
             // alert('hola');
-            this.showModalVac=true;
+            this.showModalVac = true;
         },
         log() {
-            axios.get("logat_id")
-            .then(res => {
-                console.log(res);
-                Vue.prototype.$user_id=res.data;
-            })
-            .catch(err => {
-                console.error(err);
-            })
+            axios
+                .get("logat_id")
+                .then((res) => {
+                    console.log(res);
+                    Vue.prototype.$user_id = res.data;
+                })
+                .catch((err) => {
+                    console.error(err);
+                });
         },
         ajuda_f() {
-            this.ajuda=this.view;
-            this.view='ajuda';
-        }
+            this.ajuda = this.view;
+            this.view = "ajuda";
+        },
     },
     created() {
         // Creem els elements que es van a escoltar pel bus
-        this.$eventBus.$on('tanca-avis', this.tanca_avis);
-        this.$eventBus.$on('tanca-incidencia', this.tanca_incidencia);
-        this.$eventBus.$on('tanca-moscoso', this.tanca_moscoso);
-        this.$eventBus.$on('tanca-vacances', this.tanca_vacances);
-        this.$eventBus.$on('tanca-missatge', this.tanca_missatge);
-        this.$eventBus.$on('tanca-borsahores', this.tanca_borsahores);
-        this.$eventBus.$on('tanca-edita', this.tanca_edita);
-        this.$eventBus.$on('obre-moscoso', this.obre_moscoso);
-        this.$eventBus.$on('obre-vacances', this.obre_vacances);
+        this.$eventBus.$on("tanca-avis", this.tanca_avis);
+        this.$eventBus.$on("tanca-incidencia", this.tanca_incidencia);
+        this.$eventBus.$on("tanca-moscoso", this.tanca_moscoso);
+        this.$eventBus.$on("tanca-vacances", this.tanca_vacances);
+        this.$eventBus.$on("tanca-missatge", this.tanca_missatge);
+        this.$eventBus.$on("tanca-borsahores", this.tanca_borsahores);
+        this.$eventBus.$on("tanca-compensahores", this.tanca_compensahores);
+        this.$eventBus.$on("tanca-edita", this.tanca_edita);
+        this.$eventBus.$on("obre-moscoso", this.obre_moscoso);
+        this.$eventBus.$on("obre-vacances", this.obre_vacances);
         this.log();
-
     },
     beforeDestroy() {
-        this.$eventBus.$off('tanca-avis');
-        this.$eventBus.$off('tanca-missatge');
-        this.$eventBus.$off('tanca-borsahores');
-        this.$eventBus.$off('tanca-edita');
-        this.$eventBus.$off('tanca-incidencia');
-        this.$eventBus.$off('tanca-moscoso');
-        this.$eventBus.$off('tanca-vacances');
-
-    }
-
+        this.$eventBus.$off("tanca-avis");
+        this.$eventBus.$off("tanca-missatge");
+        this.$eventBus.$off("tanca-borsahores");
+        this.$eventBus.$off("tanca-edita");
+        this.$eventBus.$off("tanca-incidencia");
+        this.$eventBus.$off("tanca-moscoso");
+        this.$eventBus.$off("tanca-vacances");
+        this.$eventBus.$off("tanca-compensahores");
+    },
 });
-

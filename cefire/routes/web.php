@@ -5,6 +5,7 @@
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Schema;
 use App\Models\control;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -36,7 +37,7 @@ Route::get('/', function () {
 })->name('entrada');
 
 
-Route::get('/clear-cache', function() {
+Route::get('/clear-cache', function () {
     Artisan::call('cache:clear');
     Artisan::call('view:clear');
     return "Cache is cleared";
@@ -97,42 +98,43 @@ Route::get('/contar/{desde}/{fins}', 'cefireController@contar_cefires')->name('g
 
 Route::get('/contar_tot/{desde}/{fins}', 'UserController@contar')->name('contar_tot')->middleware('auth');
 
-Route::post('guardia/insert','guardiaController@put_guardia_id')->name('put_guardia_id')->middleware('auth');
+Route::post('guardia/insert', 'guardiaController@put_guardia_id')->name('put_guardia_id')->middleware('auth');
 
-Route::post('upload_permis','permisController@upload')->middleware('auth');
-Route::post('download_permis','permisController@download')->middleware('auth');
-Route::post('permis_desde','permisController@permis_desde')->middleware('can:esAdmin');
-Route::post('permis_sense_arxiu','permisController@permis_sense_arxiu')->middleware('can:esAdmin');
+Route::post('upload_permis', 'permisController@upload')->middleware('auth');
+Route::post('download_permis', 'permisController@download')->middleware('auth');
+Route::post('permis_desde', 'permisController@permis_desde')->middleware('can:esAdmin');
+Route::post('permis_sense_arxiu', 'permisController@permis_sense_arxiu')->middleware('can:esAdmin');
 
-Route::post('compensacions_no_validades','compensaController@compensacionsnovalidades')->middleware('can:esAdmin');
-Route::post('moscosos_no_validades','MoscosoController@moscososnovalidades')->middleware('can:esAdmin');
-Route::post('vacances_no_validades','VacancesController@vacancesnovalidades')->middleware('can:esAdmin');
-Route::post('visita_no_validades','visitaController@visitanovalidades')->middleware('can:esAdmin'); //NOU
+Route::post('compensacions_no_validades', 'compensaController@compensacionsnovalidades')->middleware('can:esAdmin');
+Route::post('moscosos_no_validades', 'MoscosoController@moscososnovalidades')->middleware('can:esAdmin');
+Route::post('vacances_no_validades', 'VacancesController@vacancesnovalidades')->middleware('can:esAdmin');
+Route::post('visita_no_validades', 'visitaController@visitanovalidades')->middleware('can:esAdmin'); //NOU
 
-Route::post('validacompensacio','compensaController@validacompensacio')->middleware('can:esAdmin');
-Route::post('validamoscosos','MoscosoController@validamoscosos')->middleware('can:esAdmin');
-Route::post('validavacances','VacancesController@validavacances')->middleware('can:esAdmin');
-Route::post('validavisita','visitaController@validavisita')->middleware('can:esAdmin'); //NOU
-Route::post('borsasolicitudsvalida','BorsaSolicitudsController@borsasolicitudsvalida')->middleware('can:esAdmin'); //NOU
-
-
+Route::post('validacompensacio', 'compensaController@validacompensacio')->middleware('can:esAdmin');
+Route::post('validamoscosos', 'MoscosoController@validamoscosos')->middleware('can:esAdmin');
+Route::post('validavacances', 'VacancesController@validavacances')->middleware('can:esAdmin');
+Route::post('validavisita', 'visitaController@validavisita')->middleware('can:esAdmin'); //NOU
+Route::post('borsasolicitudsvalida', 'BorsaSolicitudsController@borsasolicitudsvalida')->middleware('can:esAdmin'); //NOU
 
 
 
-Route::post('cefire_fitxa_oblit','cefireController@cefire_fitxa_oblit')->middleware('can:esAdmin'); //NOU
+
+
+Route::post('cefire_fitxa_oblit', 'cefireController@cefire_fitxa_oblit')->middleware('can:esAdmin'); //NOU
 
 Route::get('/usuaris_oblit_fitxatge', 'cefireController@usuaris_oblit_fitxatge')->name('usuaris_oblit_fitxatge')->middleware('can:esAdmin');
 Route::post('/validaoblidat', 'cefireController@validaoblidat')->name('validaoblidat')->middleware('can:esAdmin');
 Route::get('/tots_els_dies_mes/{any}/{mes}', 'UserController@tots_els_dies_mes')->name('tots_els_dies_mes')->middleware('can:esAdmin');
 //Route::get('/vacancesoficials/{from}/{to}', 'VacancesOficialsController@agafavacancescurs')->name('agafavacancescurs')->middleware('can:esAdmin');
 Route::get('/calcula_deutes_mes_un_usuari', 'UserController@calcula_deutes_mes_un_usuari')->name('calcula_deutes_mes_un_usuari')->middleware('auth');
+Route::post('/minuts_a_compensar_solicitud', 'DeutesmesController@minuts_a_compensar_solicitud')->name('minuts_a_compensar_solicitud')->middleware('auth');
 
 
 Route::resource('control', ControlController::class)->middleware('can:esAdmin');
 
 Route::resource('centres', centresController::class);
 
-Route::group(['middleware' => 'auth'], function() {
+Route::group(['middleware' => 'auth'], function () {
     Route::resources([
         'cefire' => cefireController::class,
         'compensa' => compensaController::class,
@@ -149,7 +151,7 @@ Route::group(['middleware' => 'auth'], function() {
         'vacances' => VacancesController::class,
         'vacancesoficials' => VacancesOficialsController::class,
         'borsahores' => BorsaHoresController::class,
-        'borsasolicituds' => BorsaSolicitudsController::class
-        ]);
+        'borsasolicituds' => BorsaSolicitudsController::class,
+        'deutemes' => DeutesmesController::class,
+    ]);
 });
-
