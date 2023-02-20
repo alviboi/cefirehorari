@@ -38,7 +38,7 @@
           <div class="uk-margin">
             <div class="uk-inline">
               <span class="uk-text-medium"
-                >Quants minuts vols trapasat de la borsa d'hores al deute de
+                >Quants minuts vols trapassar de la borsa d'hores al deute de
                 mes?</span
               >
               <input
