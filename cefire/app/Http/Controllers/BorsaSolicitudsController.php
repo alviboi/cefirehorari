@@ -20,12 +20,12 @@ class BorsaSolicitudsController extends Controller
         //
         //return BorsaSolicituds::get();
 
-        $borsol=BorsaSolicituds::orderby('id','DESC')->where("aprobada","=",0)->get();
-        $ret=array();
+        $borsol = BorsaSolicituds::orderby('id', 'DESC')->where("aprobada", "=", 0)->get();
+        $ret = array();
         foreach ($borsol as $bors) {
             # code...
-            $el = ["nom"=>$bors->user['name'],"any"=>$bors->any,"mes"=>$bors->mes,"minuts"=>$bors->minuts,"justificacio"=>$bors->justificacio,"id"=>$bors->id,"user_id"=>$bors->user_id];
-            array_push($ret,$el);
+            $el = ["nom" => $bors->user['name'], "any" => $bors->any, "mes" => $bors->mes, "minuts" => $bors->minuts, "justificacio" => $bors->justificacio, "id" => $bors->id, "user_id" => $bors->user_id];
+            array_push($ret, $el);
         }
         return $ret;
     }
@@ -54,7 +54,7 @@ class BorsaSolicitudsController extends Controller
             'minuts_a_afegir' => 'required',
             'justificacio' => 'required',
         ]);
-        $check = BorsaSolicituds::where("user_id", "=", auth()->id())->where("mes", "=", date("m")-1)->where("any", "=", date("Y"))->first();
+        $check = BorsaSolicituds::where("user_id", "=", auth()->id())->where("mes", "=", date("m") - 1)->where("any", "=", date("Y"))->first();
         if ($check) {
             abort(403, "Ja existeix una sol·licitud per a aquest mes");
         }
@@ -62,7 +62,7 @@ class BorsaSolicitudsController extends Controller
         $borssol = new BorsaSolicituds();
         $borssol->user_id = auth()->id();
         $borssol->minuts = $request->minuts_a_afegir;
-        $borssol->mes = date("m")-1;
+        $borssol->mes = date("m") - 1;
         $borssol->any = date("Y");
         $borssol->justificacio = $request->justificacio;
 
@@ -121,18 +121,28 @@ class BorsaSolicitudsController extends Controller
     }
 
 
-    public function borsasolicitudsvalida(Request $request) {
+    public function borsasolicitudsvalida(Request $request)
+    {
+
+        $user_controller = new UserController();
+        $este = $user_controller->calcula_deutes_mes_usuari($request->user_id);
+
+        $deutes_mes_controller = new DeutesmesController();
+        $deutes_mes_controller->afegix_deutes_mes($request->user_id, -$request->minuts);
+
+        //abort(413, $este['diferència']);
+
         $bs = BorsaSolicituds::find($request->id);
         $BorsaHores = new BorsaHoresController();
         $ret = $BorsaHores->crea($request->user_id, $request->minuts);
-        if ($ret > 0){
+        if ($ret > 0) {
             $bs->aprobada = 1;
             $bs->save();
-            return "La borsa ara és de ".$ret." minuts.";
+            return "La borsa ara és de " . $ret . " minuts.";
         } else {
             abort(403, "Ha hagut un error.");
         }
-        
+
 
     }
 }

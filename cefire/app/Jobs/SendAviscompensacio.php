@@ -24,7 +24,7 @@ class SendAviscompensacio implements ShouldQueue
      *
      * @return void
      */
-    public function __construct($mail,$datos)
+    public function __construct($mail, $datos)
     {
         //
         $this->datos = $datos;

@@ -1,10 +1,12 @@
 <?php
 
 namespace App\Http\Controllers;
+
+use App\Jobs\SendIncidenciaresolta;
 use Validator;
 use Illuminate\Http\Request;
 use App\Models\Incidencies;
-
+use Carbon\Carbon;
 
 class IncidenciesController extends Controller
 {
@@ -28,7 +30,7 @@ class IncidenciesController extends Controller
         $ret = array();
         $els = Incidencies::whereMonth('data', '=', date($mes))->whereYear('data', '=', date($any))->get();
         foreach ($els as $el) {
-            $item=array("id"=>$el->id, "name"=>$el->user['name'], "data"=>$el->data, "inici"=>$el->inici, "fi"=>$el->fi, "incidencia"=>$el->incidencia, "corregida"=>$el->corregida);
+            $item = array("id" => $el->id, "name" => $el->user['name'], "data" => $el->data, "inici" => $el->inici, "fi" => $el->fi, "incidencia" => $el->incidencia, "corregida" => $el->corregida);
             array_push($ret, $item);
         }
         return $ret;
@@ -71,7 +73,7 @@ class IncidenciesController extends Controller
     public function show($id)
     {
         //
-        return Incidencies::get()->where('ass_id','=',$id);
+        return Incidencies::get()->where('ass_id', '=', $id);
     }
 
     /**
@@ -94,9 +96,24 @@ class IncidenciesController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $inci = Incidencies::where("id","=",$id)->first();
+        $inci = Incidencies::where("id", "=", $id)->first();
         $inci->corregida = $request->estat;
         $inci->save();
+
+
+        $datos2 = [
+            'nombre' => $inci->user['name'],
+            'data' => date("d/m/Y", strtotime($inci->data)),
+            'incidencia' => $inci->incidencia,
+            'estat' => $inci->corregida ? "Resolta" : "No resolta",
+
+        ];
+
+        $emailJob2 = (new SendIncidenciaresolta($inci->user['email'], $datos2))->delay(Carbon::now()->addSeconds(120));
+        dispatch($emailJob2);
+
+
+
         return "Canviat estat d'incidència";
         //return $inci->corregida;
     }

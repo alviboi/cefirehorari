@@ -32,7 +32,7 @@
               <span class="uk-text-medium"
                 >Nombre de <b>minuts</b> que vols que t'afegixquen a la borsa
                 d'hores (has de posar el número de <b>minuts</b> multiplicat amb
-                els càclculs fets). Has de detallar correctament el càcul sino
+                els càlculs fets). Has de detallar correctament el càlcul sino
                 se't denegarà la sol·licitud.</span
               >
               <input

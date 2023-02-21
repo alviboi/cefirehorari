@@ -9,6 +9,8 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 
+use Illuminate\Support\Facades\Mail;
+
 class SendAvismoscosos implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
@@ -21,7 +23,7 @@ class SendAvismoscosos implements ShouldQueue
      *
      * @return void
      */
-    public function __construct($mail,$datos)
+    public function __construct($mail, $datos)
     {
         //
         $this->datos = $datos;
