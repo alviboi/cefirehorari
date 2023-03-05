@@ -447,7 +447,10 @@ export default {
     },
     fullcalcul() {
       let csv = "";
-
+      if (this.items.length == 0){
+        this.$toast.error("No hi han resultats");
+        return 0;
+      }
       // Loop the array of objects
       for (let row = 0; row < this.items.length; row++) {
         if (this.items[row]["title"] !== undefined){
@@ -475,15 +478,16 @@ export default {
       /*********************/
 
       // Once we are done looping, download the .csv by creating a link
+      let ran = Math.floor(Math.random() * 100000);
       let link = document.createElement("a");
-      link.id = "download-csv";
+      link.id = "download-csv-"+ran;
       link.setAttribute(
         "href",
         "data:text/plain;charset=utf-8," + encodeURIComponent(csv)
       );
-      link.setAttribute("download", "centresfiltrats.csv");
+      link.setAttribute("download", "document.csv");
       document.body.appendChild(link);
-      document.querySelector("#download-csv").click();
+      document.querySelector("#download-csv-"+ran).click();
     },
   },
   mounted() {
