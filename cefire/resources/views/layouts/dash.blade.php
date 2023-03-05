@@ -62,7 +62,7 @@
                                                 Borsa hores</a></li>
                                         <li><a class="uk-navbar-dropdown-close" href="#"
                                                 @click="showModalCompensaBorsa = true"><span
-                                                    data-uk-icon="icon: future"></span> Compensa deute</a>
+                                                    data-uk-icon="icon: push"></span> Compensa deute</a>
                                         </li>
 
                                         {{-- <li><a class="uk-navbar-dropdown-close" href="#" @click="showModalMosc = true"><span data-uk-icon="icon: tripadvisor"></span> Escriu Moscoso</a></li> --}}

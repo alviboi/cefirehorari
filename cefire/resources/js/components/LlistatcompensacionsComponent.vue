@@ -113,7 +113,7 @@
       <hr />
       <h1 class="uk-heading-line uk-text-center">BORSA D'HORES</h1>
       <transition-group name="list3" tag="div">
-        <div v-for="item in borsahores" :key="item.id">
+        <div v-for="(item, index) in borsahores" :key="item.id">
           <div class="llistatcomp">
             <div class="data">
               <span data-uk-icon="icon: calendar"></span>
@@ -130,19 +130,20 @@
               >
             </div>
             <!-- <div class="mati"></div> -->
-            <div class="motiu" @click="mostra(item.justificacio)">
+            <!-- <div class="motiu" @click="mostra(item.justificacio)">
               <span data-uk-icon="icon: comments"></span>
               {{
                 item.justificacio.length > 20
                   ? item.justificacio.slice(0, 20) + "..."
                   : item.justificacio
               }}
-            </div>
+            </div> -->
+            <a uk-margin class="uk-button uk-button-small uk-button-secondary motiu uk-margin-right" @click="mostra(index)"><span uk-icon="icon: file-edit">Detall de sol·licitud  </span></a>
 
             <div class="botons">
               <div
                 @click.prevent="
-                  valida_borsa_hores(item.id, item.user_id, item.minuts)
+                  valida_borsa_hores(index)
                 "
                 class="uk-icon-button uk-text-success"
                 uk-icon="check"
@@ -369,7 +370,23 @@ export default {
   },
   methods: {
     mostra(aux) {
-      UIkit.modal.dialog('<p class="uk-padding uk-text-large">' + aux + "</p>");
+      var a = this.borsahores[aux];
+      var pre_html = "<div style='padding: 20px;'>"
+        +"<div class='uk-text-center uk-text-lead' style='padding: 10px;'>Informe sol·licituds de "+a.nom+"</div>"
+        +"<div>"
+        +"    <div><b>Minuts sol·licitats x2.5</b>: "+a.minutsx25+"x2.5="+(a.minutsx25*2.5)+" minuts</div>"
+        +"    <div><pre class='uk-text-emphasis'><b>Justificació de la sol·licitud: \n</b>"+a.justificacio25+"</pre></div>"
+        +"    <div><b>Minuts sol·licitats x2:</b> "+a.minutsx2+"x2="+(a.minutsx2*2)+" minuts</div>"
+        +"    <div><pre class='uk-text-emphasis'><b>Justificació de la sol·licitud: \n</b>"+a.justificacio2+"</pre></div>"
+        +"    <div><b>Minuts que s'afegiran al còmput x1:</b> "+a.minuts+" minuts</div>"
+        +((a.justificacio=="")?"":"    <div><pre class='uk-text-emphasis'><b>Observacions: \n</b>"+a.justificacio+"</pre></div>")
+        +"<hr>"
+        +"    <div><b>TOTAL sol·licitat per a afegir a la borsa:</b> <span class='uk-text-lead uk-text-warning'>"+((a.minutsx2*2)+(a.minutsx25*2.5))+"<span> minuts</div>"
+        +"</div>"
+    +"</div>";
+
+
+      UIkit.modal.dialog(pre_html);
     },
     // Petició de les dades de tots els usuaris per al desplegable
     agafa_users() {
@@ -700,24 +717,23 @@ export default {
           this.$toast.error(err.response.data.message);
         });
     },
-    valida_borsa_hores(id, user_id, minuts) {
+    valida_borsa_hores(index) {
       let url = "borsasolicitudsvalida";
 
-      let params = {
-        id: id,
-        user_id: user_id,
-        minuts: minuts,
-      };
+      // let params = {
+      //   id: id,
+      //   user_id: user_id,
+      //   minuts: minuts,
+      //   minuts2: minuts,
+      //   minuts25: minuts,
+      // };
+      let params = this.borsahores[index];
       axios
         .post(url, params)
         .then((res) => {
           console.log(res);
           this.$toast.success(res.data);
-          for (let index = 0; index < this.borsahores.length; index++) {
-            if (this.borsahores[index].id == id) {
-              this.borsahores.splice(index, 1);
-            }
-          }
+          this.borsahores.splice(index, 1);
         })
         .catch((err) => {
           this.$toast.error(err.response.data.message);

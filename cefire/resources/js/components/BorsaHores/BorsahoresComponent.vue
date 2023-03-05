@@ -34,24 +34,84 @@
                 d'hores (has de posar el número de <b>minuts</b> multiplicat amb
                 els càlculs fets). Has de detallar correctament el càlcul sino
                 se't denegarà la sol·licitud.</span
-              >
-              <input
-                class="uk-input uk-inline"
-                type="number"
-                v-model="minuts_a_afegir"
-                :max="minuts_sobrants_mes_anterior * 2.5"
-                min="0"
-                step="1"
-              />
+              ><br />
+              <hr>
+              <div>
+                <div>
+                  <input
+                    class="uk-input uk-form-width-medium"
+                    type="number"
+                    v-model="minuts_a_afegir_25"
+                    :max="minuts_sobrants_mes_anterior * 2.5"
+                    min="0"
+                    step="1"
+                  />
+                  <span>x2.5 = {{ minuts_a_afegir_25 * 2.5 }} minuts</span>
+                </div>
+                <div class="uk-margin">
+                  <label for="just">Justifica el x2.5:</label>
+                  <textarea
+                    id="just"
+                    v-model="justificacio25"
+                    class="uk-textarea"
+                    rows="2"
+                    placeholder="Justifica aquest modificador"
+                  ></textarea>
+                </div>
+                <hr>
+                <div>
+                  <input
+                    class="uk-input uk-form-width-medium"
+                    type="number"
+                    v-model="minuts_a_afegir_2"
+                    :max="minuts_sobrants_mes_anterior * 2"
+                    min="0"
+                    step="1"
+                  />
+                  <span>x2 = {{ minuts_a_afegir_2 * 2 }} minuts</span>
+                </div>
+                <div class="uk-margin">
+                  <label for="just"
+                    >Justifica el x2:</label
+                  >
+                  <textarea
+                    id="just"
+                    v-model="justificacio2"
+                    class="uk-textarea"
+                    rows="2"
+                    placeholder="Justifica aquest modificador"
+                  ></textarea>
+                </div>
+                <hr>
+                <div>
+                  <input
+                    class="uk-input uk-form-width-medium"
+                    type="number"
+                    v-model="minuts_a_afegir_1"
+                    min="0"
+                    step="1"
+                    disabled
+                  />
+                  <span>x1 = {{ minuts_a_afegir_1 }} minuts</span>
+                </div>
+                <div>
+                  <span class="uk-align-right">TOTAL = {{ total }} minuts</span>
+                </div>
+                <div v-if="minuts_a_afegir_1 < 0">
+                  <span class="uk-label uk-label-warning"
+                    >NO POTS COMPENSAR TANT</span
+                  >
+                </div>
+              </div>
             </div>
           </div>
           <div class="uk-margin">
-            <label for="just">Justifica perquè fas aquesta sol·licitud:</label>
+            <label for="just">Observacions:</label>
             <textarea
               id="just"
               v-model="justificacio"
               class="uk-textarea"
-              rows="5"
+              rows="2"
               placeholder="Justificació"
             ></textarea>
           </div>
@@ -74,6 +134,7 @@
             @click.prevent="envia"
             class="uk-button uk-button-primary"
             type="button"
+            :disabled="minuts_a_afegir_1 < 0"
           >
             Envia
           </button>
@@ -91,7 +152,11 @@ export default {
   data() {
     return {
       minuts_sobrants_mes_anterior: 0,
-      minuts_a_afegir: 0,
+      //minuts_a_afegir_1: 0,
+      minuts_a_afegir_2: 0,
+      minuts_a_afegir_25: 0,
+      justificacio25: "",
+      justificacio2: "",
       justificacio: "",
       id: 0,
     };
@@ -100,6 +165,23 @@ export default {
   watch: {
     showBorsahores() {
       this.mostra_modal();
+    },
+  },
+  computed: {
+    minuts_a_afegir_1() {
+      return (
+        this.minuts_sobrants_mes_anterior -
+        this.minuts_a_afegir_2 -
+        this.minuts_a_afegir_25
+      );
+    },
+    total() {
+      var a = Math.random();
+      return (
+        this.minuts_a_afegir_25 * 2.5 +
+        this.minuts_a_afegir_1 +
+        this.minuts_a_afegir_2 * 2
+      );
     },
   },
   methods: {
@@ -124,18 +206,39 @@ export default {
     // Envia el misstage
     envia() {
       //console.log(this.cap.length);
-      if (this.minuts_a_afegir > this.minuts_sobrants_mes_anterior * 2.5) {
-        this.$toast.error("No pots demanar tants minuts");
-        return 0;
+      // if (this.minuts_a_afegir > this.minuts_sobrants_mes_anterior * 2.5) {
+      //   this.$toast.error("No pots demanar tants minuts");
+      //   return 0;
+      // }
+
+      // if (this.minuts_a_afegir <= this.minuts_sobrants_mes_anterior) {
+      //   this.$toast.error("No et convé fer esta sol·licitud!");
+      //   return 0;
+      // }
+
+
+
+      if ((this.minuts_a_afegir_25>0 && this.justificacio25.length === 0) || (this.minuts_a_afegir_25===0 && this.justificacio25.length > 0) ) {
+        this.$toast.error("Falta algun paràmetre per emplenar a l'apartat de x2.5");
+        return;
+      } 
+
+
+      if ((this.minuts_a_afegir_2>0 && this.justificacio2.length === 0) || (this.minuts_a_afegir_2===0 && this.justificacio2.length > 0) )  {
+        this.$toast.error("Falta algun paràmetre per emplenar a l'apartat de x2");
+        return;
       }
 
-      if (this.minuts_a_afegir == 0 || this.justificacio.length === 0) {
-        this.$toast.error("Falta algun paràmetre per emplenar");
-      } else {
+
         let url = "borsasolicituds";
         let params = {
-          minuts_a_afegir: this.minuts_a_afegir,
+          //minuts_a_afegir: this.minuts_a_afegir,
           justificacio: this.justificacio,
+          minutsx1: this.minuts_a_afegir_1,
+          minutsx2: this.minuts_a_afegir_2,
+          minutsx25: this.minuts_a_afegir_25,
+          justificaciox25: this.justificacio25,
+          justificaciox2: this.justificacio2,
         };
         axios
           .post(url, params)
@@ -149,7 +252,7 @@ export default {
 
             //console.error(err);
           });
-      }
+      
     },
     // Mostra modal en funció del bus
     mostra_modal() {
@@ -172,6 +275,7 @@ export default {
       UIkit.modal("#modal_borsahores").show();
     },
   },
+
   mounted() {
     this.id = this._uid;
   },

@@ -24,7 +24,8 @@ class BorsaSolicitudsController extends Controller
         $ret = array();
         foreach ($borsol as $bors) {
             # code...
-            $el = ["nom" => $bors->user['name'], "any" => $bors->any, "mes" => $bors->mes, "minuts" => $bors->minuts, "justificacio" => $bors->justificacio, "id" => $bors->id, "user_id" => $bors->user_id];
+
+            $el = ["nom" => $bors->user['name'], "any" => $bors->any, "mes" => $bors->mes, "minuts" => $bors->minuts, "minutsx2" => $bors->minuts2, "minutsx25" => $bors->minuts25, "justificacio" => ($bors->justificacio===null)?"":$bors->justificacio, "justificacio2" => $bors->justificacio2, "justificacio25" => $bors->justificacio25, "id" => $bors->id, "user_id" => $bors->user_id];
             array_push($ret, $el);
         }
         return $ret;
@@ -51,8 +52,13 @@ class BorsaSolicitudsController extends Controller
         //
         //Validem en el component, no seria necessari esta part
         $this->validate($request, [
-            'minuts_a_afegir' => 'required',
             'justificacio' => 'required',
+            'minutsx1' => 'required|integer',
+            'minutsx2' => 'required|integer',
+            'minutsx25' => 'required|integer',
+            'justificaciox25' => 'required',
+            'justificaciox2' => 'required',
+            'justificacio' => 'sometimes',
         ]);
         $check = BorsaSolicituds::where("user_id", "=", auth()->id())->where("mes", "=", date("m") - 1)->where("any", "=", date("Y"))->first();
         if ($check) {
@@ -61,10 +67,14 @@ class BorsaSolicitudsController extends Controller
 
         $borssol = new BorsaSolicituds();
         $borssol->user_id = auth()->id();
-        $borssol->minuts = $request->minuts_a_afegir;
+        $borssol->minuts = $request->minutsx1;
+        $borssol->minuts2 = $request->minutsx2;
+        $borssol->minuts25 = $request->minutsx25;
         $borssol->mes = date("m") - 1;
         $borssol->any = date("Y");
         $borssol->justificacio = $request->justificacio;
+        $borssol->justificacio2 = $request->justificaciox2;
+        $borssol->justificacio25 = $request->justificaciox25;
 
         //  Store data in database
         $borssol->save();
@@ -120,21 +130,29 @@ class BorsaSolicitudsController extends Controller
         //return "sfsdaf";
     }
 
-
+/**
+ * 
+ */
     public function borsasolicitudsvalida(Request $request)
     {
 
         $user_controller = new UserController();
         $este = $user_controller->calcula_deutes_mes_usuari($request->user_id);
 
+
+
+
+        $minuts_a_llevar_del_deute = $request->minutsx2 + $request->minuts25; 
+
         $deutes_mes_controller = new DeutesmesController();
-        $deutes_mes_controller->afegix_deutes_mes($request->user_id, -$request->minuts);
+        $deutes_mes_controller->afegix_deutes_mes($request->user_id, -$minuts_a_llevar_del_deute);
 
         //abort(413, $este['diferència']);
 
         $bs = BorsaSolicituds::find($request->id);
         $BorsaHores = new BorsaHoresController();
-        $ret = $BorsaHores->crea($request->user_id, $request->minuts);
+        $minuts_a_afegir_a_la_borsa = $request->minutsx2*2 + $request->minuts25*25;
+        $ret = $BorsaHores->crea($request->user_id, $minuts_a_afegir_a_la_borsa);
         if ($ret > 0) {
             $bs->aprobada = 1;
             $bs->save();
