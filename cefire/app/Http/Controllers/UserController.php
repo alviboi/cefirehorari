@@ -840,7 +840,7 @@ class UserController extends Controller
         $deutesmes = $value->deutesmes()->first();
         if ($deutesmes) {
             $a = $deutesmes->minuts;
-            $este['deute mesos anteriors'] = $a . " min";
+            $este['recompte mesos anteriors'] = $a . " min";
         } else {
             $este['deute mesos anteriors'] = "0 min";
         }
