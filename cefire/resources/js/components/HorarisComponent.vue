@@ -443,7 +443,7 @@ export default {
     },
     extractTitle(html) {
       let a = new DOMParser().parseFromString(html, "text/html").documentElement.children[1].lastElementChild.title;
-      return a;
+      return a.trim();
     },
     fullcalcul() {
       let csv = "";
@@ -454,7 +454,8 @@ export default {
       // Loop the array of objects
       for (let row = 0; row < this.items.length; row++) {
         if (this.items[row]["title"] !== undefined){
-            csv += this.extractTitle(this.items[row]["title"]) + ","+this.extractContent(this.items[row]["title"])+",\n";
+            let data = new Date(this.items[row]["startDate"]);
+            csv += data.toLocaleDateString()+", "+this.extractTitle(this.items[row]["title"]).trim() + ","+this.extractContent(this.items[row]["title"]).trim()+",\n";
         }
       }
       /**********************/

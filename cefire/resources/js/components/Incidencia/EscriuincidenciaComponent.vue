@@ -19,9 +19,9 @@
                         </div>
                         <div class="uk-margin">                        
                         <label>Hora: </label>
-                            <vue-timepicker :minute-interval="15" v-model="inici"></vue-timepicker>
+                            <vue-timepicker :minute-interval="1" v-model="inici"></vue-timepicker>
                         <span> a </span>
-                            <vue-timepicker :minute-interval="15" v-model="fi"></vue-timepicker> 
+                            <vue-timepicker :minute-interval="1" v-model="fi"></vue-timepicker> 
                         </div>
                 </fieldset>
                 <transition name="fade">
