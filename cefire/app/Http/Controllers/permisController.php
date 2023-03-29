@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use Illuminate\Support\Carbon;
 use Validator;
 use App\Models\permis;
 use Illuminate\Http\Request;
@@ -43,6 +44,8 @@ class permisController extends Controller
     public function store(Request $request)
     {
         //
+        $mes_actual = intval(date('m'));
+        $mes_demanat = intval(date('m',strtotime($request->data)));
         $dat = new permis();
         $dat->data = $request->data;
         $dat->inici = $request->inici;
@@ -51,7 +54,17 @@ class permisController extends Controller
         $dat->motiu = $request->motiu;
         $dat->arxiu= $request->arxiu;
         $dat->save();
+
+        if ($mes_actual > $mes_demanat) {
+            $in = Carbon::parse($request->inici);
+            $fi = Carbon::parse($request->fi);
+            $afegir = $in->diffInMinutes($fi);
+            $deutes_mes_controller = new DeutesmesController();
+            $deutes_mes_controller->afegix_deutes_mes($dat->user_id, $afegir);
+        }
+ 
         return $dat->toArray();
+
     }
 
     /**
@@ -107,6 +120,16 @@ class permisController extends Controller
     public function destroy($permis)
     {
         //
+        $este = permis::find($permis);
+        $mes_actual = intval(date('m'));
+        $mes_demanat = intval(date('m',strtotime($este->data)));
+        if ($mes_actual != $mes_demanat) {
+            $in = Carbon::parse($este->inici);
+            $fi = Carbon::parse($este->fi);
+            $afegir = $in->diffInMinutes($fi);
+            $deutes_mes_controller = new DeutesmesController();
+            $deutes_mes_controller->afegix_deutes_mes($este->user_id, -$afegir);
+        }
         permis::find($permis)->delete();
     }
     /**

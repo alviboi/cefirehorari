@@ -52,12 +52,11 @@ class BorsaSolicitudsController extends Controller
         //
         //Validem en el component, no seria necessari esta part
         $this->validate($request, [
-            'justificacio' => 'required',
             'minutsx1' => 'required|integer',
-            'minutsx2' => 'required|integer',
-            'minutsx25' => 'required|integer',
-            'justificaciox25' => 'required',
-            'justificaciox2' => 'required',
+            'minutsx2' => 'sometimes',
+            'minutsx25' => 'sometimes',
+            'justificaciox25' => 'sometimes',
+            'justificaciox2' => 'sometimes',
             'justificacio' => 'sometimes',
         ]);
         $check = BorsaSolicituds::where("user_id", "=", auth()->id())->where("mes", "=", date("m") - 1)->where("any", "=", date("Y"))->first();
@@ -139,10 +138,7 @@ class BorsaSolicitudsController extends Controller
         $user_controller = new UserController();
         $este = $user_controller->calcula_deutes_mes_usuari($request->user_id);
 
-
-
-
-        $minuts_a_llevar_del_deute = $request->minutsx2 + $request->minuts25; 
+        $minuts_a_llevar_del_deute = $request->minuts2 + $request->minuts25; 
 
         $deutes_mes_controller = new DeutesmesController();
         $deutes_mes_controller->afegix_deutes_mes($request->user_id, -$minuts_a_llevar_del_deute);
@@ -151,7 +147,7 @@ class BorsaSolicitudsController extends Controller
 
         $bs = BorsaSolicituds::find($request->id);
         $BorsaHores = new BorsaHoresController();
-        $minuts_a_afegir_a_la_borsa = $request->minutsx2*2 + $request->minuts25*25;
+        $minuts_a_afegir_a_la_borsa = $request->minuts2*2 + $request->minuts25*25;
         $ret = $BorsaHores->crea($request->user_id, $minuts_a_afegir_a_la_borsa);
         if ($ret > 0) {
             $bs->aprobada = 1;

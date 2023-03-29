@@ -233,12 +233,12 @@ export default {
         let url = "borsasolicituds";
         let params = {
           //minuts_a_afegir: this.minuts_a_afegir,
-          justificacio: this.justificacio,
+          justificacio: (this.justificacio=="")?"No ha fet cap justificació":this.justificacio,
           minutsx1: this.minuts_a_afegir_1,
           minutsx2: this.minuts_a_afegir_2,
           minutsx25: this.minuts_a_afegir_25,
-          justificaciox25: this.justificacio25,
-          justificaciox2: this.justificacio2,
+          justificaciox25: (this.justificacio25=="")?"No ha fet cap justificació":this.justificacio25,
+          justificaciox2: (this.justificacio2=="")?"No ha fet cap justificació":this.justificacio2,
         };
         axios
           .post(url, params)
