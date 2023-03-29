@@ -138,7 +138,7 @@ class BorsaSolicitudsController extends Controller
         $user_controller = new UserController();
         $este = $user_controller->calcula_deutes_mes_usuari($request->user_id);
 
-        $minuts_a_llevar_del_deute = $request->minuts2 + $request->minuts25; 
+        $minuts_a_llevar_del_deute = $request->minutsx2 + $request->minutsx25; 
 
         $deutes_mes_controller = new DeutesmesController();
         $deutes_mes_controller->afegix_deutes_mes($request->user_id, -$minuts_a_llevar_del_deute);
@@ -147,7 +147,7 @@ class BorsaSolicitudsController extends Controller
 
         $bs = BorsaSolicituds::find($request->id);
         $BorsaHores = new BorsaHoresController();
-        $minuts_a_afegir_a_la_borsa = $request->minuts2*2 + $request->minuts25*25;
+        $minuts_a_afegir_a_la_borsa = $request->minutsx2*2 + $request->minutsx25*2.5;
         $ret = $BorsaHores->crea($request->user_id, $minuts_a_afegir_a_la_borsa);
         if ($ret > 0) {
             $bs->aprobada = 1;
