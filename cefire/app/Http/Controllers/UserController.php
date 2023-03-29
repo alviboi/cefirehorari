@@ -883,7 +883,7 @@ class UserController extends Controller
         $vacances = new VacancesController();
         //VacancesController
         $any = date("Y", strtotime("-1 months"));
-        $mes = date("m", strtotime("-1 months"));
+        $mes = date("m", strtotime("-30 days"));
 
 
         $inici = date($any . "-" . $mes . "-01");
@@ -930,6 +930,8 @@ class UserController extends Controller
 
         $este = $this->agafa_dades_suma($usuari, $mes, $any, $inici, $fi, $total_mes, $total_dia, $total_dies);
         //$este['diferència'] = 100;
+        $este["proves"]=$mes;
+        $este["proves2"]=date("Y-m-d");
         return $este;
 
     }
