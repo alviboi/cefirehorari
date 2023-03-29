@@ -125,7 +125,7 @@ class MoscosoController extends Controller
     {
         //
         $data_hui = date('Y-m-d');
-        if (auth()->user()->Perfil == 1) {
+        if (auth()->user()->Perfil == 1 || (($moscoso->data >= $data_hui) && ($moscoso->user_id == auth()->id()))) {
             $moscoso->delete();
         } elseif ($moscoso->data < $data_hui) {
             abort(403, "No pots borrar aquest moscós");
