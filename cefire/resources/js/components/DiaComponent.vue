@@ -195,7 +195,7 @@
           </div>
           <div class="uk-margin">                        
               <label>Hora: </label>
-                  <vue-timepicker :minute-interval="5" v-model="inici"></vue-timepicker>
+                  <vue-timepicker :minute-interval="5" v-model="inici" :hour-range="[[6, 23]]" hide-disabled-hours></vue-timepicker>
               <span> a </span>
                   <vue-timepicker :minute-interval="5" v-model="fi"></vue-timepicker> 
               </div>
@@ -232,7 +232,7 @@
           </div>
           <div class="uk-margin">                        
               <label>Hora: </label>
-                  <vue-timepicker :minute-interval="5" v-model="inici"></vue-timepicker>
+                  <vue-timepicker :minute-interval="5" v-model="inici" :hour-range="[[6, 23]]" hide-disabled-hours></vue-timepicker>
               <span> a </span>
                   <vue-timepicker :minute-interval="5" v-model="fi"></vue-timepicker> 
           </div>
@@ -269,7 +269,7 @@
           </div>
           <div class="uk-margin">                        
               <label>Hora: </label>
-                  <vue-timepicker :minute-interval="5" v-model="inici"></vue-timepicker>
+                  <vue-timepicker :minute-interval="5" v-model="inici" :hour-range="[[6, 23]]" hide-disabled-hours></vue-timepicker>
               <span> a </span>
                   <vue-timepicker :minute-interval="5" v-model="fi"></vue-timepicker> 
           </div>
@@ -304,7 +304,7 @@
             />
             <div class="uk-margin">                        
               <label>Hora: </label>
-                  <vue-timepicker :minute-interval="5" v-model="inici"></vue-timepicker>
+                  <vue-timepicker :minute-interval="5" v-model="inici" :hour-range="[[6, 23]]" hide-disabled-hours></vue-timepicker>
               <span> a </span>
                   <vue-timepicker :minute-interval="5" v-model="fi"></vue-timepicker> 
               </div>
