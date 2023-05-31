@@ -148,6 +148,11 @@ Vue.component(
     require("./components/BorsaHores/CompensahoresComponent.vue").default
 );
 
+Vue.component(
+    "horariespecial-component",
+    require("./components/Horariespecial/HorariespecialComponent.vue").default
+);
+
 Vue.use(VCalendar, {
     componentPrefix: "v",
     screens: {
@@ -243,6 +248,9 @@ const app = new Vue({
         },
         afegirvacances: {
             template: "<div><afegirvacances-component /></div>",
+        },
+        horariespecial: {
+            template: "<div><horariespecial-component /></div>",
         },
     },
     methods: {

@@ -153,5 +153,6 @@ Route::group(['middleware' => 'auth'], function () {
         'borsahores' => BorsaHoresController::class,
         'borsasolicituds' => BorsaSolicitudsController::class,
         'deutemes' => DeutesmesController::class,
+        'horariespecial' => HorariespecialController::class,
     ]);
 });

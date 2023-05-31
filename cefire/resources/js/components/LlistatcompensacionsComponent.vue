@@ -254,7 +254,7 @@
         </div>
       </transition-group>
     </div>
-    <!-- Visita modal -->
+    <!-- Fitxatge modal -->
     <div :id="'cefire_afg-modal'" uk-modal>
       <div class="uk-modal-dialog uk-modal-body">
         <fieldset class="uk-fieldset">
@@ -720,7 +720,7 @@ export default {
     valida_borsa_hores(index) {
       let url = "borsasolicitudsvalida";
 
-      // let params = {
+      // let paramshow-avisdiasetmanas = {
       //   id: id,
       //   user_id: user_id,
       //   minuts: minuts,

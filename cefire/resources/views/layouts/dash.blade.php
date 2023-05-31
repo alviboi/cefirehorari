@@ -41,6 +41,9 @@
                                             <li><a class="uk-navbar-dropdown-close" href="#"
                                                     @click="view = 'afegirvacances'"><span
                                                         data-uk-icon="icon: calendar"></span> Dies de vacances</a></li>
+                                            <li><a class="uk-navbar-dropdown-close" href="#"
+                                                    @click="view = 'horariespecial'"><span
+                                                        data-uk-icon="icon: happy"></span> Dies d'horari especial</a></li>
 
                                             <li><a class="uk-navbar-dropdown-close" href="#"
                                                     @click="view = 'controlass'"><span
