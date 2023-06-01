@@ -271,7 +271,7 @@ class cefireController extends Controller
 
         $horari_especial = new HorariespecialController();
         $dates_especials_arr = $horari_especial->index_en_dif();
-
+        $interval_comp=0;
         foreach ($dates_especials_arr as $key2 => $value2) {
             # code...
             if ($value2["dia"] == $data_hui){

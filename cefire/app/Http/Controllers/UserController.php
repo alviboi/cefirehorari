@@ -745,6 +745,8 @@ class UserController extends Controller
         // } else {
         //     $total_dia = (26100 / 60);
         // }
+        $ix=1;
+        $total_dia=0;
         $horari_especial = new HorariespecialController();
         $dates_especials_arr = $horari_especial->index_en_dif();
             foreach ($dates as $key => $value) {
