@@ -126,7 +126,7 @@
             <div class="mati">
               <span data-uk-icon="icon: clock"></span>
               <span
-                ><b>{{ (item.minuts / 60).toFixed(2) }} hores</b></span
+                ><b>{{ ((item.minuts+item.minutsx2+item.minutsx25) / 60).toFixed(2) }} hores</b></span
               >
             </div>
             <!-- <div class="mati"></div> -->
