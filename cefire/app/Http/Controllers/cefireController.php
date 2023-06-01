@@ -263,11 +263,31 @@ class cefireController extends Controller
         $any = date('Y');
         $data_15_oct = date($any."-10-15");
         $data_15_mai = date($any."-05-15");
-        if ($data_hui >= $data_15_oct || $data_hui <= $data_15_mai) {
-            $interval_comp = 27900/60;       
-        } else {
-            $interval_comp = 26100/60;
+        // if ($data_hui >= $data_15_oct || $data_hui <= $data_15_mai) {
+        //     $interval_comp = 27900/60;       
+        // } else {
+        //     $interval_comp = 26100/60;
+        // }
+
+        $horari_especial = new HorariespecialController();
+        $dates_especials_arr = $horari_especial->index_en_dif();
+
+        foreach ($dates_especials_arr as $key2 => $value2) {
+            # code...
+            if ($value2["dia"] == $data_hui){
+                $interval_comp = $value2['total'];
+                break;
+            } else if ($data_hui >= $data_15_oct || $data_hui <= $data_15_mai) {
+                $interval_comp = 27900/60;   
+            } else {
+                $interval_comp = 26100/60;
+            }
         }
+
+
+
+
+
 
         if(auth()->user()->reduccio){
             $interval_comp = $interval_comp - 60;

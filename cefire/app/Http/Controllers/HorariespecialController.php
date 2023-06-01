@@ -22,6 +22,24 @@ class HorariespecialController extends Controller
         return $ret->toArray();
     }
 
+    public function index_en_dif()
+    {
+        //
+        $ret_a = array();
+        $ret = horariespecial::get();
+
+        foreach ($ret as $key => $value) {
+            $fi = strtotime($value->fi);
+            $inici = strtotime($value->inici);
+            $dif = $fi - $inici;
+            $add = ['dia' => $value['data'], 'total' => $dif/60 ];
+            array_push($ret_a,$add);
+            # code...
+        }
+
+        return $ret_a;
+    }
+
     /**
      * Show the form for creating a new resource.
      *

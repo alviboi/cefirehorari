@@ -2,7 +2,7 @@
   <div>
     <div class="uk-child-width-1-2" uk-grid>
       <div>
-        <h2>Afegix dies de vacances especials</h2>
+        <h2>Afegix dies amb horari especial</h2>
       </div>
     </div>
     <div>
@@ -46,10 +46,12 @@
         </div>
       </div>
     </div>
+    <transition-group name="llista_horari" tag="div">
+
     <div
-      v-for="(item, index) in calendariespecial"
-      :key="index"
-      class="llista_horari"
+      v-for="(item) in calendariespecial"
+      :key="item.id"
+      class="llista_horari llista_horari-item"
     >
       <div class="data1">{{ item.data }}</div>
       <div class="text" style="text-align: right; padding-right: 20px">
@@ -66,6 +68,7 @@
         ></a>
       </div>
     </div>
+    </transition-group>
   </div>
 </template>
 
@@ -158,6 +161,15 @@ export default {
 </script>
 
 <style lang="sass" scope>
+.llista_horari-item
+    transition: all 1s
+
+.llista_horari-enter, .llista_horari-leave-to
+    opacity: 0
+
+.llista_horari-leave-active
+    position: absolute
+
 .llista_horari
   display: grid
   grid-template-columns: 0.7fr 0.7fr 0.7fr 0.7fr 0.3fr

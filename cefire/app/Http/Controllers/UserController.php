@@ -730,20 +730,48 @@ class UserController extends Controller
 
 
         $total_mes = 0;
-        foreach ($dates as $key => $value) {
+        // foreach ($dates as $key => $value) {
+        //     # code...
+        //     if ($value >= $data_15_oct || $value <= $data_15_mai) {
+        //         $total_mes += (27900 / 60);
+        //     } else {
+        //         $total_mes += (26100 / 60);
+        //     }
+
+        // }
+
+        // if ($data_hui >= $data_15_oct || $data_hui <= $data_15_mai) {
+        //     $total_dia = (27900 / 60);
+        // } else {
+        //     $total_dia = (26100 / 60);
+        // }
+        $horari_especial = new HorariespecialController();
+        $dates_especials_arr = $horari_especial->index_en_dif();
+            foreach ($dates as $key => $value) {
             # code...
-            if ($value >= $data_15_oct || $value <= $data_15_mai) {
-                $total_mes += (27900 / 60);
-            } else {
-                $total_mes += (26100 / 60);
+                foreach ($dates_especials_arr as $key2 => $value2) {
+                    $ix = 1;
+                    # code...
+                    if ($value2["dia"] == $value){
+                        $total_dia = $value2['total'];
+                        $total_mes += $value2['total'];
+                        $ix = 0;
+                        break;
+                    } else if ($data_hui >= $data_15_oct || $data_hui <= $data_15_mai) {
+                        $total_dia = (27900 / 60);
+                    } else {
+                        $total_dia = (26100 / 60);
+                    }
+                }
+            if ($ix){
+                if ($value >= $data_15_oct || $value <= $data_15_mai) {
+                    $total_mes += (27900 / 60);
+                } else {
+                    $total_mes += (26100 / 60);
+                }
+
             }
-
-        }
-
-        if ($data_hui >= $data_15_oct || $data_hui <= $data_15_mai) {
-            $total_dia = (27900 / 60);
-        } else {
-            $total_dia = (26100 / 60);
+ 
         }
 
         $este = $this->agafa_dades_suma($usuari, $mes, $any, $inici, $fi, $total_mes, $total_dia, $total_dies);
@@ -784,21 +812,52 @@ class UserController extends Controller
         $data_15_mai = date($any . "-05-15");
 
         $total_mes = 0;
-        foreach ($dates as $key => $value) {
+        // foreach ($dates as $key => $value) {
+        //     # code...
+        //     if ($value >= $data_15_oct || $value <= $data_15_mai) {
+        //         $total_mes += (27900 / 60);
+        //     } else {
+        //         $total_mes += (26100 / 60);
+        //     }
+
+        // }
+
+        // if ($data_hui >= $data_15_oct || $data_hui <= $data_15_mai) {
+        //     $total_dia = (27900 / 60);
+        // } else {
+        //     $total_dia = (26100 / 60);
+        // }
+
+        $horari_especial = new HorariespecialController();
+        $dates_especials_arr = $horari_especial->index_en_dif();
+            foreach ($dates as $key => $value) {
             # code...
-            if ($value >= $data_15_oct || $value <= $data_15_mai) {
-                $total_mes += (27900 / 60);
-            } else {
-                $total_mes += (26100 / 60);
+                foreach ($dates_especials_arr as $key2 => $value2) {
+                    $ix = 1;
+                    # code...
+                    if ($value2["dia"] == $value){
+                        $total_dia = $value2['total'];
+                        $total_mes += $value2['total'];
+                        $ix = 0;
+                        break;
+                    } else if ($data_hui >= $data_15_oct || $data_hui <= $data_15_mai) {
+                        $total_dia = (27900 / 60);
+                    } else {
+                        $total_dia = (26100 / 60);
+                    }
+                }
+            if ($ix){
+                if ($value >= $data_15_oct || $value <= $data_15_mai) {
+                    $total_mes += (27900 / 60);
+                } else {
+                    $total_mes += (26100 / 60);
+                }
+
             }
-
+ 
         }
 
-        if ($data_hui >= $data_15_oct || $data_hui <= $data_15_mai) {
-            $total_dia = (27900 / 60);
-        } else {
-            $total_dia = (26100 / 60);
-        }
+        
 
         foreach ($usuaris as $key => $value) {
             # code...
@@ -978,20 +1037,50 @@ class UserController extends Controller
         $data_15_oct = date($any . "-10-15");
         $data_15_mai = date($any . "-05-15");
 
-        $total_mes = 0;
-        foreach ($dates as $key => $value) {
-            # code...
-            if ($value >= $data_15_oct || $value <= $data_15_mai) {
-                $total_mes += (27900 / 60);
-            } else {
-                $total_mes += (26100 / 60);
-            }
+        // $total_mes = 0;
+        // foreach ($dates as $key => $value) {
+        //     # code...
+        //     if ($value >= $data_15_oct || $value <= $data_15_mai) {
+        //         $total_mes += (27900 / 60);
+        //     } else {
+        //         $total_mes += (26100 / 60);
+        //     }
 
-        }
-        if ($data_hui >= $data_15_oct || $data_hui <= $data_15_mai) {
-            $total_dia = (27900 / 60);
-        } else {
-            $total_dia = (26100 / 60);
+        // }
+        // if ($data_hui >= $data_15_oct || $data_hui <= $data_15_mai) {
+        //     $total_dia = (27900 / 60);
+        // } else {
+        //     $total_dia = (26100 / 60);
+        // }
+        $total_mes = 0;
+
+        $horari_especial = new HorariespecialController();
+        $dates_especials_arr = $horari_especial->index_en_dif();
+            foreach ($dates as $key => $value) {
+            # code...
+                foreach ($dates_especials_arr as $key2 => $value2) {
+                    $ix = 1;
+                    # code...
+                    if ($value2["dia"] == $value){
+                        $total_dia = $value2['total'];
+                        $total_mes += $value2['total'];
+                        $ix = 0;
+                        break;
+                    } else if ($data_hui >= $data_15_oct || $data_hui <= $data_15_mai) {
+                        $total_dia = (27900 / 60);
+                    } else {
+                        $total_dia = (26100 / 60);
+                    }
+                }
+            if ($ix){
+                if ($value >= $data_15_oct || $value <= $data_15_mai) {
+                    $total_mes += (27900 / 60);
+                } else {
+                    $total_mes += (26100 / 60);
+                }
+
+            }
+ 
         }
 
         $este = $this->agafa_dades_suma($usuari, $mes, $any, $inici, $fi, $total_mes, $total_dia, $total_dies);
