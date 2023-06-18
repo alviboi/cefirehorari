@@ -82,8 +82,12 @@ export default {
           //if (this.dia.mes_actual != this.mes){
           //}
           this.users_statistic.forEach(element => {
-            if (this.mes_actual != (this.mes-1))
+            if (this.mes_actual != (this.mes-1)){
              delete element['recompte mesos anteriors'];
+             delete element['borsa hores'];
+             delete element['moscosos (any)'];
+             delete element['vacances (any)'];
+             }
           });
           a.hide();
         })
