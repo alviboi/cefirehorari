@@ -125,6 +125,7 @@ export default {
             .then(res => {
                 console.log(res);
                 this.user_statistic=res.data;
+                delete this.user_statistic['deute mes concret'];
             })
             .catch(err => {
                 console.error(err);

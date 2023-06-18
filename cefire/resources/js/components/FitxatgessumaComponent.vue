@@ -47,10 +47,11 @@ export default {
   data() {
     return {
       dia: new Date(),
+      mes_actual: 0,
       componentKey: 0,
       ca: ca,
       dia_aux: null,
-      users_statistic: [],
+      users_statistic: {},
       any: null,
       mes: null,
       nom_mes: "",
@@ -64,12 +65,27 @@ export default {
     },
 
     get_data_statistics() {
+      var a = UIkit.modal.dialog(
+        '<p class="uk-modal-body"><span uk-spinner></span> Comprovant... puc tardar un ratet!</p>',
+        {
+          escClose: false,
+          bgClose: false,
+        }
+      );
       //var here = this;
       axios
         .get("tots_els_dies_mes/" + this.any + "/" + this.mes)
         .then((res) => {
           console.log(res);
           this.users_statistic = res.data;
+          //alert(this.mes);
+          //if (this.dia.mes_actual != this.mes){
+          //}
+          this.users_statistic.forEach(element => {
+            if (this.mes_actual != (this.mes-1))
+             delete element['recompte mesos anteriors'];
+          });
+          a.hide();
         })
         .catch((err) => {
           for (let index = 0; index < this.users_statistic.length; index++) {            								
@@ -117,6 +133,11 @@ export default {
         );
       }
     },
+
+    mes_actual_f() {
+      //alert(this.dia);
+      this.mes_actual = this.dia.getMonth();
+    }
   },
   created() {
     //this.emplena_lloc();
@@ -125,6 +146,7 @@ export default {
     this.dia_aux = this.dia;
     this.get_mes_any();
     this.get_data_statistics();
+    this.mes_actual_f();
   },
   components: {
     CollapseTransition,
