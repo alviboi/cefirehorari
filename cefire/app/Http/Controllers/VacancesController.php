@@ -101,7 +101,7 @@ class VacancesController extends Controller
 
         foreach ($dies_a_afegir as $key => $value) {
             # code...
-            $exist_vacances = Vacances::where('data', '=',$value)->where('id','=',auth()->id())->first();
+            $exist_vacances = Vacances::where('data','=',$value)->where('user_id','=',auth()->id())->first();
             if ($exist_vacances) {
                 abort(403, "Estàs demanant un dia que ja tens");
             }
