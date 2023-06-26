@@ -30,9 +30,8 @@
           <div class="uk-margin">
             <div class="uk-inline">
               <span class="uk-text-medium"
-                >Nombre de <b>minuts</b> que vols que t'afegixquen a la borsa
-                d'hores (has de posar el número de <b>minuts</b> multiplicat amb
-                els càlculs fets). Has de detallar correctament el càlcul sino
+                >Nombre de <b>minuts</b> que vols que t'afegisquen a la borsa
+                d'hores (has de posar el número de <b>minuts</b>. El sistema et mostra el càlcul). Has de detallar correctament per escrit el càlcul sino
                 se't denegarà la sol·licitud.</span
               ><br />
               <hr>

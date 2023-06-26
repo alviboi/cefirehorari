@@ -95,9 +95,13 @@ class VacancesController extends Controller
         $final = date_create(($year + 1) . "-12-31");
         $total = Vacances::where('data', '>', $inici)->where('data', '<', $final)->where("user_id","=",auth()->id())->count();
 
+        if (count($dies_a_afegir)<=0){
+            abort(403, "La data fi ha de ser superior a la d'inici");
+        }
+
         foreach ($dies_a_afegir as $key => $value) {
             # code...
-            $exist_vacances = Vacances::where('data', '=',$value)->first();
+            $exist_vacances = Vacances::where('data', '=',$value)->where('id','=',auth()->id())->first();
             if ($exist_vacances) {
                 abort(403, "Estàs demanant un dia que ja tens");
             }
