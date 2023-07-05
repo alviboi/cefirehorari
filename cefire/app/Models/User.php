@@ -113,6 +113,11 @@ class User extends Authenticatable
         return $this->hasOne('App\Models\BorsaHores');
     }
 
+    public function vacancespendents()
+    {
+        return $this->hasOne('App\Models\Vacancespendents');
+    }
+
     /**
      * The attributes that are mass assignable.
      *

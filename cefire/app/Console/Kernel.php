@@ -29,7 +29,11 @@ class Kernel extends ConsoleKernel
     {
         // $schedule->command('inspire')->hourly();
         $schedule->command("calcula:mesdeute")->monthly(); //Run the task on the first day of every month at 00:00
-        $schedule->command("borra:borsahores")->yearlyOn(8, 31, '00:00');
+        $schedule->command("borra:borsahores")->yearlyOn(8, 31, '00:01');
+        $schedule->command("vacances:gener")->yearlyOn(1, 1, '00:01');
+        $schedule->command("vacances:marc")->yearlyOn(3, 1, '00:01');
+
+
         //$schedule->command("calcula:mesdeute")->everyMinute();
     }
 

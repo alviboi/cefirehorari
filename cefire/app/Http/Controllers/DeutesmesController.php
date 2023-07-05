@@ -6,6 +6,7 @@ use App\Http\Requests\StoredeutesmesRequest;
 use App\Http\Requests\UpdatedeutesmesRequest;
 use App\Models\deutesmes;
 use App\Models\BorsaHores;
+use App\Models\Regcompensadeute;
 use Illuminate\Http\Request;
 
 class DeutesmesController extends Controller
@@ -152,6 +153,8 @@ class DeutesmesController extends Controller
 
         $deute = deutesmes::where("user_id", "=", auth()->id())->first();
 
+        
+
         if ($minuts < 0) {
             abort(413, "No pots demanar minuts negatius, només funciona en un sentit");
         }
@@ -164,6 +167,12 @@ class DeutesmesController extends Controller
         $borsa_hores->minuts = $borsa_hores->minuts - $minuts;
         $deute->save();
         $borsa_hores->save();
+
+        $registre = new Regcompensadeute();
+        $registre->minuts = $minuts;
+        $registre->user_id = auth()->id();
+        $registre->save();
+
 
         $ret['nou_deute_mes'] = $deute->minuts;
         $ret['nou_borsa_hores'] = $borsa_hores->minuts;

@@ -918,8 +918,16 @@ class UserController extends Controller
         $moscosos = $value->moscoso()->whereBetween('data', [$desde_any, $fins_any])->count();
 
 
-        $este['moscosos (any)'] = $moscosos . " de " . $value->moscosos . " cons";
-        $este['vacances (any)'] = $vacances . " de " . $value->vacances . " cons";
+        $moscosos_pendents = $value->vacancespendents()->first();
+        $vacances_pendents = $value->vacancespendents()->first();
+        //abort(413,$moscosos_pendents)->toArray();
+        if ($moscosos_pendents === null) { $moscosos_pendents_num=0;} else { $moscosos_pendents_num=$moscosos_pendents->dies_sobrants_moscosos; }
+        if ($vacances_pendents === null) { $vacances_pendents_num=0;} else { $vacances_pendents_num=$vacances_pendents->dies_sobrants_vacances; }
+
+
+
+        $este['moscosos (any)'] = $moscosos . " de " . $value->moscosos . " + (".$moscosos_pendents_num .") cons";
+        $este['vacances (any)'] = $vacances . " de" . $value->vacances . " + (".$vacances_pendents_num .") cons";
 
 
         $este['total'] = $este['fitxatge'] + $este['permís'] + $este['compensa'] /*Es suma perquè les està gaudint d'un excés que ha fet altre mes*/+ $este['curs'] + $este['com.serv.'] + $este['moscosos'] + $este['vacances'];

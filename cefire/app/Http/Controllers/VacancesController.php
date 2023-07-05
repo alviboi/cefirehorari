@@ -8,6 +8,8 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use App\Jobs\SendAvisvacances;
 use Carbon\Carbon;
+use App\Models\Vacancespendents;
+
 class VacancesController extends Controller
 {
     /**
@@ -106,8 +108,9 @@ class VacancesController extends Controller
                 abort(403, "Estàs demanant un dia que ja tens");
             }
         }
+        $dies_extra = Vacancespendents::where("user_id","=",auth()->id())->first();
 
-        if (($total+ count($dies_a_afegir)) > $vacances_total->vacances){
+        if (($total+ count($dies_a_afegir)) > ($vacances_total->vacances+$dies_extra->dies_sobrants_vacances)){
             abort(403, "Estàs passant-te dels dies que tens de vacances");
         } 
                

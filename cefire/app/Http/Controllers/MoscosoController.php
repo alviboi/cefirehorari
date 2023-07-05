@@ -67,8 +67,9 @@ class MoscosoController extends Controller
         $moscosos = User::where("id", "=", auth()->id())->first();
         $total = moscoso::where('data', '>', $inici)->where('data', '<', $final)->where("user_id", "=", auth()->id())->count();
 
+        $dies_extra = Vacancespendents::where("user_id","=",auth()->id())->first();  
 
-        if ($moscosos->moscosos <= $total) {
+        if (($moscosos->moscosos+$dies_extra->dies_sobrants_moscosos )<= $total) {
             abort(403, "Ja has consumit tots els moscosos");
         } else {
             $dat = new moscoso();
