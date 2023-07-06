@@ -110,7 +110,13 @@ class VacancesController extends Controller
         }
         $dies_extra = Vacancespendents::where("user_id","=",auth()->id())->first();
 
-        if (($total+ count($dies_a_afegir)) > ($vacances_total->vacances+$dies_extra->dies_sobrants_vacances)){
+        if ($dies_extra === null){
+            $dies_sobrants_vacances = 0;
+        } else {
+            $dies_sobrants_vacances = $dies_extra->dies_sobrants_vacances;
+        }
+
+        if (($total+ count($dies_a_afegir)) > ($vacances_total->vacances+$dies_sobrants_vacances)){
             abort(403, "Estàs passant-te dels dies que tens de vacances".($total+ count($dies_a_afegir))." ".($vacances_total->vacances+$dies_extra->dies_sobrants_vacances));
         } 
                
