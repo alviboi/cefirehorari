@@ -149,7 +149,7 @@ class BorsaSolicitudsController extends Controller
         $BorsaHores = new BorsaHoresController();
         $minuts_a_afegir_a_la_borsa = $request->minutsx2*2 + $request->minutsx25*2.5;
         $ret = $BorsaHores->crea($request->user_id, $minuts_a_afegir_a_la_borsa);
-        if ($ret > 0) {
+        if ($ret != -1) {
             $bs->aprobada = 1;
             $bs->save();
             return "La borsa ara és de " . $ret . " minuts.";

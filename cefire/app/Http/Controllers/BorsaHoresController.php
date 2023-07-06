@@ -105,7 +105,7 @@ class BorsaHoresController extends Controller
             $existeix->save();
             return $add;
         }
-        return 0;
+        return -1;
 
     }
 
