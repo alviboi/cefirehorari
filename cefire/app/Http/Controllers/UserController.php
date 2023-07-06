@@ -927,7 +927,7 @@ class UserController extends Controller
 
 
         $este['moscosos (any)'] = $moscosos . " de " . $value->moscosos . " + (".$moscosos_pendents_num .") cons";
-        $este['vacances (any)'] = $vacances . " de" . $value->vacances . " + (".$vacances_pendents_num .") cons";
+        $este['vacances (any)'] = $vacances . " de " . $value->vacances . " + (".$vacances_pendents_num .") cons";
 
 
         $este['total'] = $este['fitxatge'] + $este['permís'] + $este['compensa'] /*Es suma perquè les està gaudint d'un excés que ha fet altre mes*/+ $este['curs'] + $este['com.serv.'] + $este['moscosos'] + $este['vacances'];

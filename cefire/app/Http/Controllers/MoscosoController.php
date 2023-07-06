@@ -10,6 +10,7 @@ use App\Models\moscoso;
 use App\Models\User;
 use App\Jobs\SendAvismoscosos;
 use Carbon\Carbon;
+use App\Models\Vacancespendents;
 
 class MoscosoController extends Controller
 {

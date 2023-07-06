@@ -90,7 +90,7 @@ class VacancespendentsController extends Controller
 
     public function gener() {
         //Vacancespendents::truncate();
-        $any = date("Y");
+        $any = date("Y")-1;
         $inici = date($any . "-1-1");
         $fi = date($any . "-12-31");
         $user = User::get();
