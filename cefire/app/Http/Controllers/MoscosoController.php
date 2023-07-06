@@ -70,7 +70,13 @@ class MoscosoController extends Controller
 
         $dies_extra = Vacancespendents::where("user_id","=",auth()->id())->first();  
 
-        if (($moscosos->moscosos+$dies_extra->dies_sobrants_moscosos )<= $total) {
+        if ($dies_extra === null){
+            $dies_sobrants_moscosos = 0;
+        } else {
+            $dies_sobrants_moscosos = $dies_extra->dies_sobrants_vacances;
+        }
+
+        if (($moscosos->moscosos+$dies_sobrants_moscosos )<= $total) {
             abort(403, "Ja has consumit tots els moscosos");
         } else {
             $dat = new moscoso();
