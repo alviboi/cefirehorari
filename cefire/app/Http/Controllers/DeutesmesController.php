@@ -135,11 +135,7 @@ class DeutesmesController extends Controller
         $deute = deutesmes::where("user_id", "=", $user_id)->first();
         if ($deute) {
             $afig = $deute->minuts + $minuts;
-            if ($afig > 0) {
-                $deute->minuts = 0;
-            } else {
-                $deute->minuts = $afig;
-            }
+            $deute->minuts = $afig;
             $deute->save();
         }
         return;
