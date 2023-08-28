@@ -767,8 +767,10 @@ class UserController extends Controller
                 }
             if ($ix){
                 if ($value >= $data_15_oct || $value <= $data_15_mai) {
+                    $total_dia = (27900 / 60);
                     $total_mes += (27900 / 60);
                 } else {
+                    $total_dia = (26100 / 60);
                     $total_mes += (26100 / 60);
                 }
 
@@ -789,7 +791,7 @@ class UserController extends Controller
 
         $vacances = new VacancesController();
         //VacancesController
-
+        
 
         $inici = date($any . "-" . $mes . "-01");
         $fi = date("Y-m-t", strtotime($inici));
@@ -804,7 +806,7 @@ class UserController extends Controller
         $total_dies = count($dates);
         $usuaris = User::orderBy('name', 'ASC')->get();
 
-
+        $ix=1;
         $este = array();
         $a = array();
 
@@ -848,14 +850,16 @@ class UserController extends Controller
                         $total_dia = (26100 / 60);
                     }
                 }
-            if ($ix){
-                if ($value >= $data_15_oct || $value <= $data_15_mai) {
-                    $total_mes += (27900 / 60);
-                } else {
-                    $total_mes += (26100 / 60);
-                }
+                if ($ix){
+                    if ($value >= $data_15_oct || $value <= $data_15_mai) {
+                        $total_dia = (27900 / 60);
+                        $total_mes += (27900 / 60);
+                    } else {
+                        $total_dia = (26100 / 60);
+                        $total_mes += (26100 / 60);
+                    }
 
-            }
+                }
  
         }
 
@@ -897,6 +901,7 @@ class UserController extends Controller
         } else {
             $este['moscosos'] = $value->moscoso()->whereBetween('data', [$inici, $fi])->count() * $total_dia;
             $este['vacances'] = $value->vacances()->whereBetween('data', [$inici, $fi])->count() * $total_dia;
+            
         }
         $deutesmes = $value->deutesmes()->first();
         if ($deutesmes) {
@@ -1088,8 +1093,10 @@ class UserController extends Controller
                 }
             if ($ix){
                 if ($value >= $data_15_oct || $value <= $data_15_mai) {
+                    $total_dia = (27900 / 60);
                     $total_mes += (27900 / 60);
                 } else {
+                    $total_dia = (26100 / 60);
                     $total_mes += (26100 / 60);
                 }
 
