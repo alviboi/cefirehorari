@@ -891,16 +891,16 @@ class UserController extends Controller
         $este['com.serv.'] = intval($value->visita()->select(DB::raw('SUM(TIME_TO_SEC(TIMEDIFF(fi,inici))/60) as total'))->whereBetween('data', [$inici, $fi])->first()['total']);
 
         if ($mes == 5 || $mes == 10) {
-            $mosc1 = $value->moscoso()->whereBetween('data', [$any . "-" . $mes . "-01", $any . "-" . $mes . "-15"])->count() * (26100 / 60);
-            $vac1 = $value->vacances()->whereBetween('data', [$any . "-" . $mes . "-01", $any . "-" . $mes . "-15"])->count() * (26100 / 60);
-            $mosc2 = $value->moscoso()->whereBetween('data', [$any . "-" . $mes . "-16", date("Y-m-t", strtotime($any . "-" . $mes . "-16"))])->count() * (27900 / 60);
-            $vac2 = $value->vacances()->whereBetween('data', [$any . "-" . $mes . "-16", date("Y-m-t", strtotime($any . "-" . $mes . "-16"))])->count() * (27900 / 60);
+            $mosc1 = $value->moscoso()->whereBetween('data', [$any . "-" . $mes . "-01", $any . "-" . $mes . "-15"])->count() * ((26100 / 60) - $value->reduccio * 60);
+            $vac1 = $value->vacances()->whereBetween('data', [$any . "-" . $mes . "-01", $any . "-" . $mes . "-15"])->count() * ((26100 / 60) - $value->reduccio * 60);
+            $mosc2 = $value->moscoso()->whereBetween('data', [$any . "-" . $mes . "-16", date("Y-m-t", strtotime($any . "-" . $mes . "-16"))])->count() * ((27900 / 60) - $value->reduccio * 60);
+            $vac2 = $value->vacances()->whereBetween('data', [$any . "-" . $mes . "-16", date("Y-m-t", strtotime($any . "-" . $mes . "-16"))])->count() * ((27900 / 60) - $value->reduccio * 60);
             $este['moscosos'] = $mosc1 + $mosc2;
             $este['vacances'] = $vac1 + $vac2;
 
         } else {
-            $este['moscosos'] = $value->moscoso()->whereBetween('data', [$inici, $fi])->count() * $total_dia;
-            $este['vacances'] = $value->vacances()->whereBetween('data', [$inici, $fi])->count() * $total_dia;
+            $este['moscosos'] = $value->moscoso()->whereBetween('data', [$inici, $fi])->count() * ($total_dia - $value->reduccio * 60);
+            $este['vacances'] = $value->vacances()->whereBetween('data', [$inici, $fi])->count() * ($total_dia - $value->reduccio * 60);
             
         }
         $deutesmes = $value->deutesmes()->first();
