@@ -177,5 +177,10 @@ class DeutesmesController extends Controller
 
     }
 
+    public function afegix_minuts_admin (Request $request) {
+        $a = $this->afegix_deutes_mes($request->id,$request->minuts);
+        return "L'assessor/a ara té ".$a." minuts a la borsa";
+    }
+
 
 }

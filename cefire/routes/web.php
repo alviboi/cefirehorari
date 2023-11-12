@@ -30,7 +30,9 @@ if (Schema::hasTable('control')) {
     }
 }
 
-
+// Route::get('/login', function () {
+//     return view('login');
+// })->name('login');
 
 Route::get('/', function () {
     return view('welcome');
@@ -117,6 +119,7 @@ Route::post('validavisita', 'visitaController@validavisita')->middleware('can:es
 Route::post('borsasolicitudsvalida', 'BorsaSolicitudsController@borsasolicitudsvalida')->middleware('can:esAdmin'); //NOU
 
 
+Route::post('afegix_minuts_admin', 'DeutesmesController@afegix_minuts_admin')->middleware('can:esAdmin'); //NOU
 
 
 
@@ -156,3 +159,6 @@ Route::group(['middleware' => 'auth'], function () {
         'horariespecial' => HorariespecialController::class,
     ]);
 });
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

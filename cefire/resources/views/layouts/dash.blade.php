@@ -13,7 +13,7 @@
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="css/dashboard.css">
     <script>
-        var missatges = {{ $conta }};
+        var missatges = {{ $conta ?? '' }};
     </script>
 
 </head>
@@ -106,7 +106,7 @@
                             <li><a class="uk-navbar-dropdown-close" class="uk-navbar-toggle uk-inline" data-uk-toggle
                                     data-uk-navbar-toggle-icon href="#offcanvas-nav" title="Missatge rebuts"
                                     data-uk-tooltip>
-                                    @if ($conta > 0)
+                                    @if ($conta ?? '' > 0)
                                         <span class="uk-badge uk-position-top-right"
                                             style="background-color: red; margin-top: 5px;"><b>?</b></span>
                                     @endif
