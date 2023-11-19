@@ -49,7 +49,7 @@ Route::get('/clear-cache', function () {
 Route::view('/consultacentres', 'centres')->name('centresconsulta');
 
 
-Route::get('/home', 'UserController@home')->name('casa')->middleware('auth');
+Route::get('/home', 'UserController@home')->middleware('auth');
 
 Route::get('/logat', 'UserController@logat')->middleware('auth');
 Route::get('/logat_id', 'UserController@logat_id')->middleware('auth');

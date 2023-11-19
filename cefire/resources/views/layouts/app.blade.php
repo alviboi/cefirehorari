@@ -23,7 +23,7 @@
                         @if (Auth::check())
                         <ul class="uk-navbar-nav">
                                 <li>
-                                    <a href="{{ route('casa') }}"><i class="fa fa-cog fa-2x" aria-hidden="true"></i></a>
+                                    <a href="/home"><i class="fa fa-cog fa-2x" aria-hidden="true"></i></a>
                                 </li>
                         </ul>
                         @endif

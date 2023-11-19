@@ -89,13 +89,21 @@ class VacancesController extends Controller
     public function store(Request $request)
     {
         //
+        $dies_sobrants_vacances = 0;
         $year = date("Y");        
         $dies_a_afegir = $this->getWorkingDays($request->dia_inici,$request->dia_fi);
         $vacances_total=User::where("id","=",auth()->id())->first();
         $str = $year . "-1-1";
         $inici = date_create($str);
-        $final = date_create(($year + 1) . "-12-31");
-        $total = Vacances::where('data', '>', $inici)->where('data', '<', $final)->where("user_id","=",auth()->id())->count();
+        $final = date_create(($year) . "-12-31"); //$yer tenia un +1 i no entenc perqué
+        // Canvia ací
+        //$total = Vacances::where('data', '>', $inici)->where('data', '<', $final)->where("user_id","=",auth()->id())->count();
+        $fins_any2 = date_create(($year + 1) . "-03-01");
+        //abort(403,var_dump($fins_any2));
+        // Es calcula vacances demanades en l'any anterior
+        $total = Vacances::whereBetween('data',[$inici, $fins_any2])->where('created_at','>',$inici)->where('created_at','<',$final)->where("user_id","=",auth()->id())->count();
+
+        //$vacances = $value->vacances()->where('created_at','>',$desde_any)->where('created_at','<',$fins_any)->whereBetween('data', [$desde_any, $fins_any2])->count();
 
         if (count($dies_a_afegir)<=0){
             abort(403, "La data fi ha de ser superior a la d'inici");
@@ -110,14 +118,14 @@ class VacancesController extends Controller
         }
         $dies_extra = Vacancespendents::where("user_id","=",auth()->id())->first();
 
-        if ($dies_extra === null){
+        if ($dies_extra === null || $dies_extra->isEmpty()){
             $dies_sobrants_vacances = 0;
         } else {
             $dies_sobrants_vacances = $dies_extra->dies_sobrants_vacances;
         }
 
         if (($total+ count($dies_a_afegir)) > ($vacances_total->vacances+$dies_sobrants_vacances)){
-            abort(403, "Estàs passant-te dels dies que tens de vacances".($total+ count($dies_a_afegir))." ".($vacances_total->vacances+$dies_extra->dies_sobrants_vacances));
+            abort(403, "Estàs passant-te dels dies que tens de vacances ".($total+ count($dies_a_afegir))." de ".($vacances_total->vacances+$dies_sobrants_vacances));
         } 
                
         foreach ($dies_a_afegir as $key => $value) {

@@ -900,6 +900,7 @@ class UserController extends Controller
 
         } else {
             $este['moscosos'] = $value->moscoso()->whereBetween('data', [$inici, $fi])->count() * ($total_dia - $value->reduccio * 60);
+            
             $este['vacances'] = $value->vacances()->whereBetween('data', [$inici, $fi])->count() * ($total_dia - $value->reduccio * 60);
             
         }
@@ -913,7 +914,14 @@ class UserController extends Controller
         
         //$este['deute mes concret'] = $this->calcula_deutes_mes_usuari_i_mes($value->id, $mes, $any);
 
-        $vacances = $value->vacances()->whereBetween('data', [$desde_any, $fins_any])->count();
+
+        //$vacances = $value->vacances()->whereBetween('data', [$desde_any, $fins_any])->count();
+        //tema càlcul de estadística, ja que conten fins 3 mesos després
+        $fins_any2 = date('Y-m-d', strtotime('+3 month' , strtotime(date($fins_any))));
+       
+
+        $vacances = $value->vacances()->where('created_at','>',$desde_any)->where('created_at','<',$fins_any)->whereBetween('data', [$desde_any, $fins_any2])->count();
+        //2023-11-19 10:18:48
         $borsahores = $value->borsahores()->first();
         if ($borsahores) {
             $este['borsa hores'] = $borsahores->minuts . " min";
