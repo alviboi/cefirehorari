@@ -111,10 +111,16 @@ class VacancesController extends Controller
 
         foreach ($dies_a_afegir as $key => $value) {
             # code...
+            if (date_create($value) > date_create(($year+1)."-03-01")){
+                abort(403, "No pots demanar este dia de vacances");
+            }
+
+
             $exist_vacances = Vacances::where('data','=',$value)->where('user_id','=',auth()->id())->first();
             if ($exist_vacances) {
                 abort(403, "Estàs demanant un dia que ja tens");
             }
+            
         }
         $dies_extra = Vacancespendents::where("user_id","=",auth()->id())->first();
 

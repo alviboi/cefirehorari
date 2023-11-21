@@ -110,10 +110,8 @@ class VacancespendentsController extends Controller
             //$vacances_consumides = $value->vacances()->whereBetween('data', [$inici, $fi])->count();
             $fins_any2 = date_create(($any + 1) . "-03-01");
             $vacances_consumides = $value->vacances()->where('created_at','>',$inici)->where('created_at','<',$fi)->whereBetween('data', [$inici, $fins_any2])->count();
-
-            
-
-            $moscosos_consumits = $value->moscoso()->whereBetween('data', [$inici, $fi])->count();
+            //$moscosos_consumits = $value->moscoso()->whereBetween('data', [$inici, $fi])->count();
+            $moscosos_consumits = $value->moscoso()->where('created_at','>',$inici)->where('created_at','<',$fi)->whereBetween('data', [$inici, $fins_any2])->count();
 
             $vacances_restants = ($value->vacances+$control_vacances->dies_sobrants_vacances) - $vacances_consumides;
             $moscosos_restants = ($value->moscosos+$control_vacances->dies_sobrants_moscosos) - $moscosos_consumits;

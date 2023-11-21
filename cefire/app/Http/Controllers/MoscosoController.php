@@ -63,6 +63,10 @@ class MoscosoController extends Controller
         $year = date("Y");
         $str = $year . "-1-1";
 
+        if (date_create($request->data) > date_create(($year+1)."-03-01")){
+            abort(403, "No pots demanar este dia de moscós");
+        }
+
         $inici = date_create($str);
         $final = date_create(($year + 1) . "-12-31");
         $moscosos = User::where("id", "=", auth()->id())->first();

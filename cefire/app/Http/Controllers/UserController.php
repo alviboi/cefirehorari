@@ -916,11 +916,18 @@ class UserController extends Controller
 
 
         //$vacances = $value->vacances()->whereBetween('data', [$desde_any, $fins_any])->count();
-        //tema càlcul de estadística, ja que conten fins 3 mesos després
-        $fins_any2 = date('Y-m-d', strtotime('+3 month' , strtotime(date($fins_any))));
-       
+        //        $moscosos = $value->moscoso()->whereBetween('data', [$desde_any, $fins_any])->count();
 
+        //tema càlcul de estadística, ja que conten fins 3 mesos després
+
+        $fins_any2 = date('Y-m-d', strtotime('+3 month' , strtotime(date($fins_any))));
         $vacances = $value->vacances()->where('created_at','>',$desde_any)->where('created_at','<',$fins_any)->whereBetween('data', [$desde_any, $fins_any2])->count();
+        $moscosos = $value->moscoso()->where('created_at','>',$desde_any)->where('created_at','<',$fins_any)->whereBetween('data', [$desde_any, $fins_any2])->count();
+
+        
+        
+        
+        
         //2023-11-19 10:18:48
         $borsahores = $value->borsahores()->first();
         if ($borsahores) {
@@ -928,7 +935,6 @@ class UserController extends Controller
         } else {
             $este['borsa hores'] = 0;
         }
-        $moscosos = $value->moscoso()->whereBetween('data', [$desde_any, $fins_any])->count();
 
 
         $moscosos_pendents = $value->vacancespendents()->first();
