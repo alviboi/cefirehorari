@@ -19,13 +19,16 @@ use App\Models\control;
 
 //Comprovem si el registre està habilitat per a mostrar-se o no, comprovem també si la taula existeix ja que quan corres
 //l'artisan per primera vegada llig el web.php i dona un error si control no existeix.
+//View::share('title', 'My Title Here');
+
 
 if (Schema::hasTable('control')) {
     if (control::where("registra", "=", 1)->exists()) {
         Auth::routes();
     } else {
+        $registra = false;
         Auth::routes([
-            'register' => false
+            'register' => false,
         ]);
     }
 }
@@ -33,6 +36,12 @@ if (Schema::hasTable('control')) {
 // Route::get('/login', function () {
 //     return view('login');
 // })->name('login');
+
+$data = array(
+    'title' => 'Home',
+    'otherData' => 'Data Here'
+);
+
 
 Route::get('/', function () {
     return view('welcome');
@@ -89,7 +98,7 @@ Route::get('/dia_guardia/{dia}', 'UserController@dia_guardia')->name('dia_guardi
 Route::get('/dia_permis/{dia}', 'UserController@dia_permis')->name('dia_permis')->middleware('auth');
 Route::get('/dia_incidencies/{dia}', 'UserController@dia_incidencies')->name('dia_incidencies')->middleware('auth');
 Route::get('/dia_moscosos/{dia}', 'UserController@dia_moscoso')->name('dia_moscoso')->middleware('auth');
-Route::get('/dia_vacances/{dia}', 'UserController@dia_vacances')->name('dia_moscoso')->middleware('auth');
+Route::get('/dia_vacances/{dia}', 'UserController@dia_vacances')->name('dia_vacances')->middleware('auth');
 
 Route::get('/dia_tot/{dia}', 'UserController@dia_tot')->name('dia_tot')->middleware('auth');
 
@@ -159,6 +168,10 @@ Route::group(['middleware' => 'auth'], function () {
         'horariespecial' => HorariespecialController::class,
     ]);
 });
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

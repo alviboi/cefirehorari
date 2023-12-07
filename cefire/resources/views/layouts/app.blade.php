@@ -37,7 +37,7 @@
                                         <a href="{{ route('login') }}">Entra</a>
                                     </li>
                                 @endif
-                                @if (Route::has('register'))
+                                @if (\App\Models\control::all()[0]->registra)
                                     <li>
                                         <a href="{{ route('register') }}">Registra't</a>
                                     </li>
