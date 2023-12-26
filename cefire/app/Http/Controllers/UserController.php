@@ -637,77 +637,7 @@ class UserController extends Controller
 
     public function get_statistics()
     {
-        // $ret = array();
-        // //$labels=['cefire','permis','curs','visita'];
-        // $year = date('Y');
-        // $mes = date('m');
-        // $desde = date($year . "-" . $mes . "-1");
-        // $fins = date($year . "-" . $mes . "-t");
-
-        // $desde_any = date($year . "-1-1");
-        // $fins_any = date($year . "-12-31");
-
-
-        // $cefire = user::find(auth()->id())->cefire()->whereBetween('data', [$desde, $fins])->where('fi','!=','00:00:00')->get();
-        // $permis = user::find(auth()->id())->permis()->whereBetween('data', [$desde, $fins])->get();
-        // $compensa = user::find(auth()->id())->compensa()->whereBetween('data', [$desde, $fins])->get();
-        // $curs = user::find(auth()->id())->curs()->whereBetween('data', [$desde, $fins])->get();
-        // $visita = user::find(auth()->id())->visita()->whereBetween('data', [$desde, $fins])->get();
-        // $moscosos = user::find(auth()->id())->moscoso()->whereBetween('data', [$desde_any, $fins_any])->count();
-        // $vacances = user::find(auth()->id())->vacances()->whereBetween('data', [$desde_any, $fins_any])->count();
-        // $borsahores = user::find(auth()->id())->borsahores()->first()->minuts;
-        // $deutesmes = user::find(auth()->id())->deutesmes()->first()->minuts;
-
-
-        // $total_cef = 0;
-        // foreach ($cefire as $cef) {
-        //     $duration = $cef->inici->diffInMinutes($cef->fi);
-        //     $total_cef = $total_cef + $duration;
-        // }
-        // $cefire_count = user::find(auth()->id())->cefire()->where('fi','!=','00:00:00')->whereBetween('data', [$desde, $fins])->count();
-        // $ret['fitxatges'] = $total_cef . " minuts" . "(" . $cefire_count . " dies)";
-        // $total_per = 0;
-        // foreach ($permis as $perm) {
-        //     $in = Carbon::parse($perm->inici);
-        //     $fi = Carbon::parse($perm->fi);
-        //     $duration = $in->diffInMinutes($fi);
-        //     $total_per = $total_per + $duration;
-        // }
-        // $ret['permís'] = $total_per . " minuts";
-        // $total_comp = 0;
-        // foreach ($compensa as $comp) {
-        //     $in = Carbon::parse($comp->inici);
-        //     $fi = Carbon::parse($comp->fi);
-        //     $duration = $in->diffInMinutes($fi);
-        //     $total_comp = $total_comp + $duration;
-        // }
-        // $ret['compensa'] = $total_comp . " minuts";
-        // $total_curs = 0;
-        // foreach ($curs as $cu) {
-        //     $in = Carbon::parse($cu->inici);
-        //     $fi = Carbon::parse($cu->fi);
-        //     $duration = $in->diffInMinutes($fi);
-        //     $total_curs = $total_curs + $duration;
-        // }
-        // $ret['curs'] = $total_curs . " minuts";
-        // $total_visita = 0;
-        // foreach ($visita as $vi) {
-        //     $in = Carbon::parse($vi->inici);
-        //     $fi = Carbon::parse($vi->fi);
-        //     $duration = $in->diffInMinutes($fi);
-        //     $total_visita = $total_visita + $duration;
-        // }
-        // $ret['Com. Serv.'] = $total_visita . " minuts";
-
-        // $user = User::find(auth()->id());
-        // $ret['moscosos (any)'] = $moscosos . " de " . $user->moscosos . " consumits";
-        // $ret['vacances (any)'] = $vacances . " de " . $user->vacances . " consumits";
-        // $ret['borsa hores'] = $borsahores . " minuts";
-        // if($deutesmes<0){
-        //     $ret['deute anterior'] = $deutesmes . " minuts";
-        // }
-        // $ret['TOTAL TEMPS'] = ($total_visita + $total_curs + $total_cef + $total_per + $total_comp) . " minuts";
-        /****************************************************************************TODO: */
+        
         $vacances_con = new VacancesController();
         //VacancesController
 
@@ -730,32 +660,18 @@ class UserController extends Controller
 
 
         $total_mes = 0;
-        // foreach ($dates as $key => $value) {
-        //     # code...
-        //     if ($value >= $data_15_oct || $value <= $data_15_mai) {
-        //         $total_mes += (27900 / 60);
-        //     } else {
-        //         $total_mes += (26100 / 60);
-        //     }
-
-        // }
-
-        // if ($data_hui >= $data_15_oct || $data_hui <= $data_15_mai) {
-        //     $total_dia = (27900 / 60);
-        // } else {
-        //     $total_dia = (26100 / 60);
-        // }
+       
         $ix=1;
         $total_dia=0;
         $horari_especial = new HorariespecialController();
         $dates_especials_arr = $horari_especial->index_en_dif();
-            foreach ($dates as $key => $value) {
+        foreach ($dates as $key => $value) {
             # code...
                 foreach ($dates_especials_arr as $key2 => $value2) {
                     $ix = 1;
                     # code...
                     if ($value2["dia"] == $value){
-                        $total_dia = $value2['total'];
+                        //$total_dia = $value2['total'];
                         $total_mes += $value2['total'];
                         $ix = 0;
                         break;
@@ -890,6 +806,8 @@ class UserController extends Controller
         $este['curs'] = intval($value->curs()->select(DB::raw('SUM(TIME_TO_SEC(TIMEDIFF(fi,inici))/60) as total'))->whereBetween('data', [$inici, $fi])->first()['total']);
         $este['com.serv.'] = intval($value->visita()->select(DB::raw('SUM(TIME_TO_SEC(TIMEDIFF(fi,inici))/60) as total'))->whereBetween('data', [$inici, $fi])->first()['total']);
 
+
+        
         if ($mes == 5 || $mes == 10) {
             $mosc1 = $value->moscoso()->whereBetween('data', [$any . "-" . $mes . "-01", $any . "-" . $mes . "-15"])->count() * ((26100 / 60) - $value->reduccio * 60);
             $vac1 = $value->vacances()->whereBetween('data', [$any . "-" . $mes . "-01", $any . "-" . $mes . "-15"])->count() * ((26100 / 60) - $value->reduccio * 60);
@@ -904,6 +822,30 @@ class UserController extends Controller
             $este['vacances'] = $value->vacances()->whereBetween('data', [$inici, $fi])->count() * ($total_dia - $value->reduccio * 60);
             
         }
+
+
+        $horari_especial = new HorariespecialController();
+        $dates_especials_arr = $horari_especial->index_en_dif();
+
+        $restar_especial = 0;
+        foreach ($dates_especials_arr as $key2 => $value2) {
+            # code...
+            $mes_espc_dia = date('F', strtotime($value2["dia"]));
+            if ($mes_espc_dia == $mes){
+                //$total_dia = $value2['total'];
+                $restar_especial += $total_dia - $value2['total'];
+            } 
+        }
+ 
+        
+
+
+
+
+
+
+
+
         $deutesmes = $value->deutesmes()->first();
         if ($deutesmes) {
             $a = $deutesmes->minuts;
@@ -952,7 +894,7 @@ class UserController extends Controller
         $este['total'] = $este['fitxatge'] + $este['permís'] + $este['compensa'] /*Es suma perquè les està gaudint d'un excés que ha fet altre mes*/+ $este['curs'] + $este['com.serv.'] + $este['moscosos'] + $este['vacances'];
 
 
-        $este['diferència'] = ($este['total']) - $total_mes + ($value->reduccio * 60 * $total_dies); //El total dels dies del mes multiplicat per 60
+        $este['diferència'] = ($este['total']) - $restar_especial - $total_mes + ($value->reduccio * 60 * $total_dies); //El total dels dies del mes multiplicat per 60
         return $este;
     }
 
