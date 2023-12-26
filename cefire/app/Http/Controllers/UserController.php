@@ -824,18 +824,18 @@ class UserController extends Controller
         }
 
 
-        $horari_especial = new HorariespecialController();
-        $dates_especials_arr = $horari_especial->index_en_dif();
+        // $horari_especial = new HorariespecialController();
+        // $dates_especials_arr = $horari_especial->index_en_dif();
 
-        $restar_especial = 0;
-        foreach ($dates_especials_arr as $key2 => $value2) {
-            # code...
-            $mes_espc_dia = date('F', strtotime($value2["dia"]));
-            if ($mes_espc_dia == $mes){
-                //$total_dia = $value2['total'];
-                $restar_especial += $total_dia - $value2['total'];
-            } 
-        }
+        // $restar_especial = 0;
+        // foreach ($dates_especials_arr as $key2 => $value2) {
+        //     # code...
+        //     $mes_espc_dia = date('F', strtotime($value2["dia"]));
+        //     if ($mes_espc_dia == $mes){
+        //         //$total_dia = $value2['total'];
+        //         $restar_especial += $total_dia - $value2['total'];
+        //     } 
+        // }
  
         
 
@@ -894,7 +894,7 @@ class UserController extends Controller
         $este['total'] = $este['fitxatge'] + $este['permís'] + $este['compensa'] /*Es suma perquè les està gaudint d'un excés que ha fet altre mes*/+ $este['curs'] + $este['com.serv.'] + $este['moscosos'] + $este['vacances'];
 
 
-        $este['diferència'] = ($este['total']) - $restar_especial - $total_mes + ($value->reduccio * 60 * $total_dies); //El total dels dies del mes multiplicat per 60
+        $este['diferència'] = ($este['total']) - $total_mes + ($value->reduccio * 60 * $total_dies); //El total dels dies del mes multiplicat per 60
         return $este;
     }
 
