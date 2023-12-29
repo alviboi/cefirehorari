@@ -824,24 +824,93 @@ class UserController extends Controller
         }
 
 
-        // $horari_especial = new HorariespecialController();
-        // $dates_especials_arr = $horari_especial->index_en_dif();
+        $horari_especial = new HorariespecialController();
+        $dates_especials_arr = $horari_especial->get_data();
+        $horari_especial_dif = $horari_especial->index_en_dif();
 
-        // $restar_especial = 0;
-        // foreach ($dates_especials_arr as $key2 => $value2) {
-        //     # code...
-        //     $mes_espc_dia = date('F', strtotime($value2["dia"]));
-        //     if ($mes_espc_dia == $mes){
-        //         //$total_dia = $value2['total'];
-        //         $restar_especial += $total_dia - $value2['total'];
-        //     } 
-        // }
- 
+        $esp = array();
         
 
 
+        $esp['fitxatge'] = $value->cefire()->whereBetween('data', [$inici, $fi])->whereIn('data',$dates_especials_arr)->where('fi', '!=', '00:00:00')->get();
+        $esp['permís'] = $value->permis()->whereBetween('data', [$inici, $fi])->whereIn('data',$dates_especials_arr)->get();
+        $esp['compensa'] = $value->compensa()->whereBetween('data', [$inici, $fi])->whereIn('data',$dates_especials_arr)->get();
+        $esp['curs'] = $value->curs()->whereBetween('data', [$inici, $fi])->whereIn('data',$dates_especials_arr)->get();
+        $esp['com.serv.'] = $value->visita()->whereBetween('data', [$inici, $fi])->whereIn('data',$dates_especials_arr)->get();
+        $esp['moscosos'] = $value->moscoso()->whereBetween('data', [$inici, $fi])->whereIn('data',$dates_especials_arr)->get();
+        $esp['vacances'] = $value->vacances()->whereBetween('data', [$inici, $fi])->whereIn('data', $dates_especials_arr)->get();
+        
+        $canvi_vacances=0;
+        $canvi_moscosos=0;
+        $canvi_com=0;
+        $canvi_curs=0;
+        $canvi_compensa=0;
+        $canvi_permis=0;
+        $canvi_fitxatge=0;
 
+        # Ajusta els valors de la estadística dels tags que són dies sencers i en permís (per si algú posa més) a l'horari especials
 
+        foreach ($horari_especial_dif as $key => $value1) {
+            # code...
+            for ($i=0; $i < sizeof($esp['vacances']); $i++) { 
+                # code...
+                if($esp['vacances'][$i]['data'] == $value1['dia']){
+                    $canvi_vacances += $total_dia-$value1['total'];
+                }
+            }
+
+            for ($i=0; $i < sizeof($esp['moscosos']); $i++) { 
+                # code...
+                if($esp['moscosos'][$i]['data'] == $value1['dia']){
+                    $canvi_moscosos += $total_dia-$value1['total'];
+                }
+            }
+
+            // for ($i=0; $i < sizeof($esp['com.serv.']); $i++) { 
+            //     # code...
+            //     if($esp['com.serv.'][$i]['data'] == $value1['dia']){
+            //         $canvi_com += $total_dia-$value1['total'];
+            //     }
+            // }
+
+            // for ($i=0; $i < sizeof($esp['curs']); $i++) { 
+            //     # code...
+            //     if($esp['curs'][$i]['data'] == $value1['dia']){
+            //         $canvi_curs += $total_dia-$value1['total'];
+            //     }
+            // }
+
+            // for ($i=0; $i < sizeof($esp['compensa']); $i++) { 
+            //     # code...
+            //     if($esp['compensa'][$i]['data'] == $value1['dia']){
+            //         $canvi_compensa += $total_dia-$value1['total'];
+            //     }
+            // }
+
+            for ($i=0; $i < sizeof($esp['permís']); $i++) { 
+                # code...
+                if($esp['permís'][$i]['data'] == $value1['dia']){
+                    $canvi_permis += $total_dia-$value1['total'];
+                }
+            }
+
+            // for ($i=0; $i < sizeof($esp['fitxatge']); $i++) { 
+            //     # code...
+            //     if($esp['fitxatge'][$i]['data'] == $value1['dia']){
+            //         $canvi_fitxatge += $total_dia-$value1['total'];
+            //     }
+            // }
+        }
+
+        //abort(403,"Dia ".$canvi_vacances);
+
+        $este['vacances'] -= $canvi_vacances;
+        $este['moscosos'] -= $canvi_moscosos;
+        $este['com.serv.'] -= $canvi_com;
+        $este['curs'] -= $canvi_curs;
+        $este['compensa'] -= $canvi_compensa;
+        $este['permís'] -= $canvi_permis;
+        $este['fitxatge'] -= $canvi_fitxatge;
 
 
 

@@ -114,4 +114,15 @@ class HorariespecialController extends Controller
         return "Borrat";
 
     }
+
+    # Funcion para coger solo la columna data de la tabla horariespecial
+
+    public function get_data()
+    {
+        //
+        $ret = horariespecial::select('data')->get();
+        return $ret->toArray();
+    }
+
+
 }
