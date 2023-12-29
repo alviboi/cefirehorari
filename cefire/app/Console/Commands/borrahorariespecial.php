@@ -1,25 +1,26 @@
 <?php
 
 namespace App\Console\Commands;
+use App\Http\Controllers\HorariespecialController;
 
-use App\Http\Controllers\VacancespendentsController;
+
 use Illuminate\Console\Command;
 
-class vacancesgener extends Command
+class borrahorariespecial extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'vacances:gener';
+    protected $signature = 'borra:horariespecial';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = 'Borra horaries especials de la taula horariesespecials de la base de dades cefire';
 
     /**
      * Create a new command instance.
@@ -38,8 +39,10 @@ class vacancesgener extends Command
      */
     public function handle()
     {
-        $deute = new VacancespendentsController();
-        $deute->gener();
+
+        #Borra taula horari especial
+        $horariespecial = new HorariespecialController();
+        $horariespecial->borra_horari_especial();
         return 0;
     }
 }

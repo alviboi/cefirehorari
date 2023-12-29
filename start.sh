@@ -8,5 +8,5 @@ cd ./laradock
 
  sudo docker-compose up -d nginx mysql phpmyadmin php-worker
 # sudo docker-compose exec workspace bash /var/www/instalar.sh
-sudo docker-compose exec workspace bash
+sudo docker-compose exec --user=laradock workspace bash
 

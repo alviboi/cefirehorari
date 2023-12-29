@@ -124,5 +124,10 @@ class HorariespecialController extends Controller
         return $ret->toArray();
     }
 
+    public function borraborsa()
+    {
+        horariespecial::truncate();
+        return 1;
+    }
 
 }
