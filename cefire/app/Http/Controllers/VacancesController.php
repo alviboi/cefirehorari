@@ -124,7 +124,7 @@ class VacancesController extends Controller
         }
         $dies_extra = Vacancespendents::where("user_id","=",auth()->id())->first();
 
-        if ($dies_extra === null || $dies_extra->isEmpty()){
+        if ($dies_extra === null){
             $dies_sobrants_vacances = 0;
         } else {
             $dies_sobrants_vacances = $dies_extra->dies_sobrants_vacances;
@@ -189,6 +189,21 @@ class VacancesController extends Controller
         $vac = Vacances::where("id","=",$id)->first();
         $data = date($vac->data);
         $data_hui = date("Y-m-d");
+        $any=date("Y");
+
+
+        // if (date_create($vac->created_at) < date_create(($any) . "-01-01")){
+        //     abort(403,"No pots borrar aquestes vacances, les demanares l'any passat");
+        // } else {
+        //     abort(403,var_dump(date_create(($any) . "-01-01")));
+        // }
+        
+
+
+        if (date_create($vac->created_at) < date_create(($any) . "-01-01")){
+            abort(403,"No pots borrar aquestes vacances, les demanares l'any passat");
+        }
+        
         
         if ($data_hui > $data && auth()->user()->Perfil != 1){
             abort(403,"No pots borrar aquestes vacances");

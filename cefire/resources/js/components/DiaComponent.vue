@@ -495,6 +495,7 @@ export default {
                  
         })
         .catch((err) => {
+          //this.$toast.error("Algo raro");
           this.$toast.error(err.response.data.message);
           console.error(err);
         });
