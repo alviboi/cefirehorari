@@ -55,6 +55,9 @@ class MoscosoController extends Controller
     public function store(StoremoscosoRequest $request)
     {
         //
+        $year = date("Y");   
+        $fins_any2 = date_create(($year + 1) . "-03-01");
+
         $exist_mocosos = moscoso::where("user_id", "=", auth()->id())->where('data', '=', $request->data)->first();
         if ($exist_mocosos) {
             abort(403, "No te'n pots anar dos dies de festa en un sol dia");
@@ -70,14 +73,17 @@ class MoscosoController extends Controller
         $inici = date_create($str);
         $final = date_create(($year + 1) . "-12-31");
         $moscosos = User::where("id", "=", auth()->id())->first();
-        $total = moscoso::where('data', '>', $inici)->where('data', '<', $final)->where("user_id", "=", auth()->id())->count();
+        //$total = moscoso::where('data', '>', $inici)->where('data', '<', $final)->where("user_id", "=", auth()->id())->count();
+        $total = moscoso::whereBetween('data',[$inici, $fins_any2])->where('created_at','>',$inici)->where('created_at','<',$final)->where("user_id","=",auth()->id())->count();
+
+
 
         $dies_extra = Vacancespendents::where("user_id","=",auth()->id())->first();  
 
         if ($dies_extra === null){
             $dies_sobrants_moscosos = 0;
         } else {
-            $dies_sobrants_moscosos = $dies_extra->dies_sobrants_vacances;
+            $dies_sobrants_moscosos = $dies_extra->dies_sobrants_moscosos;
         }
 
         if (($moscosos->moscosos+$dies_sobrants_moscosos )<= $total) {

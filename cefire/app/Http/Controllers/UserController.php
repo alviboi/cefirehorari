@@ -357,8 +357,8 @@ class UserController extends Controller
     public function dia_vacances($dia)
     {
         //
-        $moscoso = User::find(auth()->id())->vacances()->where('data', '=', $dia)->get();
-        return $moscoso;
+        $vacances = User::find(auth()->id())->vacances()->where('data', '=', $dia)->get();
+        return $vacances;
     }
     /**
      * dia_curs
